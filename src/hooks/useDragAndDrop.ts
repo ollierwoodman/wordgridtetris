@@ -45,7 +45,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
   const { playDragClick, playDragSuccess, playDragFail } = useGameSounds();
 
   const handleDragStart = useCallback((pieceIndex: number, x: number, y: number, event: React.MouseEvent | React.TouchEvent) => {
-    // Prevent default behavior for touch events to avoid mouse event synthesis
+    // Prevent default behavior for touch events to avoid mouse event synthesis and scrolling
     if (event.type === 'touchstart') {
       event.preventDefault();
     }
@@ -75,12 +75,14 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     game.selectPiece(pieceIndex);
     setDraggedBlockIndex(foundBlockIndex);
     document.body.style.cursor = 'grabbing';
+    document.body.classList.add('overflow-hidden', 'touch-none');
   }, [game, gameState.pieces]);
 
   const handleDragMove = useCallback((event: MouseEvent | TouchEvent) => {
     // Prevent default for touch events to avoid scrolling
     if ('touches' in event) {
       event.preventDefault();
+      event.stopPropagation();
     }
 
     if (draggedPieceIndex === null || !gridRef.current || draggedBlockIndex === null) {
@@ -136,6 +138,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     // Prevent default for touch events
     if (event && 'touches' in event) {
       event.preventDefault();
+      event.stopPropagation();
     }
 
     if (draggedPieceIndex !== null && dragPosition) {
@@ -170,16 +173,27 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     setIsValidDrop(true);
     setDraggedBlockIndex(null);
     document.body.style.cursor = '';
+    document.body.classList.remove('overflow-hidden', 'touch-none');
   }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDragSuccess, playDragFail]);
 
   // Attach global listeners for drag move/end
   useEffect(() => {
     if (draggedPieceIndex !== null) {
       const move = (e: MouseEvent | TouchEvent) => {
-        e.preventDefault(); // Prevent scrolling during drag
+        // Prevent scrolling during drag
+        if ('touches' in e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         handleDragMove(e);
       };
-      const up = (e: MouseEvent | TouchEvent) => handleDragEnd(e);
+      const up = (e: MouseEvent | TouchEvent) => {
+        if ('touches' in e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        handleDragEnd(e);
+      };
       
       window.addEventListener('mousemove', move);
       window.addEventListener('touchmove', move);
@@ -194,6 +208,14 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
       };
     }
   }, [draggedPieceIndex, dragPosition, isValidDrop, handleDragMove, handleDragEnd]);
+
+  // Cleanup effect to remove dragging classes when component unmounts
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('overflow-hidden', 'touch-none');
+      document.body.style.cursor = '';
+    };
+  }, []);
 
   return {
     draggedPieceIndex,

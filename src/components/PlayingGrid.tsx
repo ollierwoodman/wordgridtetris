@@ -24,7 +24,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
 
   function getTileClasses(tileContent: TileContent) {
     return cn(
-      "relative aspect-square select-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
+      "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
       {
         "ring-4 ring-green-400": tileContent?.isValid,
         "ring-4 ring-red-400": tileContent?.isValid === false,
@@ -44,7 +44,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
       id="playing-grid"
       ref={gridRef}
       className={cn(
-        "grid grid-cols-9 gap-[10px] aspect-square relative max-h-screen max-w-screen select-none",
+        "grid grid-cols-9 gap-[10px] aspect-square relative max-h-screen max-w-screen select-none touch-none",
       )}
     >
       {Array.from({ length: 81 }).map((_, index) => {
