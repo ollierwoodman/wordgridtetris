@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Top-left quadrant -->
+  <rect x="0" y="0" width="15" height="15" rx="2" fill="#8B5CF6" />
+  <text x="7.5" y="11.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  
+  <!-- Top-right quadrant -->
+  <rect x="17" y="0" width="15" height="15" rx="2" fill="#8B5CF6" />
+  <text x="24.5" y="11.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">L</text>
+  
+  <!-- Bottom-left quadrant -->
+  <rect x="0" y="17" width="15" height="15" rx="2" fill="#8B5CF6" />
+  <text x="7.5" y="28.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">K</text>
+  
+  <!-- Bottom-right quadrant -->
+  <rect x="17" y="17" width="15" height="15" rx="2" fill="#8B5CF6" />
+  <text x="24.5" y="28.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">L</text>
+</svg>
