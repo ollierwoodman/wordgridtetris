@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CheckIcon, Copy } from "lucide-react";
 import type { GameState } from "../../types/game";
 
-const GAME_LINK = "https://blockle.com";
+const GAME_LINK = "https://ollierwoodman.github.io/wordgridtetris/";
 
 interface SuccessProps {
   gameState: GameState;
