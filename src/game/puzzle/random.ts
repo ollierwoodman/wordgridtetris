@@ -1,5 +1,6 @@
 import type { PieceSolutionEntry, WordSolution } from "../../types/game";
 import { SeededRandom } from "../../utils/random";
+import { createUrl } from "../../utils/game";
 
 function getCurrentDate() {
   const date = new Date();
@@ -9,7 +10,7 @@ function getCurrentDate() {
 export async function fetchRandomWordSolution(): Promise<WordSolution> {
   const seed = `${getCurrentDate()}-word-solution`;
   const randomHelper = SeededRandom.fromString(seed);
-  const res = await fetch("/solutions/words/checked.json");
+  const res = await fetch(createUrl("solutions/words/checked.json"));
   const data = await res.json();
   // Pick a random solution (array of 5 words)
   const solution = data[randomHelper.randInt(0, data.length - 1)] as WordSolution;
@@ -25,7 +26,7 @@ export async function fetchRandomPieceSolution(): Promise<
   const seed = `${getCurrentDate()}-piece-solution`;
   const randomHelper = SeededRandom.fromString(seed);
   const index = randomHelper.randInt(0, numAvailableSolutions - 1);
-  const res = await fetch(`/solutions/pieces/${index}.json`);
+  const res = await fetch(createUrl(`solutions/pieces/${index}.json`));
   const data = await res.json();
   return data;
 }

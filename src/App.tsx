@@ -31,20 +31,10 @@ function App() {
   } = useGame();
 
   // Check for puzzle completion and trigger confetti and success modal
-  useEffect(() => {
-    console.log("Game state changed:", {
-      isCompleted: gameState?.isCompleted,
-      showConfetti,
-      showSuccessModal,
-      hintProgress: gameState?.hintProgress
-    });
-    
+  useEffect(() => {    
     if (gameState?.isCompleted && !showConfetti && !showSuccessModal) {
-      console.log("Puzzle completed! Triggering confetti and success modal");
       setShowConfetti(true);
       playPuzzleComplete();
-      
-      console.log("Showing success modal");
       setShowSuccessModal(true);
       setModalHeader("Well done!");
       setModalContent(<Success gameState={gameState} />);

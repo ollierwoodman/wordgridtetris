@@ -113,3 +113,13 @@ export function getHintData(game: Game): PuzzleData {
     emptyLetter,
   };
 }
+
+/**
+ * Creates a URL by concatenating the base URL with the given path
+ * Uses import.meta.env.BASE_URL for dynamic base path support
+ * @param path - The path to append to the base URL
+ * @returns The complete URL
+ */
+export function createUrl(path: string): string {
+  return `${import.meta.env.BASE_URL}${path}`;
+}

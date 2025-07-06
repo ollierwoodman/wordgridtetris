@@ -1,14 +1,15 @@
 import useSound from "use-sound";
 import { createContext, useContext } from "react";
+import { createUrl } from "../utils/game";
 
 // Sound file paths
 const SOUND_PATHS = {
-  BUTTON_CLICK: "/sounds/button_click.ogg",
-  DRAG_CLICK: "/sounds/drag_tick.ogg",
-  DRAG_SUCCESS: "/sounds/drag_success.ogg",
-  DRAG_FAIL: "/sounds/drag_fail.ogg",
-  HINT_REVEAL: "/sounds/hint_reveal.ogg",
-  PUZZLE_COMPLETE: "/sounds/puzzle_complete.ogg",
+  BUTTON_CLICK: createUrl("sounds/button_click.ogg"),
+  DRAG_CLICK: createUrl("sounds/drag_tick.ogg"),
+  DRAG_SUCCESS: createUrl("sounds/drag_success.ogg"),
+  DRAG_FAIL: createUrl("sounds/drag_fail.ogg"),
+  HINT_REVEAL: createUrl("sounds/hint_reveal.ogg"),
+  PUZZLE_COMPLETE: createUrl("sounds/puzzle_complete.ogg"),
 } as const;
 
 // Sound configuration options
