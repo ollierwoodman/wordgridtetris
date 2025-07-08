@@ -70,7 +70,7 @@ function App() {
         "Well done!",
         <Success game={game} handleLevelUp={handleLevelUp} />
       );
-    }
+    }    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState]);
 
@@ -135,7 +135,7 @@ function App() {
           />
         </>
       )}
-      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-8">
+      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-4">
         <button
           title="About this game"
           className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -177,7 +177,7 @@ function App() {
       <div className="w-full max-w-[65vh] flex flex-col justify-center">
         {playingGrid}
       </div>
-      <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-8">
+      <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-4">
         {/* Greeting and theme */}
         <div className="flex flex-col text-gray-600 dark:text-gray-300 text-lg text-center md:text-left text-balance gap-2">
           {game.getGreeting() && <p className="">{game.getGreeting()}</p>}
