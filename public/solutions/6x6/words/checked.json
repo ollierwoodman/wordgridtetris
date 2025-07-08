@@ -35,12 +35,58 @@
   {
     "theme": "clothing",
     "words": [
-      "jacket",
-      "sweats",
-      "sunhat",
-      "gloves",
-      "tshirt",
-      "skirts"
+      "outfit",
+      "attire",
+      "cotton",
+      "hoodie",
+      "blouse",
+      "fleece",
+      "sleeve",
+      "bikini",
+      "zipper",
+      "fabric",
+      "jacket"
     ]
-  }
+  },
+  {
+    "theme": "musical",
+    "words": [
+      "guitar",
+      "tuning",
+      "stereo",
+      "stylus",
+      "strung",
+      "groove",
+      "preamp",
+      "mozart",
+      "fiddle",
+      "violin",
+      "choral",
+      "chords",
+      "medley",
+      "melody",
+      "octave",
+      "banjos",
+      "basset"
+    ]
+  },
+  {
+    "theme": "food",
+    "words": [
+        "burger",
+        "hungry",
+        "coffee",
+        "cooked",
+        "potato",
+        "dinner",
+        "kibble",
+        "liquor",
+        "cheese",
+        "cereal",
+        "recipe",
+        "edible",
+        "eatery",
+        "pantry"
+    ]
+}
 ]
