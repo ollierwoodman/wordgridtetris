@@ -47,7 +47,10 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
           </button>
         </div>
         <button
-          onClick={handleLevelUp}
+          onClick={() => {
+            
+            handleLevelUp();
+          }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-red-600 dark:bg-red-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
         >
           <span>Level up</span>

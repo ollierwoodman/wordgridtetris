@@ -24,7 +24,6 @@ function App() {
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
   const [currentModalType, setCurrentModalType] = useState<string>("");
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [showSuccessButtonPanel, setShowSuccessButtonPanel] =
     useState<boolean>(false);
 
@@ -39,16 +38,6 @@ function App() {
     solvePuzzle,
   } = useGame(solutionSize);
 
-  const handleLevelUp = useCallback(() => {
-    if (solutionSize < 5 || solutionSize >= MAX_SOLUTION_SIZE) {
-      return;
-    }
-    setShowConfetti(false);
-    setShowSuccessModal(false);
-    setShowSuccessButtonPanel(false);
-    setSolutionSize(solutionSize + 1);
-  }, [solutionSize]);
-
   // Update modal content when isMuted changes and settings modal is open
   useEffect(() => {
     if (isModalOpen && currentModalType === "settings" && game) {
@@ -58,20 +47,29 @@ function App() {
     }
   }, [isMuted, isModalOpen, currentModalType, game, setIsMuted]);
 
+  const handleLevelUp = useCallback(() => {
+    if (solutionSize < 5 || solutionSize >= MAX_SOLUTION_SIZE) {
+      return;
+    }
+    setShowConfetti(false);
+    setIsModalOpen(false);
+    setShowSuccessButtonPanel(false);
+    setSolutionSize(solutionSize + 1);
+  }, [solutionSize]);
+
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
     if (gameState?.isCompleted) {
       setShowConfetti(true);
       playPuzzleComplete();
-      setShowSuccessModal(true);
       setShowSuccessButtonPanel(true);
       handleOpenModal(
         "success",
         "Well done!",
         <Success game={game} handleLevelUp={handleLevelUp} />
       );
-    }    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState]);
 
   const handleOpenModal = (
@@ -87,7 +85,6 @@ function App() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setShowSuccessModal(false);
     setCurrentModalType("");
   };
 
@@ -181,7 +178,10 @@ function App() {
         {/* Greeting and theme */}
         <div className="flex flex-col text-gray-600 dark:text-gray-300 text-lg text-center md:text-left text-balance gap-2">
           {game.getGreeting() && <p className="">{game.getGreeting()}</p>}
-          <p className="">Today's theme: <span className="font-bold">{game.getWordTheme()}</span></p>
+          <p className="">
+            Today's theme:{" "}
+            <span className="font-bold">{game.getWordTheme()}</span>
+          </p>
         </div>
         {/* Button Panel */}
         <div className="flex flex-row justify-center md:justify-end gap-8">
@@ -196,7 +196,7 @@ function App() {
         </div>
       </div>
       <Modal
-        isOpen={isModalOpen || showSuccessModal}
+        isOpen={isModalOpen}
         onClose={handleCloseModal}
         header={modalHeader}
       >
