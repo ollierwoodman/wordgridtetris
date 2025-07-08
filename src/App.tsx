@@ -68,10 +68,11 @@ function App() {
       handleOpenModal(
         "success",
         "Well done!",
-        <Success game={game} />
+        <Success game={game} handleLevelUp={handleLevelUp} />
       );
     }
-  }, [gameState, playPuzzleComplete, game]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState]);
 
   const handleOpenModal = (
     type: string,

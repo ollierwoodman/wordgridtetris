@@ -25,7 +25,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
         title="Open success dialog"
         className="bg-yellow-600 dark:bg-yellow-800"
         onClick={() => {
-          onOpenModal("success", "Success", <Success game={game} />);
+          onOpenModal("success", "Well done!", <Success game={game} handleLevelUp={handleLevelUp} />);
         }}
       >
         <TrophyIcon className="size-8 md:size-10 xl:size-12" />
@@ -33,7 +33,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
       {game.getSolutionSize() < MAX_SOLUTION_SIZE && (
         <BigRoundButton
           title="Begin a new, more difficult puzzle"
-          className="bg-red-600 dark:bg-red-800 gap-4 pl-6"
+          className="bg-red-600 dark:bg-red-800 gap-4 pl-4 md:pl-6"
           onClick={() => {
             handleLevelUp();
           }}

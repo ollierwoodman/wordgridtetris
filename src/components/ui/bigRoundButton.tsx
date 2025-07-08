@@ -24,7 +24,7 @@ export const BigRoundButton: React.FC<{
     <button
       title={title}
       className={cn(
-        "flex items-center justify-center bg-gray-600 dark:bg-gray-800 text-white rounded-full p-4 shadow-xl/20 dark:shadow-xl/40 cursor-pointer hover:opacity-80 transition-opacity",
+        "flex items-center justify-center bg-gray-600 dark:bg-gray-800 text-white rounded-full p-2 md:p-4 shadow-xl/20 dark:shadow-xl/40 cursor-pointer hover:opacity-80 transition-opacity",
         className,
         disabled && "opacity-50 cursor-not-allowed hover:opacity-50"
       )}
