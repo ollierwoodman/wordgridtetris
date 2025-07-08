@@ -1,7 +1,7 @@
 export const About = () => {
   return (
     <div className="space-y-4 text-gray-800 dark:text-gray-300">
-      <div>
+      <div className="space-y-2">
         <h3 className="text-lg font-bold dark:text-gray-200">Author</h3>
         <p>
           This game was created with ❤️ by{" "}
@@ -12,8 +12,12 @@ export const About = () => {
             Ollie
           </a>
         </p>
+        <p>
+          You can support me via the link below:
+        </p>
+        <a href="https://www.buymeacoffee.com/ooodman" className="flex items-center justify-center bg-purple-500 text-lg text-white font-bold px-4 py-2 gap-4 rounded-full shadow-lg hover:opacity-80">Buy me a boba tea <span className="text-2xl bg-white rounded-full rotate-12 p-1">🧋</span></a>
       </div>
-      <div>
+      <div className="space-y-2">
         <h3 className="text-lg font-bold dark:text-gray-200">Code</h3>
         <p>
           You can find the source code for this game on{" "}
@@ -25,8 +29,8 @@ export const About = () => {
           </a>
         </p>
       </div>
-      <div>
-        <h3 className="text-lg font-bold dark:text-gray-200">Support</h3>
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold dark:text-gray-200">Report an issue</h3>
         <p>
           To report a problem or suggest a feature, submit an issue on{" "}
           <a

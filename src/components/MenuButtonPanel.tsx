@@ -2,12 +2,14 @@ import React from "react";
 import {
   CheckCheckIcon,
   GraduationCapIcon,
+  InfoIcon,
   SettingsIcon,
 } from "lucide-react";
 import Tutorial from "./DialogContents/Tutorial";
 import Settings from "./DialogContents/Settings";
 import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
+import { About } from "./DialogContents/About";
 
 interface MenuButtonPanelProps {
   updateGameState: () => void;
@@ -42,6 +44,14 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />
+      </BigRoundButton>
+      <BigRoundButton
+        title="Open about"
+        onClick={() => {
+          onOpenModal("about", "About Blockle", <About />);
+        }}
+      >
+        <InfoIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       {import.meta.env.DEV && (
         <BigRoundButton
