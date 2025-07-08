@@ -3,7 +3,6 @@ import type { HintsProps, Hint } from "../../types/game";
 import { getHintData } from "../../utils/game";
 import FlippableCard from "../ui/flippableCard";
 import { CircleQuestionMarkIcon } from "lucide-react";
-import { useGameSounds } from "../../hooks/sounds";
 
 const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
   // Local state to track hint progress
@@ -43,8 +42,6 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
     ],
     []
   );
-
-  const { playHintReveal } = useGameSounds();
 
   const getHintContent = useCallback(
     (hintId: string) => {
@@ -113,7 +110,7 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
                         setHintProgress(game.getHintProgress());
                         // Call the callback to trigger UI update
                         onHintRevealed?.(hint.id);
-                        playHintReveal();
+                        // playHintReveal();
                       }
                     }
                   : undefined

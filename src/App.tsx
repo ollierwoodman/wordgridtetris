@@ -28,7 +28,7 @@ function App() {
   const [showSuccessButtonPanel, setShowSuccessButtonPanel] =
     useState<boolean>(false);
 
-  const { playButtonClick, playPuzzleComplete } = useGameSounds();
+  const { playMenuClick, playPuzzleComplete } = useGameSounds();
 
   const {
     game,
@@ -139,7 +139,7 @@ function App() {
           title="About this game"
           className="cursor-pointer hover:opacity-80 transition-opacity"
           onClick={() => {
-            playButtonClick();
+            playMenuClick();
             handleOpenModal("about", "About Blockle", <About />);
           }}
         >
