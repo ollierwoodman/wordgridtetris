@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowUpCircleIcon, CheckIcon, Copy } from "lucide-react";
 import type { Game } from "../../game/logic";
+import { MAX_SOLUTION_SIZE } from "../../App";
 
 const GAME_LINK = "https://ollierwoodman.github.io/wordgridtetris/";
 
@@ -27,7 +28,8 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
   return (
     <>
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
-        You've completed today's {game?.getSolutionSize()}×{game?.getSolutionSize()} puzzle!
+        You've completed today's {game?.getSolutionSize()}×
+        {game?.getSolutionSize()} puzzle!
       </p>
 
       <div className="w-full max-w-md">
@@ -43,19 +45,25 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
             className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500  text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
           >
             <span>{copied ? "Copied" : "Copy text"}</span>
-            {copied ? <CheckIcon className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {copied ? (
+              <CheckIcon className="w-4 h-4" />
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
           </button>
         </div>
-        <button
-          onClick={() => {
-            
-            handleLevelUp();
-          }}
-          className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-red-600 dark:bg-red-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
-        >
-          <span>Level up</span>
-          <ArrowUpCircleIcon className="w-4 h-4" />
-        </button>
+        {game?.getSolutionSize() &&
+          game.getSolutionSize() < MAX_SOLUTION_SIZE && (
+            <button
+              onClick={() => {
+                handleLevelUp();
+              }}
+              className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-red-600 dark:bg-red-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
+            >
+              <span>Level up</span>
+              <ArrowUpCircleIcon className="w-4 h-4" />
+            </button>
+          )}
       </div>
 
       <p className="text-center text-gray-500 dark:text-gray-400">
