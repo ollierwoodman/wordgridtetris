@@ -1,10 +1,14 @@
 import type { PieceSolutionEntry, WordSolution } from "../../types/game";
 import { SeededRandom } from "../../utils/random";
 import { createUrl } from "../../utils/game";
+import { TOTAL_NUM_SOLUTIONS_6x6 } from "./numPieceSolutions/6x6";
+import { TOTAL_NUM_SOLUTIONS_5x5 } from "./numPieceSolutions/5x5";
+import { TOTAL_NUM_SOLUTIONS_7x7 } from "./numPieceSolutions/7x7";
 
 const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
-  5: 8800,
-  6: 400,
+  5: TOTAL_NUM_SOLUTIONS_5x5,
+  6: TOTAL_NUM_SOLUTIONS_6x6,
+  7: TOTAL_NUM_SOLUTIONS_7x7,
 };
 
 export function getCurrentDateSeed() {
@@ -16,10 +20,9 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
   const randomHelper = SeededRandom.fromString(seed);
   const res = await fetch(createUrl(`solutions/${solutionSize}x${solutionSize}/words/checked.json`));
   const data = await res.json();
-  // Pick a random solution (array of 5 words)
   const solution = data[randomHelper.randInt(0, data.length - 1)] as WordSolution;
   solution.words = solution.words.map((word: string) => word.toUpperCase());
-  solution.words = randomHelper.shuffle(solution.words);
+  solution.words = randomHelper.shuffle(solution.words).slice(0, solutionSize);
   return solution;
 }
 

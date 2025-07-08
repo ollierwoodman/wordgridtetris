@@ -1,0 +1,1 @@
+export const TOTAL_NUM_SOLUTIONS_6x6 = 3000;

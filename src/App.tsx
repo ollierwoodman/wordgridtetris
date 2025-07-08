@@ -12,7 +12,7 @@ import { useGameSounds, useSoundContext } from "./hooks/sounds";
 import ConfettiBoom from "react-confetti-boom";
 import { SuccessButtonPanel } from "./components/SuccessButtonPanel";
 
-export const MAX_SOLUTION_SIZE = 6;
+export const MAX_SOLUTION_SIZE = 7;
 
 function App() {
   const [solutionSize, setSolutionSize] = useState<number>(5);

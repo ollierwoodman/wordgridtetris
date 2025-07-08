@@ -6,12 +6,6 @@
     "y": 0
   },
   {
-    "pieceIndex": 3,
-    "rotation": 1,
-    "x": 0,
-    "y": 3
-  },
-  {
     "pieceIndex": 4,
     "rotation": 1,
     "x": 1,
@@ -28,6 +22,12 @@
     "rotation": 0,
     "x": 4,
     "y": 4
+  },
+  {
+    "pieceIndex": 3,
+    "rotation": 1,
+    "x": 0,
+    "y": 3
   },
   {
     "pieceIndex": 3,

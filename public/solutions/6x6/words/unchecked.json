@@ -22,13 +22,13 @@
     ]
   },
   {
-    "theme": "weather",
+    "theme": "bad weather",
     "words": [
       "breeze",
       "stormy",
       "cloudy",
       "frozen",
-      "foggy",
+      "smoggy",
       "thawed"
     ]
   },

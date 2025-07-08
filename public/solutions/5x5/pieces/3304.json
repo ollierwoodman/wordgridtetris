@@ -6,6 +6,18 @@
     "y": 0
   },
   {
+    "pieceIndex": 4,
+    "rotation": 0,
+    "x": 2,
+    "y": 0
+  },
+  {
+    "pieceIndex": 3,
+    "rotation": 0,
+    "x": 1,
+    "y": 4
+  },
+  {
     "pieceIndex": 2,
     "rotation": 0,
     "x": 2,
@@ -22,18 +34,6 @@
     "rotation": 0,
     "x": 4,
     "y": 4
-  },
-  {
-    "pieceIndex": 3,
-    "rotation": 0,
-    "x": 1,
-    "y": 4
-  },
-  {
-    "pieceIndex": 4,
-    "rotation": 0,
-    "x": 2,
-    "y": 0
   },
   {
     "pieceIndex": -1,

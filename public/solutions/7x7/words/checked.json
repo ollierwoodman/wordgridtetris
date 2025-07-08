@@ -1,0 +1,61 @@
+[
+  {
+    "theme": "at the beach",
+    "words": [
+      "seagull",
+      "seaweed",
+      "riptide",
+      "sunburn",
+      "tourist",
+      "sandals",
+      "surfing",
+      "wetsuit",
+      "swimmer",
+      "sailing",
+      "fishing",
+      "snorkel"
+    ]
+  },
+  {
+    "theme": "cinema",
+    "words": [
+      "actress",
+      "cartoon",
+      "costume",
+      "fantasy",
+      "fiction",
+      "footage",
+      "mystery",
+      "picture",
+      "prequel",
+      "project",
+      "theatre"
+    ]
+  },
+  {
+    "theme": "cooking",
+    "words": [
+      "burgers",
+      "cuisine",
+      "utensil",
+      "grocery",
+      "kitchen",
+      "chicken",
+      "cabinet"
+    ]
+  },
+  {
+    "theme": "city",
+    "words": [
+      "stadium",
+      "station",
+      "freeway",
+      "upstate",
+      "highway",
+      "central",
+      "council",
+      "airport",
+      "capital"
+  ]
+  }
+]

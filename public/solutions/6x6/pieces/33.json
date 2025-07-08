@@ -12,10 +12,22 @@
     "y": 4
   },
   {
-    "pieceIndex": 2,
+    "pieceIndex": 4,
     "rotation": 0,
-    "x": 3,
-    "y": 5
+    "x": 1,
+    "y": 0
+  },
+  {
+    "pieceIndex": 3,
+    "rotation": 1,
+    "x": 4,
+    "y": 2
+  },
+  {
+    "pieceIndex": 3,
+    "rotation": 1,
+    "x": 4,
+    "y": 4
   },
   {
     "pieceIndex": 2,
@@ -24,9 +36,9 @@
     "y": 3
   },
   {
-    "pieceIndex": 3,
+    "pieceIndex": 6,
     "rotation": 1,
-    "x": 4,
+    "x": 1,
     "y": 2
   },
   {
@@ -36,21 +48,9 @@
     "y": 0
   },
   {
-    "pieceIndex": 4,
+    "pieceIndex": 2,
     "rotation": 0,
-    "x": 1,
-    "y": 0
-  },
-  {
-    "pieceIndex": 6,
-    "rotation": 1,
-    "x": 1,
-    "y": 2
-  },
-  {
-    "pieceIndex": 3,
-    "rotation": 1,
-    "x": 4,
-    "y": 4
+    "x": 3,
+    "y": 5
   }
 ]

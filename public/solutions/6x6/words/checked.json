@@ -20,5 +20,27 @@
       "tomato",
       "papaya"
     ]
+  },
+  {
+    "theme": "body parts",
+    "words": [
+      "brains",
+      "kidney",
+      "muscle",
+      "finger",
+      "calves",
+      "throat"
+    ]
+  },
+  {
+    "theme": "clothing",
+    "words": [
+      "jacket",
+      "sweats",
+      "sunhat",
+      "gloves",
+      "tshirt",
+      "skirts"
+    ]
   }
 ]

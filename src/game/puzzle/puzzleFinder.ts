@@ -1,9 +1,12 @@
-// Override grid size for this puzzle
-const GRID_SIZE = 7; // 6x6 grid
-const NUM_EMPTY_TILES = (GRID_SIZE * GRID_SIZE) % 4;
-const NUM_PIECES = (GRID_SIZE * GRID_SIZE - NUM_EMPTY_TILES) / 4;
-const NUM_PIECE_COMBOS = 1; // 62 unique piece combos for 6x6 grid
-const MAX_NUM_SOLUTIONS_PER_COMBO = 5;
+// GRID_SIZE should be the only constant you need to change to generate new solutions
+const GRID_SIZE = 8;
+// ==================================================================================
+
+const HAS_EMPTY_TILE = (GRID_SIZE * GRID_SIZE) % 4 === 1;
+const NUM_PIECES = (GRID_SIZE * GRID_SIZE - (HAS_EMPTY_TILE ? 1 : 0)) / 4;
+const NUM_PIECE_COMBOS = 50; // 62 unique piece combos for 6x6 grid
+const MAX_NUM_SOLUTIONS_PER_COMBO = 100;
+const TIME_LIMIT_PER_PIECE_COMBO_MS = 60000; // 60 seconds per combo
 
 // import { TETRIS_PIECES } from './constants';
 import { TETRIS_PIECE_SHAPES } from "../pieceDefs.ts";
@@ -38,62 +41,144 @@ function getAllPlacementsForPiece(pieceIndex: number): PiecePlacement[] {
   return placements;
 }
 
-// Check if a piece can be placed
-function canPlace(grid: number[][], placement: PiecePlacement): boolean {
+// Bitboard helpers for up to 8x8 grid
+function getBitIndex(x: number, y: number): number {
+  return y * GRID_SIZE + x;
+}
+
+function canPlaceBitboard(grid: bigint, placement: PiecePlacement): boolean {
   const shape = TETRIS_PIECE_SHAPES[placement.pieceIndex][placement.rotation];
   for (const block of shape) {
     const gx = placement.x + block.x;
     const gy = placement.y + block.y;
-    if (
-      gx < 0 ||
-      gx >= GRID_SIZE ||
-      gy < 0 ||
-      gy >= GRID_SIZE ||
-      grid[gy][gx] !== -1
-    ) {
+    if (gx < 0 || gx >= GRID_SIZE || gy < 0 || gy >= GRID_SIZE) {
       return false;
     }
+    const bit = 1n << BigInt(getBitIndex(gx, gy));
+    if ((grid & bit) !== 0n) return false;
   }
   return true;
 }
 
-function placePiece(grid: number[][], placement: PiecePlacement) {
+function placePieceBitboard(grid: bigint, placement: PiecePlacement): bigint {
   const shape = TETRIS_PIECE_SHAPES[placement.pieceIndex][placement.rotation];
+  let newGrid = grid;
   for (const block of shape) {
     const gx = placement.x + block.x;
     const gy = placement.y + block.y;
-    grid[gy][gx] = placement.pieceIndex;
+    const bit = 1n << BigInt(getBitIndex(gx, gy));
+    newGrid |= bit;
   }
+  return newGrid;
 }
 
-function removePiece(grid: number[][], placement: PiecePlacement) {
-  const shape = TETRIS_PIECE_SHAPES[placement.pieceIndex][placement.rotation];
-  for (const block of shape) {
-    const gx = placement.x + block.x;
-    const gy = placement.y + block.y;
-    grid[gy][gx] = -1;
+// Helper to check if all empty regions are fillable (size % 4 == 0), except for up to NUM_EMPTY_TILES regions of size 1
+function checkFillableRegions(grid: bigint): boolean {
+  // Track which cells have been visited during flood fill
+  const visited = new Set<number>();
+
+  const regionSizes = [];
+
+  // Iterate over every cell in the grid
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      const cellIndex = getBitIndex(x, y);
+      const cellBit = 1n << BigInt(cellIndex);
+
+      // Skip if this cell is filled or already visited
+      if ((grid & cellBit) !== 0n) continue;
+      if (visited.has(cellIndex)) continue;
+
+      // Begin a new flood fill for this region
+      let regionSize = 0;
+      const stack: [number, number][] = [[x, y]];
+      visited.add(cellIndex);
+
+      // Perform flood fill (DFS)
+      while (stack.length > 0) {
+        const [currentX, currentY] = stack.pop()!;
+        regionSize++;
+
+        // Check all four neighbors (up, down, left, right)
+        const neighbors: [number, number][] = [
+          [currentX, currentY - 1], // up
+          [currentX, currentY + 1], // down
+          [currentX - 1, currentY], // left
+          [currentX + 1, currentY], // right
+        ];
+
+        for (const [nx, ny] of neighbors) {
+          // Skip out-of-bounds neighbors
+          if (nx < 0 || nx >= GRID_SIZE || ny < 0 || ny >= GRID_SIZE) continue;
+          const neighborIndex = getBitIndex(nx, ny);
+          const neighborBit = 1n << BigInt(neighborIndex);
+          // If neighbor is empty and not visited, add to stack
+          if ((grid & neighborBit) === 0n && !visited.has(neighborIndex)) {
+            visited.add(neighborIndex);
+            stack.push([nx, ny]);
+          }
+        }
+      }
+
+      regionSizes.push(regionSize);
+    }
   }
+
+  // only one hole is allowed on odd grid sizes, no holes are allowed on even grid sizes
+  const holeCount = regionSizes.filter((size) => size === 1).length;
+  if (holeCount > (HAS_EMPTY_TILE ? 1 : 0)) return false;
+
+  // check that there are no regions with size of 2 or 3
+  if (regionSizes.some((size) => size === 2 || size === 3)) return false;
+
+  // get regions whose size is not a multiple of 4
+  const nonFourMultipleRegions = regionSizes.filter((size) => size % 4 !== 0);
+
+  // if there are more than 1 such region, return false
+  if (nonFourMultipleRegions.length > 1) return false;
+
+  // if there are exactly 1 such region, check that it has a remainder of 1 when divided by 4
+  if (nonFourMultipleRegions.length === 1) {
+    if (nonFourMultipleRegions[0] % 4 !== 1) return false;
+  }
+
+  // All regions are fillable
+  return true;
 }
 
 // Backtracking search
 function findSolutions(
   piecesToUse: number[],
   placements: PiecePlacement[][],
-  grid: number[][],
+  grid: bigint,
   piecesUsed: boolean[],
   solution: PiecePlacement[],
   solutions: Solution[],
-  maxSolutions: number = 100
+  maxSolutions: number = 100,
+  depth: number = 0,
+  startTime: number,
+  timeLimitMs: number
 ) {
+  // Abort if time limit exceeded
+  if (Date.now() - startTime > timeLimitMs) {
+    return;
+  }
+
+  // Flood fill region size check: all regions must be size % 4 == 0, except for up to NUM_EMPTY_TILES single holes
+  if (!checkFillableRegions(grid)) {
+    return;
+  }
+
   if (solution.length === NUM_PIECES) {
     // Check for exactly one empty tile
     const emptyTiles = [];
     for (let y = 0; y < GRID_SIZE; y++) {
       for (let x = 0; x < GRID_SIZE; x++) {
-        if (grid[y][x] === -1) emptyTiles.push({ x, y });
+        const bit = 1n << BigInt(getBitIndex(x, y));
+        if ((grid & bit) === 0n) emptyTiles.push({ x, y });
       }
     }
-    if (emptyTiles.length === NUM_EMPTY_TILES) {
+    if (emptyTiles.length === (HAS_EMPTY_TILE ? 1 : 0)) {
       emptyTiles.forEach((emptyTile) => {
         solution.push({
           pieceIndex: -1,
@@ -103,8 +188,8 @@ function findSolutions(
         });
       });
       solutions.push(JSON.parse(JSON.stringify(solution)));
-      console.log(`${new Date().toLocaleTimeString()}: Found a new solution!`);
-      for (let i = 0; i < NUM_EMPTY_TILES; i++) {
+      logWithTime(`FOUND a new solution! (total: ${solutions.length})`);
+      for (let i = 0; i < (HAS_EMPTY_TILE ? 1 : 0); i++) {
         solution.pop(); // Remove the empty tile for backtracking
       }
       if (solutions.length >= maxSolutions) return;
@@ -118,23 +203,28 @@ function findSolutions(
     const pieceIndex = piecesToUse[i];
     // Try each possible placement for this piece
     for (const placement of placements[pieceIndex]) {
-      if (canPlace(grid, placement)) {
-        placePiece(grid, placement);
+      if (canPlaceBitboard(grid, placement)) {
+        const newGrid = placePieceBitboard(grid, placement);
         piecesUsed[i] = true;
         solution.push(placement);
         findSolutions(
           piecesToUse,
           placements,
-          grid,
+          newGrid,
           piecesUsed,
           solution,
           solutions,
-          maxSolutions
+          maxSolutions,
+          depth + 1,
+          startTime,
+          timeLimitMs
         );
         solution.pop();
         piecesUsed[i] = false;
-        removePiece(grid, placement);
-        if (solutions.length >= maxSolutions) return;
+        // No need to remove piece from bitboard, just use previous grid value
+        if (solutions.length >= maxSolutions) {
+          return;
+        }
       }
     }
   }
@@ -143,6 +233,24 @@ function findSolutions(
 // Randomly pick pieces for a puzzle with constraints
 function pickRandomPieces(numPieces: number, random: SeededRandom): number[] {
   const pieceTypes = [0, 1, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6]; // Final picks can only have up to one I and one O, and at least 3 unique types
+  switch (numPieces) {
+    case 6: // 5x5
+      break;
+    case 9: // 6x6
+      break;
+    case 12: // 7x7
+      pieceTypes.push(...[0, 3, 4]); // add the possibility for up to 2 I and/or 3 S and/or Z pieces as these do not make the puzzle too much easier
+      break;
+    case 16: // 8x8
+      pieceTypes.push(...pieceTypes); // add the possibility for up to 2 I and/or 3 S and/or Z pieces as these do not make the puzzle too much easier
+      break;
+    case 20: // 9x9
+      pieceTypes.push(...pieceTypes);
+      break;
+    default:
+      throw new Error(`Unsupported grid size: ${GRID_SIZE}`);
+  }
+
   // Shuffle pieceTypes and pick the first numPieces
   return pieceTypes.sort(() => random.randFloat() - 0.5).slice(0, numPieces);
 }
@@ -168,65 +276,87 @@ function getUniquePieceCombos(
   );
 }
 
-// Main function
+function logWithTime(...args: unknown[]) {
+  const now = new Date().toLocaleTimeString();
+  console.log(`[${now}]`, ...args);
+}
+
 function main() {
+  logWithTime("Starting puzzle finder...");
+  logWithTime("GRID_SIZE", GRID_SIZE);
+  logWithTime("NUM_PIECES", NUM_PIECES);
+  logWithTime("NUM_EMPTY_TILES", HAS_EMPTY_TILE);
+  logWithTime("NUM_PIECE_COMBOS", NUM_PIECE_COMBOS);
+  logWithTime("MAX_NUM_SOLUTIONS_PER_COMBO", MAX_NUM_SOLUTIONS_PER_COMBO);
+  logWithTime("TIME_LIMIT_PER_PIECE_COMBO_MS", TIME_LIMIT_PER_PIECE_COMBO_MS);
+
   const seed = "givemecombos";
+  logWithTime("Using seed:", seed);
   const randomHelper = SeededRandom.fromString(seed);
 
   // Use random pieces with constraints
   const pieceCombos = getUniquePieceCombos(NUM_PIECE_COMBOS, randomHelper);
-  console.log(`Generated ${NUM_PIECE_COMBOS} piece combos`);
+  logWithTime(`Generated ${NUM_PIECE_COMBOS} piece combos`);
 
-  console.log("Precomputing placements...");
+  logWithTime("Precomputing placements...");
   // Precompute all placements for each piece
   const placements: PiecePlacement[][] = [];
   for (let i = 0; i < TETRIS_PIECE_SHAPES.length; i++) {
     placements[i] = getAllPlacementsForPiece(i);
   }
 
-  const dir = `./public/solutions/${GRID_SIZE}x${GRID_SIZE}/pieces`;
+  const PUBLIC_SOLUTIONS_DIR = `./public/solutions/${GRID_SIZE}x${GRID_SIZE}/pieces`;
+  const GAME_SOLUTIONS_DIR = `./src/game/puzzle/numPieceSolutions`;
 
   let totalNumSolutions = 0;
-  for (const pieceCombo of pieceCombos) {
-    // Initialize empty grid
-    const gridState = Array.from({ length: GRID_SIZE }, () =>
-      Array(GRID_SIZE).fill(-1)
+  for (let comboIdx = 0; comboIdx < pieceCombos.length; comboIdx++) {
+    const pieceCombo = pieceCombos[comboIdx];
+    logWithTime(
+      `Processing piece combo ${comboIdx + 1}/${pieceCombos.length}:`,
+      pieceCombo
     );
+    const startCombo = Date.now();
+    // Order pieces by number of placements (fewest first)
+    const pieceComboSorted = [...pieceCombo].sort(
+      (a, b) => placements[a].length - placements[b].length
+    );
+    const gridState = 0n;
     const piecesUsed = Array(NUM_PIECES).fill(false);
     const solution: PiecePlacement[] = [];
-
-    console.log(`Finding solutions for piece combo ${pieceCombo}...`);
     const solutions: Solution[] = [];
-
     findSolutions(
-      pieceCombo,
+      pieceComboSorted,
       placements,
       gridState,
       piecesUsed,
       solution,
       solutions,
-      MAX_NUM_SOLUTIONS_PER_COMBO
+      MAX_NUM_SOLUTIONS_PER_COMBO,
+      0,
+      startCombo,
+      TIME_LIMIT_PER_PIECE_COMBO_MS
     );
-    console.log(`Found ${solutions.length} solutions`);
-
+    logWithTime(
+      `Found ${solutions.length} solutions for combo ${comboIdx + 1}`
+    );
     solutions.forEach((solution, index) => {
       fs.writeFileSync(
-        `${dir}/${index + totalNumSolutions}.json`,
+        `${PUBLIC_SOLUTIONS_DIR}/${index + totalNumSolutions}.json`,
         JSON.stringify(solution, null, 2),
         "utf-8"
       );
     });
-    console.log(`Wrote ${solutions.length} solutions to JSON files`);
-
     totalNumSolutions += solutions.length;
+    fs.writeFileSync(
+      `${GAME_SOLUTIONS_DIR}/${GRID_SIZE}x${GRID_SIZE}.ts`,
+      `export const TOTAL_NUM_SOLUTIONS_${GRID_SIZE}x${GRID_SIZE} = ${totalNumSolutions};`,
+      "utf-8"
+    );
+    const endCombo = Date.now();
+    logWithTime(
+      `Finished combo ${comboIdx + 1} in ${(endCombo - startCombo) / 1000}s`
+    );
   }
-
-  console.log(`Wrote ${totalNumSolutions} solutions to JSON files`);
-  fs.writeFileSync(
-    `${dir}/total.ts`,
-    `export const TOTAL_NUM_SOLUTIONS = ${totalNumSolutions};`,
-    "utf-8"
-  );
+  logWithTime(`Wrote ${totalNumSolutions} solutions to JSON files`);
 }
-
 main();

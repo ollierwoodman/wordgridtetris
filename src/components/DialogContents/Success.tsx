@@ -33,7 +33,7 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
       </p>
 
       <div className="w-full max-w-md">
-        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-4">
+        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
           <p className="text-center text-gray-500 dark:text-gray-400 mb-2">
             Share your achievement
           </p>
@@ -66,9 +66,12 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
           )}
       </div>
 
-      <p className="text-center text-gray-500 dark:text-gray-400">
-        Come back tomorrow for new puzzles!
-      </p>
+      {game?.getSolutionSize() &&
+        game.getSolutionSize() >= MAX_SOLUTION_SIZE && (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Come back tomorrow for new puzzles!
+          </p>
+        )}
     </>
   );
 }
