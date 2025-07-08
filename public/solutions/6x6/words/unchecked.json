@@ -1,0 +1,112 @@
+[
+  {
+    "theme": "animals",
+    "words": [
+      "monkey",
+      "rabbit",
+      "turtle",
+      "wombat",
+      "possum",
+      "puffin"
+    ]
+  },
+  {
+    "theme": "fruits",
+    "words": [
+      "orange",
+      "banana",
+      "cherry",
+      "lychee",
+      "tomato",
+      "papaya"
+    ]
+  },
+  {
+    "theme": "weather",
+    "words": [
+      "breeze",
+      "stormy",
+      "cloudy",
+      "frozen",
+      "foggy",
+      "thawed"
+    ]
+  },
+  {
+    "theme": "kitchen",
+    "words": [
+      "aprons",
+      "kettle",
+      "knives",
+      "plates",
+      "frying",
+      "baking"
+    ]
+  },
+  {
+    "theme": "travel",
+    "words": [
+      "flight",
+      "voyage",
+      "desert",
+      "resort",
+      "island",
+      "safari"
+    ]
+  },
+  {
+    "theme": "colors",
+    "words": [
+      "purple",
+      "indigo",
+      "violet",
+      "golden",
+      "silver",
+      "bronze"
+    ]
+  },
+  {
+    "theme": "sports",
+    "words": [
+      "tennis",
+      "bowling",
+      "",
+      "hockey",
+      "sprint",
+      "diving"
+    ]
+  },
+  {
+    "theme": "emotions",
+    "words": [
+      "joyful",
+      "calmly",
+      "caring",
+      "kindly",
+      "wishes",
+      "bright"
+    ]
+  },
+  {
+    "theme": "body parts",
+    "words": [
+      "brains",
+      "kidney",
+      "muscle",
+      "finger",
+      "ribbon",
+      "throat"
+    ]
+  },
+  {
+    "theme": "clothing",
+    "words": [
+      "jacket",
+      "sweats",
+      "scarfs",
+      "gloves",
+      "tshirt",
+      "skirts"
+    ]
+  }
+]

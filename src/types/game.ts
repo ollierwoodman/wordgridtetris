@@ -76,8 +76,8 @@ export interface Hint {
 
 export interface PuzzleData {
   theme: string;
-  emptyPosition: { x: number; y: number };
-  emptyLetter: string;
+  emptyPositions: { x: number; y: number }[];
+  emptyLetters: string[];
 }
 
 // Component prop types
@@ -103,6 +103,7 @@ export interface HintsProps {
 
 export interface WordSolution {
   theme: string;
+  greeting?: string;
   words: string[];
 }
 

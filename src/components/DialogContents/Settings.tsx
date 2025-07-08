@@ -18,15 +18,16 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({ isMuted, setIsMuted }) => {
   const { theme, cycleTheme, getNextTheme } = useTheme();
-  const { playButtonClick } = useGameSounds();
+
+  const { playMenuClick } = useGameSounds();
 
   const handleThemeChange = () => {
-    playButtonClick();
+    playMenuClick();
     cycleTheme();
   };
 
   const handleSoundToggle = () => {
-    playButtonClick();
+    playMenuClick();
     setIsMuted(!isMuted);
   };
 

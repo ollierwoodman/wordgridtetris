@@ -1,16 +1,16 @@
-export const NUM_PIECE_COMBOS = 100;
-export const MAX_NUM_SOLUTIONS_PER_COMBO = 100;
+// Override grid size for this puzzle
+const GRID_SIZE = 7; // 6x6 grid
+const NUM_EMPTY_TILES = (GRID_SIZE * GRID_SIZE) % 4;
+const NUM_PIECES = (GRID_SIZE * GRID_SIZE - NUM_EMPTY_TILES) / 4;
+const NUM_PIECE_COMBOS = 1; // 62 unique piece combos for 6x6 grid
+const MAX_NUM_SOLUTIONS_PER_COMBO = 5;
 
 // import { TETRIS_PIECES } from './constants';
-import { TETRIS_PIECE_SHAPES } from "../constants.ts";
+import { TETRIS_PIECE_SHAPES } from "../pieceDefs.ts";
 // If you see a type error for 'fs', run: npm install --save-dev @types/node
 import * as fs from "fs";
 import type { PiecePlacement, Solution } from "../../types/game";
 import { SeededRandom } from "../../utils/random.ts";
-
-// Override grid size for this puzzle
-const GRID_SIZE = 5; // 5x5 grid
-const NUM_PIECES = 6;
 
 // Generate all possible placements for a piece
 function getAllPlacementsForPiece(pieceIndex: number): PiecePlacement[] {
@@ -93,15 +93,20 @@ function findSolutions(
         if (grid[y][x] === -1) emptyTiles.push({ x, y });
       }
     }
-    if (emptyTiles.length === 1) {
-      solution.push({
-        pieceIndex: -1,
-        rotation: 0,
-        x: emptyTiles[0].x,
-        y: emptyTiles[0].y,
+    if (emptyTiles.length === NUM_EMPTY_TILES) {
+      emptyTiles.forEach((emptyTile) => {
+        solution.push({
+          pieceIndex: -1,
+          rotation: 0,
+          x: emptyTile.x,
+          y: emptyTile.y,
+        });
       });
       solutions.push(JSON.parse(JSON.stringify(solution)));
-      solution.pop(); // Remove the empty tile for backtracking
+      console.log(`${new Date().toLocaleTimeString()}: Found a new solution!`);
+      for (let i = 0; i < NUM_EMPTY_TILES; i++) {
+        solution.pop(); // Remove the empty tile for backtracking
+      }
       if (solutions.length >= maxSolutions) return;
     }
   }
@@ -142,7 +147,10 @@ function pickRandomPieces(numPieces: number, random: SeededRandom): number[] {
   return pieceTypes.sort(() => random.randFloat() - 0.5).slice(0, numPieces);
 }
 
-function getUniquePieceCombos(numCombos: number, random: SeededRandom): number[][] {
+function getUniquePieceCombos(
+  numCombos: number,
+  random: SeededRandom
+): number[][] {
   const maxAttempts = 1000;
   const pieceCombos: number[][] = [];
   const uniquePieceCombos = new Set<string>();
@@ -176,8 +184,9 @@ function main() {
     placements[i] = getAllPlacementsForPiece(i);
   }
 
+  const dir = `./public/solutions/${GRID_SIZE}x${GRID_SIZE}/pieces`;
+
   let totalNumSolutions = 0;
-  const solutionsByCombo: Solution[][] = [];
   for (const pieceCombo of pieceCombos) {
     // Initialize empty grid
     const gridState = Array.from({ length: GRID_SIZE }, () =>
@@ -199,20 +208,25 @@ function main() {
       MAX_NUM_SOLUTIONS_PER_COMBO
     );
     console.log(`Found ${solutions.length} solutions`);
-    solutionsByCombo.push(solutions.slice());
+
+    solutions.forEach((solution, index) => {
+      fs.writeFileSync(
+        `${dir}/${index + totalNumSolutions}.json`,
+        JSON.stringify(solution, null, 2),
+        "utf-8"
+      );
+    });
+    console.log(`Wrote ${solutions.length} solutions to JSON files`);
+
     totalNumSolutions += solutions.length;
   }
 
-  // Write solutions to JSON file
-  console.log("Writing solutions to JSON file...");
-  solutionsByCombo.flat().forEach((solution, index) => {
-    fs.writeFileSync(
-      `./public/solutions/pieces/${index}.json`,
-      JSON.stringify(solution, null, 2),
-      "utf-8"
-    );
-  });
-  console.log(`Wrote ${totalNumSolutions} solutions to JSON file`);
+  console.log(`Wrote ${totalNumSolutions} solutions to JSON files`);
+  fs.writeFileSync(
+    `${dir}/total.ts`,
+    `export const TOTAL_NUM_SOLUTIONS = ${totalNumSolutions};`,
+    "utf-8"
+  );
 }
 
 main();

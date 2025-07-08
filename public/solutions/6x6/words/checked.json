@@ -1,0 +1,24 @@
+[
+  {
+    "theme": "animals",
+    "words": [
+      "monkey",
+      "rabbit",
+      "turtle",
+      "wombat",
+      "possum",
+      "puffin"
+    ]
+  },
+  {
+    "theme": "fruits",
+    "words": [
+      "orange",
+      "banana",
+      "cherry",
+      "lychee",
+      "tomato",
+      "papaya"
+    ]
+  }
+]

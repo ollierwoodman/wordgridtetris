@@ -4,12 +4,12 @@ import { createUrl } from "../utils/game";
 
 // Sound file paths
 const SOUND_PATHS = {
-  BUTTON_CLICK: createUrl("sounds/button_click.ogg"),
-  DRAG_CLICK: createUrl("sounds/drag_tick.ogg"),
-  DRAG_SUCCESS: createUrl("sounds/drag_success.ogg"),
-  DRAG_FAIL: createUrl("sounds/drag_fail.ogg"),
-  HINT_REVEAL: createUrl("sounds/hint_reveal.ogg"),
-  PUZZLE_COMPLETE: createUrl("sounds/puzzle_complete.ogg"),
+  MENU_CLICK: createUrl("sounds/menu_click.ogg"),
+  DRAG_CLICK: createUrl("sounds/drag_blong.ogg"),
+  DROP_SUCCESS: createUrl("sounds/drop_success.ogg"),
+  DROP_FAIL: createUrl("sounds/drop_fail.ogg"),
+  LEVEL_COMPLETE: createUrl("sounds/level_complete.ogg"),
+  LEVEL_UP: createUrl("sounds/level_up.ogg"),
 } as const;
 
 // Sound configuration options
@@ -44,7 +44,7 @@ export function useSoundContext() {
 export function useGameSounds() {
   const { isMuted } = useSoundContext();
 
-  const [playButtonClick] = useSound(SOUND_PATHS.BUTTON_CLICK, {
+  const [playMenuClick] = useSound(SOUND_PATHS.MENU_CLICK, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
@@ -54,33 +54,33 @@ export function useGameSounds() {
     soundEnabled: !isMuted,
   });
 
-  const [playDragSuccess] = useSound(SOUND_PATHS.DRAG_SUCCESS, {
+  const [playDropSuccess] = useSound(SOUND_PATHS.DROP_SUCCESS, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
 
-  const [playDragFail] = useSound(SOUND_PATHS.DRAG_FAIL, {
+  const [playDropFail] = useSound(SOUND_PATHS.DROP_FAIL, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
 
-  const [playHintReveal] = useSound(SOUND_PATHS.HINT_REVEAL, {
+  const [playPuzzleComplete] = useSound(SOUND_PATHS.LEVEL_COMPLETE, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
 
-  const [playPuzzleComplete] = useSound(SOUND_PATHS.PUZZLE_COMPLETE, {
+  const [playLevelUp] = useSound(SOUND_PATHS.LEVEL_UP, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
 
   return {
-    playButtonClick,
+    playMenuClick,
     playDragClick,
-    playDragSuccess,
-    playDragFail,
-    playHintReveal,
+    playDropSuccess,
+    playDropFail,
     playPuzzleComplete,
+    playLevelUp,
   };
 }
 

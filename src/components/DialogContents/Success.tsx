@@ -1,25 +1,17 @@
 import { useState } from "react";
 import { CheckIcon, Copy } from "lucide-react";
-import type { GameState } from "../../types/game";
+import type { Game } from "../../game/logic";
 
 const GAME_LINK = "https://ollierwoodman.github.io/wordgridtetris/";
 
 interface SuccessProps {
-  gameState: GameState;
+  game: Game | null;
 }
 
-export function Success({ gameState }: SuccessProps) {
+export function Success({ game }: SuccessProps) {
   const [copied, setCopied] = useState(false);
 
-  const hintCount = gameState.hintProgress;
-  const hintText =
-    hintCount === 0
-      ? "no hints"
-      : hintCount === 1
-      ? "1 hint"
-      : `${hintCount} hints`;
-
-  const shareText = `I solved today's Blockle puzzle using ${hintText}!\n\nSee how you go here: ${GAME_LINK}`;
+  const shareText = `I solved today's ${game?.getSolutionSize()}×${game?.getSolutionSize()} Blockle puzzle!\nSee how you go here: ${GAME_LINK}`;
 
   const copyToClipboard = async () => {
     try {
@@ -34,8 +26,7 @@ export function Success({ gameState }: SuccessProps) {
   return (
     <>
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
-        You've completed today's puzzle using{" "}
-        <span className="font-semibold break-after-all">{hintText}</span>!
+        You've completed today's {game?.getSolutionSize()}×{game?.getSolutionSize()} puzzle!
       </p>
 
       <div className="w-full max-w-md">
@@ -59,7 +50,7 @@ export function Success({ gameState }: SuccessProps) {
       </div>
 
       <p className="text-center text-gray-500 dark:text-gray-400">
-        Come back tomorrow for a new puzzle!
+        Come back tomorrow for new puzzles!
       </p>
     </>
   );

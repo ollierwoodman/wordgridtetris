@@ -22,6 +22,8 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
     updateGameState,
   });
 
+  const gridSize = game.getGridSize();
+
   function getTileClasses(tileContent: TileContent) {
     return cn(
       "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
@@ -44,12 +46,15 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
       id="playing-grid"
       ref={gridRef}
       className={cn(
-        "grid grid-cols-9 gap-[10px] aspect-square relative max-h-screen max-w-screen select-none touch-none",
+        "grid gap-[10px] aspect-square relative max-h-screen max-w-screen select-none touch-none",
       )}
+      style={{
+        gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+      }}
     >
-      {Array.from({ length: 81 }).map((_, index) => {
-        const x = index % 9;
-        const y = Math.floor(index / 9);
+      {Array.from({ length: gridSize * gridSize }).map((_, index) => {
+        const x = index % gridSize;
+        const y = Math.floor(index / gridSize);
         const tileContent = getTileContent({
           x,
           y,

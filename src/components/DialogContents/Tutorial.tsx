@@ -1,6 +1,16 @@
-import { HeartIcon, KeyboardIcon, SmartphoneIcon, TrophyIcon } from "lucide-react";
+import {
+  HeartIcon,
+  KeyboardIcon,
+  SmartphoneIcon,
+  TrophyIcon,
+} from "lucide-react";
+import { Game } from "../../game/logic";
 
-const Tutorial = () => {
+interface TutorialProps {
+  game?: Game;
+}
+
+const Tutorial: React.FC<TutorialProps> = ({ game }) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
@@ -8,11 +18,11 @@ const Tutorial = () => {
         <h3>Objective</h3>
       </div>
       <p className="text-gray-800 dark:text-gray-300">
-        You must move the 6 game pieces around the grid and place them in the
-        center 5x5 grid to form 5 words.
+        Drag and drop the {game?.getNumPieces() ?? 6} game pieces into the{" "}
+        {game?.getSolutionSize() ?? 9}x{game?.getSolutionSize() ?? 9} grid in
+        the center to form {game?.getSolutionSize() ?? 5} horizontal words.
       </p>
 
-      
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
         <SmartphoneIcon />
         <h3>Touch controls</h3>
@@ -21,7 +31,6 @@ const Tutorial = () => {
         You can move the pieces around the grid by dragging and dropping them.
       </p>
 
-      
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
         <KeyboardIcon />
         <h3>Keyboard controls</h3>
@@ -37,23 +46,28 @@ const Tutorial = () => {
         through them.
       </p>
 
-      
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
         <HeartIcon />
         <h3>Tips</h3>
       </div>
-        <p className="text-gray-800 dark:text-gray-300">
-          Each of the five words in the puzzle's solution are related to a
-          common theme which can be revealed by using hints
-        </p>
-        <p className="text-gray-800 dark:text-gray-300">
-          One tile on the grid is empty, but you can reveal its position and
-          letter by using hints
-        </p>
-        <p className="text-gray-800 dark:text-gray-300">
-          The pieces are already in the correct orientation, so you don't need
-          to rotate them
-        </p>
+      <p className="text-gray-800 dark:text-gray-300">
+        Each of the {game?.getSolutionSize() ?? 5} words in the puzzle's
+        solution are related to a common theme which can be revealed by using
+        hints
+      </p>
+      {game?.getEmptyTilePositions() &&
+        game.getEmptyTilePositions().length > 0 && (
+          <p className="text-gray-800 dark:text-gray-300">
+            There is {game.getEmptyTilePositions().length} empty tile
+            {game.getEmptyTilePositions().length > 1 ? "s" : ""} on the grid.
+            The tile{game.getEmptyTilePositions().length > 1 ? "s" : ""} also
+            take the place of an unknown letter in a word.
+          </p>
+        )}
+      <p className="text-gray-800 dark:text-gray-300">
+        The pieces are already in the correct orientation, so you don't need to
+        rotate them
+      </p>
     </div>
   );
 };

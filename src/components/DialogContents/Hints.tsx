@@ -15,6 +15,10 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
       setHintProgress(game.getHintProgress());
     }
   }, [game]);
+
+  // Check if hints are enabled for this game
+  const hintsEnabled = game?.areHintsEnabled() ?? false;
+
   // Define hints in order
   const hints: Hint[] = useMemo(
     () => [
@@ -54,15 +58,16 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
             puzzleData.theme.charAt(0).toUpperCase() + puzzleData.theme.slice(1)
           );
 
-        case "position":
-          return `${getOrdinalNumber(
-            puzzleData.emptyPosition.x + 1 - 2
-          )} letter of the ${getOrdinalNumber(
-            puzzleData.emptyPosition.y + 1 - 2
-          )} word`;
+        case "position": {
+          // Convert grid coordinates to solution coordinates
+          const solutionOffset = game.getSolutionOffset();
+          const solutionX = puzzleData.emptyPositions[0].x - solutionOffset;
+          const solutionY = puzzleData.emptyPositions[0].y - solutionOffset;
+          return `${getOrdinalNumber(solutionX + 1)} letter of the ${getOrdinalNumber(solutionY + 1)} word`;
+        }
 
         case "letter":
-          return puzzleData.emptyLetter;
+          return puzzleData.emptyLetters[0];
 
         default:
           return null;
@@ -70,6 +75,20 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
     },
     [game]
   );
+
+  // If hints are disabled, show a message
+  if (!hintsEnabled) {
+    return (
+      <div className="text-center space-y-4">
+        <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          Hints Not Available
+        </p>
+        <p className="text-gray-600 dark:text-gray-300">
+          Hints are only available for 5x5 puzzles. This puzzle is {game?.getSolutionSize()}x{game?.getSolutionSize()}.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -79,13 +98,12 @@ const Hints: React.FC<HintsProps> = ({ game, onHintRevealed }) => {
         const isNextHint = hintProgress === index;
 
         return (
-          <div className="flex flex-col">
+          <div key={hint.id} className="flex flex-col">
             <p className="text-lg font-bold dark:text-gray-200">{hint.title}</p>
             <p className="text-gray-800 dark:text-gray-300 mb-2">
               {hint.description}
             </p>
             <FlippableCard
-              key={hint.id}
               isFlipped={isRevealed}
               onFlip={
                 isNextHint

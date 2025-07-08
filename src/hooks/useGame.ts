@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
-import { fetchRandomPieceSolution, fetchRandomWordSolution } from "../game/puzzle/random";
+import { getCurrentDateSeed } from "../game/puzzle/random";
 import { useGameSounds } from "./sounds";
 
-export function useGame() {
+export function useGame(solutionSize: number = 5, seed: string = getCurrentDateSeed()) {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -13,12 +13,14 @@ export function useGame() {
 
   const initializeGame = useCallback(async () => {
     setLoading(true);
-    const [wordSolution, pieceSolution] = await Promise.all([
-      fetchRandomWordSolution(),
-      fetchRandomPieceSolution()
-    ]);
-    const newGame = new Game(wordSolution, pieceSolution);
+    // Reset gameState immediately to prevent completion effects from old state
+    setGameState(null);
+    const newGame = new Game(solutionSize, seed);
     setGame(newGame);
+    
+    // Wait for the game to be fully initialized
+    await newGame.waitForInitialization();
+    
     setGameState({
       grid: newGame.getGrid(),
       pieces: newGame.getPieces(),
@@ -27,7 +29,7 @@ export function useGame() {
       isCompleted: newGame.isPuzzleCompleted()
     });
     setLoading(false);
-  }, []);
+  }, [solutionSize, seed]);
 
   useEffect(() => {
     initializeGame();
@@ -98,35 +100,6 @@ export function useGame() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  const resetGame = useCallback(async () => {
-    setLoading(true);
-    const [wordSolution, pieceSolution] = await Promise.all([
-      fetchRandomWordSolution(),
-      fetchRandomPieceSolution()
-    ]);
-    if (game) {
-      game.resetGame(wordSolution, pieceSolution);
-      setGameState({
-        grid: game.getGrid(),
-        pieces: game.getPieces(),
-        selectedPieceIndex: game.getSelectedPieceIndex(),
-        hintProgress: game.getHintProgress(),
-        isCompleted: game.isPuzzleCompleted()
-      });
-    } else {
-      const newGame = new Game(wordSolution, pieceSolution);
-      setGame(newGame);
-              setGameState({
-          grid: newGame.getGrid(),
-          pieces: newGame.getPieces(),
-          selectedPieceIndex: newGame.getSelectedPieceIndex(),
-          hintProgress: newGame.getHintProgress(),
-          isCompleted: newGame.isPuzzleCompleted()
-        });
-    }
-    setLoading(false);
-  }, [game]);
-
   const solvePuzzle = useCallback(() => {
     if (game) {
       game.solvePuzzle();
@@ -140,7 +113,6 @@ export function useGame() {
     updateGameState,
     handleTileClick,
     handleKeyDown,
-    resetGame,
     loading,
     solvePuzzle
   };

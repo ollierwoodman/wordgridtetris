@@ -42,7 +42,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   // Sound effects
-  const { playDragClick, playDragSuccess, playDragFail } = useGameSounds();
+  const { playDragClick, playDropSuccess, playDropFail } = useGameSounds();
 
   const handleDragStart = useCallback((pieceIndex: number, x: number, y: number, event: React.MouseEvent | React.TouchEvent) => {
     // Prevent default behavior for touch events to avoid mouse event synthesis and scrolling
@@ -102,9 +102,9 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     }
 
     const rect = gridRef.current.getBoundingClientRect();
-    const tileSize = rect.width / 9;
-    const cursorTileX = Math.floor(Math.min(Math.max(0, clientX - rect.left) / tileSize, 8));
-    const cursorTileY = Math.floor(Math.min(Math.max(0, clientY - rect.top) / tileSize, 8));
+    const tileSize = rect.width / game.getGridSize();
+    const cursorTileX = Math.floor(Math.min(Math.max(0, clientX - rect.left) / tileSize, game.getGridSize() - 1));
+    const cursorTileY = Math.floor(Math.min(Math.max(0, clientY - rect.top) / tileSize, game.getGridSize() - 1));
 
     const piece = gameState.pieces[draggedPieceIndex];
     const block = piece.blocks[draggedBlockIndex];
@@ -120,7 +120,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     for (let i = 0; i < piece.blocks.length; i++) {
       const blockX = x + piece.blocks[i].x;
       const blockY = y + piece.blocks[i].y;
-      if (blockX < 0 || blockX >= 9 || blockY < 0 || blockY >= 9) {
+      if (blockX < 0 || blockX >= game.getGridSize() || blockY < 0 || blockY >= game.getGridSize()) {
         inBounds = false;
         break;
       }
@@ -148,7 +148,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
       for (let i = 0; i < piece.blocks.length; i++) {
         const blockX = dragPosition.x + piece.blocks[i].x;
         const blockY = dragPosition.y + piece.blocks[i].y;
-        if (blockX < 0 || blockX >= 9 || blockY < 0 || blockY >= 9) {
+        if (blockX < 0 || blockX >= game.getGridSize() || blockY < 0 || blockY >= game.getGridSize()) {
           inBounds = false;
           break;
         }
@@ -157,11 +157,11 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
       const isValidMove = game.isValidMove(draggedPieceIndex, dragPosition.x, dragPosition.y);
 
       if (inBounds && isValidMove) {
-        playDragSuccess();
+        playDropSuccess();
         game.setPiecePosition(draggedPieceIndex, dragPosition.x, dragPosition.y);
         updateGameState();
       } else if (originalPosition) {
-        playDragFail();
+        playDropFail();
         game.setPiecePosition(draggedPieceIndex, originalPosition.x, originalPosition.y);
         updateGameState();
       }
@@ -174,7 +174,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     setDraggedBlockIndex(null);
     document.body.style.cursor = '';
     document.body.classList.remove('overflow-hidden', 'touch-none');
-  }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDragSuccess, playDragFail]);
+  }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDropSuccess, playDropFail]);
 
   // Attach global listeners for drag move/end
   useEffect(() => {
