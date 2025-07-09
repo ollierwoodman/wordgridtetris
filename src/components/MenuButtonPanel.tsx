@@ -4,6 +4,7 @@ import {
   GraduationCapIcon,
   InfoIcon,
   SettingsIcon,
+  ShuffleIcon,
 } from "lucide-react";
 import Tutorial from "./DialogContents/Tutorial";
 import Settings from "./DialogContents/Settings";
@@ -26,6 +27,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   isMuted,
   setIsMuted,
   onOpenModal,
+  updateGameState,
 }) => {
   return (
     <>
@@ -44,6 +46,15 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />
+      </BigRoundButton>
+      <BigRoundButton
+        title="Shuffle pieces"
+        onClick={() => {
+          game?.resetPieces();
+          updateGameState();
+        }}
+      >
+        <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
         title="Open about"

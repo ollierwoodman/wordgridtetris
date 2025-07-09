@@ -9,6 +9,7 @@ import {
   fetchRandomPieceSolution,
   fetchRandomWordSolution,
 } from "./puzzle/random";
+import { SeededRandom } from "../utils/random";
 
 const NUMBER_BLOCK_PER_PIECE = 4;
 
@@ -142,10 +143,17 @@ export class Game {
       });
   }
 
-  private placePieces(): void {
+  private placePieces(shuffle: boolean = false): void {
     // Move all pieces to temporary positions outside the grid to avoid initial collisions
     for (let i = 0; i < this.pieces.length; i++) {
       this.setPiecePosition(i, -10, -10);
+    }
+
+    const randomHelper = new SeededRandom(new Date().getMilliseconds())
+    const placePieceOrder = Array.from({length: this.pieces.length}, (_, i) => i);
+    if (shuffle) {
+      // Shuffle the pieces
+      randomHelper.shuffle(placePieceOrder);
     }
 
     // Predefined positions spread across the grid to minimize collisions
@@ -161,13 +169,13 @@ export class Game {
     ];
 
     // Place each piece in the first available valid position
-    for (let i = 0; i < this.pieces.length; i++) {
+    for (const pieceIndex of placePieceOrder) {
       let placed = false;
 
       // Try predefined positions first
       for (const pos of placementPositions) {
-        if (this.isValidMoveInternal(i, pos.x, pos.y)) {
-          this.setPiecePosition(i, pos.x, pos.y);
+        if (this.isValidMoveInternal(pieceIndex, pos.x, pos.y)) {
+          this.setPiecePosition(pieceIndex, pos.x, pos.y);
           placed = true;
           break;
         }
@@ -175,12 +183,12 @@ export class Game {
 
       // If predefined positions don't work, find any valid position
       if (!placed) {
-        const safePosition = this.findSafePosition(i);
+        const safePosition = this.findSafePosition(pieceIndex);
         if (safePosition) {
-          this.setPiecePosition(i, safePosition.x, safePosition.y);
+          this.setPiecePosition(pieceIndex, safePosition.x, safePosition.y);
         } else {
           // Fallback to center position
-          this.setPiecePosition(i, Math.floor(this.gridSize / 2), Math.floor(this.gridSize / 2));
+          this.setPiecePosition(pieceIndex, Math.floor(this.gridSize / 2), Math.floor(this.gridSize / 2));
         }
       }
     }
@@ -562,5 +570,10 @@ export class Game {
   // Public method to wait for initialization to complete
   public waitForInitialization(): Promise<void> {
     return this.initializationPromise;
+  }
+
+  // Reset pieces to random valid positions around the board
+  public resetPieces(): void {
+    this.placePieces(true);
   }
 }
