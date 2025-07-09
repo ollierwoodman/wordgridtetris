@@ -523,25 +523,32 @@ export class Game {
     return false;
   }
 
-  // Check if the puzzle is completed by verifying letters are in correct positions
+  // Check if the puzzle is completed by verifying all solution words are present in any order
   public isPuzzleCompleted(): boolean {
-    const solutionOffset = (this.gridSize - this.solutionSize) / 2;
-
-    // Check each word in the solution
-    for (let y = 0; y < this.wordSolution.words.length; y++) {
-      const expectedWord = this.wordSolution.words[y];
-
-      for (let x = 0; x < expectedWord.length; x++) {
-        const expectedLetter = expectedWord[x];
-        const actualLetter = this.getLetterAtPosition(x + solutionOffset, y + solutionOffset);
-
-        if (actualLetter !== expectedLetter) {
-          return false;
+    const actualWordsSet: Set<string> = new Set();
+    const emptyTileX = this.emptyTilePositions[0]?.x || null;
+    const emptyTileLetter = this.emptyTileLetters[0] || null;
+    let emptyTileUsed = false;
+    
+    // Extract actual words from the grid (in the solution area)
+    for (let y = 0; y < this.solutionSize; y++) {
+      let word = "";
+      for (let x = 0; x < this.solutionSize; x++) {
+        const letter = this.getLetterAtPosition(x + this.solutionOffset, y + this.solutionOffset);
+        if (letter !== "") {
+          word += letter;
+        } else if (x + this.solutionOffset === emptyTileX && !emptyTileUsed) {
+          word += emptyTileLetter;
+          emptyTileUsed = true;
         }
       }
+      actualWordsSet.add(word);
     }
 
-    return true;
+    console.log(actualWordsSet, this.wordSolution.words);
+
+    // Check if sets match
+    return this.wordSolution.words.every((word) => actualWordsSet.has(word));
   }
 
   // Helper method to get the letter at a specific grid position
