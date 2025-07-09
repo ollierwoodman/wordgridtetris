@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127 42" width="1270" height="420">
+  <!-- Filter for drop shadow -->
+
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="127" height="59" fill="oklch(21% 0.034 264.665)" />
+
+  <rect x="5" y="5" width="15" height="15" rx="2" fill="oklch(54.1% 0.281 293.009)" filter="url(#shadow)" />
+  <text x="12.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">B</text>
+
+  <rect x="22" y="5" width="15" height="15" rx="2" fill="oklch(54.1% 0.281 293.009)" filter="url(#shadow)" />
+  <text x="29.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">L</text>
+
+  <rect x="39" y="5" width="15" height="15" rx="2" fill="oklch(54.6% 0.245 262.881)" filter="url(#shadow)" />
+  <text x="46.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">O</text>
+
+  <rect x="56" y="5" width="15" height="15" rx="2" fill="oklch(54.6% 0.245 262.881)" filter="url(#shadow)" />
+  <text x="63.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">C</text>
+
+  <rect x="73" y="5" width="15" height="15" rx="2" fill="oklch(64.6% 0.222 41.116)" filter="url(#shadow)" />
+  <text x="80.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">K</text>
+
+  <rect x="90" y="5" width="15" height="15" rx="2" fill="oklch(59.1% 0.293 322.896)" filter="url(#shadow)" />
+  <text x="97.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">L</text>
+
+  <rect x="107" y="5" width="15" height="15" rx="2" fill="oklch(59.1% 0.293 322.896)" filter="url(#shadow)" />
+  <text x="114.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+    text-anchor="middle">E</text>
+
+  <g transform="translate(0, 17)" opacity="0.6">
+    <rect x="5" y="5" width="15" height="15" rx="2" fill="oklch(54.1% 0.281 293.009)" filter="url(#shadow)" />
+    <text x="12.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">D</text>
+
+    <rect x="22" y="5" width="15" height="15" rx="2" fill="oklch(54.6% 0.245 262.881)" filter="url(#shadow)" />
+    <text x="29.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">A</text>
+
+    <rect x="39" y="5" width="15" height="15" rx="2" fill="oklch(54.6% 0.245 262.881)" filter="url(#shadow)" />
+    <text x="46.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">I</text>
+
+    <rect x="56" y="5" width="15" height="15" rx="2" fill="oklch(64.6% 0.222 41.116)" filter="url(#shadow)" />
+    <text x="63.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">L</text>
+
+    <rect x="73" y="5" width="15" height="15" rx="2" fill="oklch(64.6% 0.222 41.116)" filter="url(#shadow)" />
+    <text x="80.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">I</text>
+
+    <rect x="90" y="5" width="15" height="15" rx="2" fill="oklch(64.6% 0.222 41.116)" filter="url(#shadow)" />
+    <text x="97.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">E</text>
+
+    <rect x="107" y="5" width="15" height="15" rx="2" fill="oklch(59.1% 0.293 322.896)" filter="url(#shadow)" />
+    <text x="114.5" y="16.5" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white"
+      text-anchor="middle">S</text>
+  </g>
+</svg>
