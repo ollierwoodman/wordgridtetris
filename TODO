@@ -1,5 +1,15 @@
 # TODOs
 
+## Fixes
+
+TODO: Allow solutions to have words appear in an alternate order.
+
+## Ongoing tasks
+
+TODO: Make more word lists and improve current word lists
+
+## New features
+
 TODO: Add timer to the game
 TODO: Use url path to set the puzzle difficulty (5x5, 6x6, etc.) as well as the puzzle seed
 TODO: Add local storage to save past puzzle performances
@@ -7,3 +17,4 @@ TODO: Add a "share" button to share the puzzle to social media
 TODO: Add better metadata for sharing the link via social media (logo, title, description)
 TODO: Add a game history page for players to see past puzzles and their performances
 TODO: Connect a domain to the game (e.g. blockle.au)
+TODO: Design and implement unique color schemes for increasing levels of difficulty

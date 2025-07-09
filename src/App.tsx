@@ -156,7 +156,7 @@ function App() {
         )) || (
           <div className="flex flex-col text-gray-600 dark:text-gray-300 text-md text-center md:text-right text-balance gap-2">
             <p className="">
-              Drag and drop the pieces to spell out the word{" "}
+              Drag and drop the pieces to spell out the{" "}
               {game.getSolutionSize()} words across the {game.getSolutionSize()}
               ×{game.getSolutionSize()} grid in the centre.
             </p>
