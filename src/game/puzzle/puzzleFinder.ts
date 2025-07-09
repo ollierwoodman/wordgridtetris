@@ -1,12 +1,12 @@
 // GRID_SIZE should be the only constant you need to change to generate new solutions
-const GRID_SIZE = 8;
+const GRID_SIZE = 9;
 // ==================================================================================
 
 const HAS_EMPTY_TILE = (GRID_SIZE * GRID_SIZE) % 4 === 1;
 const NUM_PIECES = (GRID_SIZE * GRID_SIZE - (HAS_EMPTY_TILE ? 1 : 0)) / 4;
 const NUM_PIECE_COMBOS = 50; // 62 unique piece combos for 6x6 grid
 const MAX_NUM_SOLUTIONS_PER_COMBO = 100;
-const TIME_LIMIT_PER_PIECE_COMBO_MS = 60000; // 60 seconds per combo
+const TIME_LIMIT_PER_PIECE_COMBO_MS = 10 * 60 * 1000; // 10 minutes per combo
 
 // import { TETRIS_PIECES } from './constants';
 import { TETRIS_PIECE_SHAPES } from "../pieceDefs.ts";

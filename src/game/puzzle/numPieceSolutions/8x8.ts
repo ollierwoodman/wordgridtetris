@@ -1,1 +1,1 @@
-export const TOTAL_NUM_SOLUTIONS_8x8 = 0;
+export const TOTAL_NUM_SOLUTIONS_8x8 = 600;

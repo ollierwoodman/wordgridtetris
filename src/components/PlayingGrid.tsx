@@ -46,7 +46,13 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
       id="playing-grid"
       ref={gridRef}
       className={cn(
-        "grid gap-[10px] aspect-square relative max-h-screen max-w-screen select-none touch-none",
+        "grid gap-[8px] aspect-square relative max-h-screen max-w-screen select-none touch-none",
+        {
+          "gap-[6px]": gridSize === 10,
+          "gap-[4px]": gridSize === 11,
+          "gap-[2px]": gridSize === 12,
+          "gap-[0px]": gridSize > 12,
+        }
       )}
       style={{
         gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,

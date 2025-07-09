@@ -4,11 +4,14 @@ import { createUrl } from "../../utils/game";
 import { TOTAL_NUM_SOLUTIONS_6x6 } from "./numPieceSolutions/6x6";
 import { TOTAL_NUM_SOLUTIONS_5x5 } from "./numPieceSolutions/5x5";
 import { TOTAL_NUM_SOLUTIONS_7x7 } from "./numPieceSolutions/7x7";
+import { TOTAL_NUM_SOLUTIONS_8x8 } from "./numPieceSolutions/8x8";
 
 const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
   5: TOTAL_NUM_SOLUTIONS_5x5,
   6: TOTAL_NUM_SOLUTIONS_6x6,
   7: TOTAL_NUM_SOLUTIONS_7x7,
+  8: TOTAL_NUM_SOLUTIONS_8x8,
+  // 9: TOTAL_NUM_SOLUTIONS_9x9,
 };
 
 export function getCurrentDateSeed() {

@@ -184,7 +184,7 @@ function App() {
           </p>
         </div>
         {/* Button Panel */}
-        <div className="flex flex-row justify-center md:justify-end gap-8">
+        <div className="flex flex-row justify-center md:justify-end gap-4">
           <MenuButtonPanel
             updateGameState={updateGameState}
             solvePuzzle={solvePuzzle}
