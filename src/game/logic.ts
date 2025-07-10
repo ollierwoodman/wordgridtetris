@@ -545,8 +545,6 @@ export class Game {
       actualWordsSet.add(word);
     }
 
-    console.log(actualWordsSet, this.wordSolution.words);
-
     // Check if sets match
     return this.wordSolution.words.every((word) => actualWordsSet.has(word));
   }
