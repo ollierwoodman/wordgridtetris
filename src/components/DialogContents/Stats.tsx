@@ -2,12 +2,13 @@ import { useState } from "react";
 import {
   TrophyIcon,
   CalendarIcon,
-  ClockIcon,
   TrendingUpIcon,
   BarChartHorizontalIcon,
   CheckCheckIcon,
   XIcon,
   BlocksIcon,
+  HistoryIcon,
+  GaugeCircleIcon,
 } from "lucide-react";
 import { useCompletedPuzzlesManager } from "../../hooks/useLocalStorage";
 import { ConfirmModal } from "../ui/ConfirmModal";
@@ -196,7 +197,7 @@ export function Stats() {
       {/* Best Times Breakdown */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
-          <ClockIcon className="size-5" />
+          <GaugeCircleIcon className="size-5" />
           Fastest Times
         </h3>
         {Object.entries(bestTimes).length > 0 ? (
@@ -254,7 +255,8 @@ export function Stats() {
       {/* Recent Activity */}
       {completedPuzzles.length > 0 && (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-          <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2">
+          <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+            <HistoryIcon className="size-5" />
             Recent Activity
           </h3>
           <div className="space-y-2">
@@ -266,11 +268,11 @@ export function Stats() {
                 <span className="text-gray-600 dark:text-gray-400">
                   {new Date(puzzle.date).toLocaleDateString()}
                 </span>
-                <div className="grid grid-cols-2 items-center gap-2">
+                <div className="flex items-center gap-2">
                   <span className="text-gray-800 dark:text-gray-200 text-sm">
                     {puzzle.solutionSize}×{puzzle.solutionSize}
                   </span>
-                  <span className="text-right font-mono text-sm text-gray-500 dark:text-gray-400">
+                  <span className="text-right font-mono text-sm min-w-[4rem] text-gray-500 dark:text-gray-400">
                     {formatDurationMs(puzzle.timeToCompleteMs)}
                   </span>
                 </div>

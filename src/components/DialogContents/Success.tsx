@@ -60,7 +60,7 @@ export function Success({ game, handleLevelUp, completionTime }: SuccessProps) {
               onClick={() => {
                 handleLevelUp();
               }}
-              className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-gray-600 dark:bg-gray-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
+              className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-gray-200 text-gray-800  px-4 py-2 mt-4 rounded-lg hover:opacity-80"
             >
               <span>Level up</span>
               <ArrowUpCircleIcon className="size-6" />
