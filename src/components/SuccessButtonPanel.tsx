@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpCircleIcon, TrophyIcon } from "lucide-react";
+import { Grid2X2PlusIcon, TrophyIcon } from "lucide-react";
 import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { Success } from "./DialogContents/Success";
@@ -35,14 +35,14 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
       {game.getSolutionSize() < MAX_SOLUTION_SIZE && (
         <BigRoundButton
           title="Begin a new, more difficult puzzle"
-          className="bg-gray-200 text-gray-800 dark:bg-gray-200 dark:text-gray-800 gap-4 pl-4 md:pl-6"
+          className="gap-4 px-4 md:px-6 animate-bounce"
           onClick={() => {
             handleLevelUp();
           }}
           playSound={playLevelUp}
         >
-          <span className="text-xl font-bold uppercase">Level&nbsp;up</span>
-          <ArrowUpCircleIcon className="size-8 md:size-10 xl:size-12" />
+          <span className="text-xl font-bold uppercase">Next&nbsp;puzzle</span>
+          <Grid2X2PlusIcon className="size-8 md:size-10 xl:size-12" />
         </BigRoundButton>
       )}
     </>

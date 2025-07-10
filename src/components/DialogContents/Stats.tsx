@@ -176,7 +176,7 @@ export function Stats() {
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-green-600 dark:text-green-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
-            {currentStreak}<span className="text-xs">day</span>
+            {currentStreak}<span className="text-xs ml-0.5">day{currentStreak === 1 ? "" : "s"}</span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
             Current<br />Streak
@@ -186,7 +186,7 @@ export function Stats() {
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-yellow-600 dark:text-yellow-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
-            {bestStreak}<span className="text-xs">day</span>
+            {bestStreak}<span className="text-xs ml-0.5">day{bestStreak === 1 ? "" : "s"}</span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
             Best<br />Streak

@@ -69,7 +69,9 @@ function App() {
       setModalContent(
         <Settings
           game={game}
-          onOpenStats={() => handleOpenModal("stats", "My Statistics", <Stats />)}
+          onOpenStats={() =>
+            handleOpenModal("stats", "My Statistics", <Stats />)
+          }
         />
       );
     }
@@ -169,11 +171,14 @@ function App() {
           />
         </>
       )}
-      <div className={cn("flex flex-col md:flex-row items-center justify-center w-full max-w-[65vh] my-auto py-4 gap-4",
-        {
-          "justify-between": showSuccessButtonPanel,
-        }
-      )}>
+      <div
+        className={cn(
+          "flex flex-col md:flex-row items-center justify-center w-full max-w-[65vh] my-auto py-4 gap-4",
+          {
+            "justify-between": showSuccessButtonPanel,
+          }
+        )}
+      >
         <button
           title="About this game"
           className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -196,56 +201,25 @@ function App() {
             />
           )}
         </div>
-        {/* {(showSuccessButtonPanel && (
-          <div className="flex flex-row justify-center md:justify-end gap-4">
-            <SuccessButtonPanel
-              game={game}
-              handleLevelUp={handleLevelUp}
-              onOpenModal={handleOpenModal}
-              completionTime={getCompletionTime()}
-            />
-          </div>
-        )) || (
-          <div className="flex flex-col text-gray-600 dark:text-gray-300 text-md text-center md:text-right text-balance gap-2">
-            <p className="">
-              Drag and drop the pieces to spell out the{" "}
-              {game.getSolutionSize()} words across the {game.getSolutionSize()}
-              ×{game.getSolutionSize()} grid in the centre.
-            </p>
-            {game.getEmptyTilePositions().length > 0 && (
-              <p className="">
-                There {game.getEmptyTilePositions().length === 1 ? "is" : "are"}{" "}
-                {game.getEmptyTilePositions().length} empty tile
-                {game.getEmptyTilePositions().length === 1 ? "" : "s"} in the
-                solution.
-              </p>
-            )}
-          </div>
-        )} */}
       </div>
       <div className="w-full max-w-[65vh] flex flex-col justify-center">
         {playingGrid}
       </div>
-      <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-4">
-        {/* Greeting and theme */}
-        <div className="flex flex-col text-gray-600 dark:text-gray-300 text-lg text-center md:text-left text-balance gap-2">
-          {game.getGreeting() && <p className="">{game.getGreeting()}</p>}
-          <p className="">
-            Today's theme:
-            <br />
-            <span className="font-bold text-xl">{game.getWordTheme()}</span>
-          </p>
+      {/* Greeting and theme */}
+      {game.getGreeting() && (
+        <div className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
+          {game.getGreeting()}
         </div>
+      )}
+      <div className="flex flex-row justify-center items-center w-full max-w-[65vh] my-auto py-4 gap-4">
         {/* Button Panel */}
-        <div className="flex flex-row flex-wrap justify-center md:justify-end gap-4">
-          <MenuButtonPanel
-            updateGameState={updateGameState}
-            solvePuzzle={solvePuzzle}
-            game={game}
-            onOpenModal={handleOpenModal}
-            onCloseModal={handleCloseModal}
-          />
-        </div>
+        <MenuButtonPanel
+          updateGameState={updateGameState}
+          solvePuzzle={solvePuzzle}
+          game={game}
+          onOpenModal={handleOpenModal}
+          onCloseModal={handleCloseModal}
+        />
       </div>
       <Modal
         isOpen={isModalOpen}

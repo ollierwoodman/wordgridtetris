@@ -60,7 +60,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   const styles = getVariantStyles();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} header={title}>
+    <Modal isOpen={isOpen} onClose={onClose} header={title} className="max-w-md">
       <div className="text-center space-y-4">
         <div className="flex justify-center">
           <AlertTriangleIcon className={`size-12 ${styles.icon}`} />
@@ -73,13 +73,13 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <div className="flex gap-3 justify-center text-sm pt-4">
           <button
             onClick={onClose}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${styles.cancelButton}`}
+            className={`px-4 py-2 rounded-lg transition-colors ${styles.cancelButton}`}
           >
             {cancelText}
           </button>
           <button
             onClick={handleConfirm}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${styles.confirmButton}`}
+            className={`px-4 py-2 rounded-lg transition-colors ${styles.confirmButton}`}
           >
             {confirmText}
           </button>

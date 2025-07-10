@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  CheckCheckIcon,
   GraduationCapIcon,
+  Grid2X2CheckIcon,
   InfoIcon,
   SettingsIcon,
   ShuffleIcon,
@@ -30,20 +30,12 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   return (
     <>
       <BigRoundButton
-        title="Show tutorial"
+        title="Open tutorial"
         onClick={() => {
           onOpenModal("tutorial", "Tutorial", <Tutorial game={game} onClose={onCloseModal} />);
         }}
       >
         <GraduationCapIcon className="size-8 md:size-10 xl:size-12" />
-      </BigRoundButton>
-      <BigRoundButton
-        title="Open settings"
-        onClick={() => {
-          onOpenModal("settings", "Settings", <Settings game={game} />);
-        }}
-      >
-        <SettingsIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
         title="Shuffle pieces"
@@ -54,6 +46,14 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         }}
       >
         <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
+      </BigRoundButton>
+      <BigRoundButton
+        title="Open settings"
+        onClick={() => {
+          onOpenModal("settings", "Settings", <Settings game={game} />);
+        }}
+      >
+        <SettingsIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
         title="Open about"
@@ -70,7 +70,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
             solvePuzzle();
           }}
         >
-          <CheckCheckIcon className="size-8 md:size-10 xl:size-12" />
+          <Grid2X2CheckIcon className="size-8 md:size-10 xl:size-12" />
         </BigRoundButton>
       )}
     </>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { XIcon } from 'lucide-react';
 import type { ModalProps } from '../../types/game';
+import { cn } from '@sglara/cn';
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children, className }) => {
     if (!isOpen) return null;
 
   return (
@@ -14,7 +15,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children 
       />
       
       {/* Modal */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] flex flex-col p-4 m-4">
+      <div className={cn("relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col p-4 m-4", className)}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 flex-shrink-0">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{header}</h2>

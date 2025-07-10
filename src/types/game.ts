@@ -93,6 +93,7 @@ export interface ModalProps {
   onClose: () => void;
   header: string;
   children: React.ReactNode;
+  className?: string;
 }
 
 export interface HintsProps {
