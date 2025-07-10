@@ -1,16 +1,29 @@
 import {
+  EyeOffIcon,
   HeartIcon,
   KeyboardIcon,
   SmartphoneIcon,
   TrophyIcon,
 } from "lucide-react";
 import { Game } from "../../game/logic";
+import { useShowTutorial } from "../../hooks/useLocalStorage";
+import { useGameSounds } from "../../hooks/sounds";
 
 interface TutorialProps {
   game?: Game;
+  onClose?: () => void;
 }
 
-const Tutorial: React.FC<TutorialProps> = ({ game }) => {
+const Tutorial: React.FC<TutorialProps> = ({ game, onClose }) => {
+  const [, setShowTutorial] = useShowTutorial();
+  const { playMenuClick } = useGameSounds();
+
+  const handleDontShowAgain = () => {
+    playMenuClick();
+    setShowTutorial(false);
+    onClose?.();
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
@@ -68,6 +81,18 @@ const Tutorial: React.FC<TutorialProps> = ({ game }) => {
         The pieces are already in the correct orientation, so you don't need to
         rotate them
       </p>
+
+      {/* Don't show again button */}
+      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+        <button
+          type="button"
+          onClick={handleDontShowAgain}
+          className="cursor-pointer flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+        >
+          <EyeOffIcon className="size-4" />
+          Don't show this again
+        </button>
+      </div>
     </div>
   );
 };

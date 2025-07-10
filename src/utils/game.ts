@@ -1,6 +1,20 @@
 import type { Game } from "../game/logic";
 import type { Piece, TileContent, PuzzleData } from "../types/game";
 
+export function formatDurationMs(ms: number): string {
+  if (ms === 0) return "N/A";
+  
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  
+  if (minutes > 0) {
+    return `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`;
+  } else {
+    return `${remainingSeconds}s`;
+  }
+}
+
 export function getPieceColor(pieceIndex: number) {
   const colors = [
     "bg-cyan-500 inset-shadow-sm inset-shadow-cyan-200/75 dark:bg-cyan-800 dark:inset-shadow-cyan-500/75",

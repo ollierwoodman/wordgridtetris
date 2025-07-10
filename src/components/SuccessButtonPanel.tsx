@@ -10,12 +10,14 @@ interface SuccessButtonPanelProps {
   game: Game;
   onOpenModal: (type: string, header: string, content: React.ReactNode) => void;
   handleLevelUp: () => void;
+  completionTime: number;
 }
 
 export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
   game,
   onOpenModal,
   handleLevelUp,
+  completionTime,
 }) => {
   const { playLevelUp } = useGameSounds();
 
@@ -25,7 +27,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
         title="Open success dialog"
         className="bg-yellow-600 dark:bg-yellow-800"
         onClick={() => {
-          onOpenModal("success", "Well done!", <Success game={game} handleLevelUp={handleLevelUp} />);
+          onOpenModal("success", "Well done!", <Success game={game} handleLevelUp={handleLevelUp} completionTime={completionTime} />);
         }}
       >
         <TrophyIcon className="size-8 md:size-10 xl:size-12" />
@@ -33,7 +35,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
       {game.getSolutionSize() < MAX_SOLUTION_SIZE && (
         <BigRoundButton
           title="Begin a new, more difficult puzzle"
-          className="bg-red-600 dark:bg-red-800 gap-4 pl-4 md:pl-6"
+          className="gap-4 pl-4 md:pl-6"
           onClick={() => {
             handleLevelUp();
           }}

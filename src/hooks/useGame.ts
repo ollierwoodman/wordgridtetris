@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
 import { getCurrentDateSeed } from "../game/puzzle/random";
@@ -8,6 +8,7 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
+  const gameStartTimeRef = useRef<number | null>(null);
   
   const { playDragClick } = useGameSounds();
 
@@ -15,6 +16,9 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
     setLoading(true);
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
+    // Record the start time when initializing a new game
+    gameStartTimeRef.current = Date.now();
+    
     const newGame = new Game(solutionSize, seed);
     setGame(newGame);
     
@@ -107,6 +111,11 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
     }
   }, [game, updateGameState]);
 
+  const getCompletionTime = useCallback(() => {
+    if (!gameStartTimeRef.current) return 0;
+    return Date.now() - gameStartTimeRef.current;
+  }, []);
+
   return {
     game,
     gameState,
@@ -114,6 +123,7 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
     handleTileClick,
     handleKeyDown,
     loading,
-    solvePuzzle
+    solvePuzzle,
+    getCompletionTime
   };
 } 

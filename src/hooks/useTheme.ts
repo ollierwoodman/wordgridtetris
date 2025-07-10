@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useTheme as useThemeStorage } from "./useLocalStorage";
 
 type Theme = "light" | "dark" | "system";
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Theme>(
-    (localStorage.theme as Theme) || "system"
-  );
+  const [theme, setTheme] = useThemeStorage();
 
   const getNextTheme = (currentTheme: Theme): Theme => {
     if (currentTheme === "system") {
@@ -19,7 +18,6 @@ export const useTheme = () => {
 
   const applyTheme = (newTheme: Theme) => {
     if (newTheme === "system") {
-      localStorage.removeItem("theme");
       // Check system preference
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add("dark");
@@ -27,7 +25,6 @@ export const useTheme = () => {
         document.documentElement.classList.remove("dark");
       }
     } else {
-      localStorage.setItem("theme", newTheme);
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }
     setTheme(newTheme);

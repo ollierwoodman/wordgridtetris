@@ -2,18 +2,20 @@ import { useState } from "react";
 import { ArrowUpCircleIcon, CheckIcon, Copy } from "lucide-react";
 import type { Game } from "../../game/logic";
 import { MAX_SOLUTION_SIZE } from "../../App";
+import { formatDurationMs } from "../../utils/game";
 
 const GAME_LINK = "https://blockle.au/";
 
 interface SuccessProps {
   game: Game | null;
   handleLevelUp: () => void;
+  completionTime: number;
 }
 
-export function Success({ game, handleLevelUp }: SuccessProps) {
-  const [copied, setCopied] = useState(false);
+export function Success({ game, handleLevelUp, completionTime }: SuccessProps) {
+  const [copied, setCopied] = useState<boolean>(false);
 
-  const shareText = `I solved today's ${game?.getSolutionSize()}×${game?.getSolutionSize()} Blockle puzzle!\nSee how you go here: ${GAME_LINK}`;
+  const shareText = `I solved today's ${game?.getSolutionSize()}×${game?.getSolutionSize()} Blockle puzzle${completionTime > 0 ? ` in ${formatDurationMs(completionTime)}` : ''}!\nSee how you go here: ${GAME_LINK}`;
 
   const copyToClipboard = async () => {
     try {
@@ -29,7 +31,7 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
     <>
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
         You've completed today's {game?.getSolutionSize()}×
-        {game?.getSolutionSize()} puzzle!
+        {game?.getSolutionSize()} puzzle{completionTime > 0 ? ` in ${formatDurationMs(completionTime)}` : ''}!
       </p>
 
       <div className="w-full max-w-md">
@@ -58,10 +60,10 @@ export function Success({ game, handleLevelUp }: SuccessProps) {
               onClick={() => {
                 handleLevelUp();
               }}
-              className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-red-600 dark:bg-red-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
+              className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-gray-600 dark:bg-gray-800 text-white px-4 py-2 mt-4 rounded-lg hover:opacity-80"
             >
               <span>Level up</span>
-              <ArrowUpCircleIcon className="w-4 h-4" />
+              <ArrowUpCircleIcon className="size-6" />
             </button>
           )}
       </div>

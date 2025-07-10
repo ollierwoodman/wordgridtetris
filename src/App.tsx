@@ -8,16 +8,21 @@ import { Modal } from "./components/ui/modal";
 import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
 import Settings from "./components/DialogContents/Settings";
-import { useGameSounds, useSoundContext } from "./hooks/sounds";
+import { Stats } from "./components/DialogContents/Stats";
+import { useGameSounds } from "./hooks/sounds";
 import ConfettiBoom from "react-confetti-boom";
 import { SuccessButtonPanel } from "./components/SuccessButtonPanel";
+import {
+  useShowTutorial,
+  useCompletedPuzzlesManager,
+} from "./hooks/useLocalStorage";
+import Tutorial from "./components/DialogContents/Tutorial";
+import { cn } from "@sglara/cn";
 
 export const MAX_SOLUTION_SIZE = 7;
 
 function App() {
   const [solutionSize, setSolutionSize] = useState<number>(5);
-
-  const { isMuted, setIsMuted } = useSoundContext();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalHeader, setModalHeader] = useState<string>("");
@@ -29,6 +34,9 @@ function App() {
 
   const { playMenuClick, playPuzzleComplete } = useGameSounds();
 
+  const [showTutorial] = useShowTutorial();
+  const { hasCompletedToday } = useCompletedPuzzlesManager();
+
   // Track if completion effect has already fired
   const hasCompletedRef = useRef<boolean>(false);
 
@@ -39,16 +47,33 @@ function App() {
     handleTileClick,
     loading,
     solvePuzzle,
+    getCompletionTime,
   } = useGame(solutionSize);
 
-  // Update modal content when isMuted changes and settings modal is open
+  const { addPuzzle } = useCompletedPuzzlesManager();
+
+  // Show tutorial modal on page load if showTutorial is true and user hasn't completed today's puzzle
+  useEffect(() => {
+    if (showTutorial && game && !loading && !hasCompletedToday()) {
+      handleOpenModal(
+        "tutorial",
+        "Tutorial",
+        <Tutorial game={game} onClose={handleCloseModal} />
+      );
+    }
+  }, [showTutorial, game, loading, hasCompletedToday]);
+
+  // Update modal content when settings modal is open
   useEffect(() => {
     if (isModalOpen && currentModalType === "settings" && game) {
       setModalContent(
-        <Settings game={game} isMuted={isMuted} setIsMuted={setIsMuted} />
+        <Settings
+          game={game}
+          onOpenStats={() => handleOpenModal("stats", "My Statistics", <Stats />)}
+        />
       );
     }
-  }, [isMuted, isModalOpen, currentModalType, game, setIsMuted]);
+  }, [isModalOpen, currentModalType, game]);
 
   const handleLevelUp = useCallback(() => {
     if (solutionSize < 5 || solutionSize >= MAX_SOLUTION_SIZE) {
@@ -69,10 +94,20 @@ function App() {
       setShowConfetti(true);
       playPuzzleComplete();
       setShowSuccessButtonPanel(true);
+      addPuzzle({
+        date: new Date().toISOString().split("T")[0],
+        solutionSize: game?.getSolutionSize() || 0,
+        seed: game?.getSeed() || "",
+        timeToCompleteMs: getCompletionTime(),
+      });
       handleOpenModal(
         "success",
         "Well done!",
-        <Success game={game} handleLevelUp={handleLevelUp} />
+        <Success
+          game={game}
+          handleLevelUp={handleLevelUp}
+          completionTime={getCompletionTime()}
+        />
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +139,7 @@ function App() {
       />
     ) : null;
 
-  if (loading) {
+  if (!game || !gameState || loading) {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 p-4">
         <p className="sr-only">Loading...</p>
@@ -112,10 +147,6 @@ function App() {
         <LoaderCircleIcon className="size-24 text-gray-400 dark:text-gray-300 animate-spin mt-8" />
       </div>
     );
-  }
-
-  if (!game || !gameState) {
-    return null;
   }
 
   return (
@@ -138,7 +169,11 @@ function App() {
           />
         </>
       )}
-      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-[65vh] my-auto py-4 gap-4">
+      <div className={cn("flex flex-col md:flex-row items-center justify-center w-full max-w-[65vh] my-auto py-4 gap-4",
+        {
+          "justify-between": showSuccessButtonPanel,
+        }
+      )}>
         <button
           title="About this game"
           className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -151,12 +186,23 @@ function App() {
             Blockle
           </h1>
         </button>
-        {(showSuccessButtonPanel && (
-          <div className="flex flex-row justify-center md:justify-end gap-8">
+        <div className="flex flex-row flex-wrap justify-center md:justify-end gap-4">
+          {showSuccessButtonPanel && (
             <SuccessButtonPanel
               game={game}
               handleLevelUp={handleLevelUp}
               onOpenModal={handleOpenModal}
+              completionTime={getCompletionTime()}
+            />
+          )}
+        </div>
+        {/* {(showSuccessButtonPanel && (
+          <div className="flex flex-row justify-center md:justify-end gap-4">
+            <SuccessButtonPanel
+              game={game}
+              handleLevelUp={handleLevelUp}
+              onOpenModal={handleOpenModal}
+              completionTime={getCompletionTime()}
             />
           </div>
         )) || (
@@ -175,7 +221,7 @@ function App() {
               </p>
             )}
           </div>
-        )}
+        )} */}
       </div>
       <div className="w-full max-w-[65vh] flex flex-col justify-center">
         {playingGrid}
@@ -185,19 +231,19 @@ function App() {
         <div className="flex flex-col text-gray-600 dark:text-gray-300 text-lg text-center md:text-left text-balance gap-2">
           {game.getGreeting() && <p className="">{game.getGreeting()}</p>}
           <p className="">
-            Today's theme:{" "}
-            <span className="font-bold">{game.getWordTheme()}</span>
+            Today's theme:
+            <br />
+            <span className="font-bold text-xl">{game.getWordTheme()}</span>
           </p>
         </div>
         {/* Button Panel */}
-        <div className="flex flex-row justify-center md:justify-end gap-4">
+        <div className="flex flex-row flex-wrap justify-center md:justify-end gap-4">
           <MenuButtonPanel
             updateGameState={updateGameState}
             solvePuzzle={solvePuzzle}
             game={game}
-            isMuted={isMuted}
-            setIsMuted={setIsMuted}
             onOpenModal={handleOpenModal}
+            onCloseModal={handleCloseModal}
           />
         </div>
       </div>

@@ -16,25 +16,23 @@ interface MenuButtonPanelProps {
   updateGameState: () => void;
   solvePuzzle: () => void;
   game?: Game;
-  isMuted: boolean;
-  setIsMuted: (isMuted: boolean) => void;
   onOpenModal: (type: string, header: string, content: React.ReactNode) => void;
+  onCloseModal?: () => void;
 }
 
 export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   solvePuzzle,
   game,
-  isMuted,
-  setIsMuted,
   onOpenModal,
   updateGameState,
+  onCloseModal,
 }) => {
   return (
     <>
       <BigRoundButton
         title="Show tutorial"
         onClick={() => {
-          onOpenModal("tutorial", "Tutorial", <Tutorial game={game} />);
+          onOpenModal("tutorial", "Tutorial", <Tutorial game={game} onClose={onCloseModal} />);
         }}
       >
         <GraduationCapIcon className="size-8 md:size-10 xl:size-12" />
@@ -42,13 +40,14 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
       <BigRoundButton
         title="Open settings"
         onClick={() => {
-          onOpenModal("settings", "Settings", <Settings game={game} isMuted={isMuted} setIsMuted={setIsMuted} />);
+          onOpenModal("settings", "Settings", <Settings game={game} />);
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
         title="Shuffle pieces"
+        disabled={game?.isPuzzleCompleted()}
         onClick={() => {
           game?.resetPieces();
           updateGameState();

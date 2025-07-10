@@ -5,20 +5,20 @@ import {
   SunIcon,
   Volume2Icon,
   VolumeOffIcon,
+  BarChart3Icon,
 } from "lucide-react";
 import type { Game } from "../../game/logic";
-import { useGameSounds } from "../../hooks/sounds";
+import { useGameSounds, useSoundContext } from "../../hooks/sounds";
 import { useTheme } from "../../hooks/useTheme";
 
 interface SettingsProps {
   game?: Game;
-  isMuted: boolean;
-  setIsMuted: (isMuted: boolean) => void;
+  onOpenStats?: () => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ isMuted, setIsMuted }) => {
+const Settings: React.FC<SettingsProps> = ({ onOpenStats }) => {
   const { theme, cycleTheme, getNextTheme } = useTheme();
-
+  const { isMuted, setIsMuted } = useSoundContext();
   const { playMenuClick } = useGameSounds();
 
   const handleThemeChange = () => {
@@ -29,6 +29,11 @@ const Settings: React.FC<SettingsProps> = ({ isMuted, setIsMuted }) => {
   const handleSoundToggle = () => {
     playMenuClick();
     setIsMuted(!isMuted);
+  };
+
+  const handleOpenStats = () => {
+    playMenuClick();
+    onOpenStats?.();
   };
 
   return (
@@ -79,6 +84,26 @@ const Settings: React.FC<SettingsProps> = ({ isMuted, setIsMuted }) => {
           className="cursor-pointer rounded-full w-full bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
         >
           {isMuted ? "Unmute sound" : "Mute sound"}
+        </button>
+      </div>
+      <div className="flex flex-col items-center gap-4">
+        {/* Stats Section */}
+        <div className="flex items-center dark:text-gray-200 w-full gap-4">
+          <div className="flex flex-col">
+            <h3 className="text-lg font-bold">Statistics</h3>
+            <p className="text-gray-800 dark:text-gray-300">
+              View your puzzle-solving progress
+            </p>
+          </div>
+          <BarChart3Icon className="size-8 ml-auto" />
+        </div>
+        <button
+          type="button"
+          title="View statistics"
+          onClick={handleOpenStats}
+          className="cursor-pointer rounded-full w-full bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
+        >
+          View statistics
         </button>
       </div>
     </div>

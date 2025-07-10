@@ -14,6 +14,7 @@ import { SeededRandom } from "../utils/random";
 const NUMBER_BLOCK_PER_PIECE = 4;
 
 export class Game {
+  private seed: string;
   private solutionSize: number;
   private gridSize: number;
   private solutionOffset: number;
@@ -32,6 +33,7 @@ export class Game {
   private initializationPromise: Promise<void>;
 
   constructor(solutionSize: number, seed: string) {
+    this.seed = seed;
     this.solutionSize = solutionSize;
     this.gridSize = solutionSize + 4;
     this.solutionOffset = (this.gridSize - this.solutionSize) / 2;
@@ -455,6 +457,10 @@ export class Game {
         this.pieceRotationStates[i] = rotation || 0;
       }
     }
+  }
+
+  public getSeed(): string {
+    return this.seed;
   }
 
   // Empty tile methods

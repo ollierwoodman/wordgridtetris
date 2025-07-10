@@ -19,7 +19,7 @@ export function getCurrentDateSeed() {
   return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
 }
 
-export async function fetchRandomWordSolution(solutionSize: number, seed: string = getCurrentDateSeed()): Promise<WordSolution> {
+export async function fetchRandomWordSolution(solutionSize: number, seed: string): Promise<WordSolution> {
   const randomHelper = SeededRandom.fromString(seed);
   const res = await fetch(createUrl(`solutions/${solutionSize}x${solutionSize}/words/checked.json`));
   const data = await res.json();
@@ -29,7 +29,7 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
   return solution;
 }
 
-export async function fetchRandomPieceSolution(solutionSize: number, seed: string = getCurrentDateSeed()): Promise<
+export async function fetchRandomPieceSolution(solutionSize: number, seed: string): Promise<
   PieceSolutionEntry[]
 > {
   const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[solutionSize]; // 0.json to [TOTAL_NUM_SOLUTIONS - 1].json
