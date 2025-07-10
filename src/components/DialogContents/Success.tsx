@@ -3,7 +3,7 @@ import { ArrowUpCircleIcon, CheckIcon, Copy } from "lucide-react";
 import type { Game } from "../../game/logic";
 import { MAX_SOLUTION_SIZE } from "../../App";
 
-const GAME_LINK = "https://ollierwoodman.github.io/wordgridtetris/";
+const GAME_LINK = "https://blockle.au/";
 
 interface SuccessProps {
   game: Game | null;
