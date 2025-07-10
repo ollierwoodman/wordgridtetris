@@ -29,10 +29,11 @@ interface Touch {
   readonly force: number;
 }
 
-export function useDragAndDrop({ game, gameState, updateGameState }: {
+export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }: {
   game: Game;
   gameState: { pieces: Piece[] };
   updateGameState: () => void;
+  isCompleted: boolean;
 }) {
   const [draggedPieceIndex, setDraggedPieceIndex] = useState<number | null>(null);
   const [dragPosition, setDragPosition] = useState<{ x: number; y: number } | null>(null);
@@ -45,6 +46,13 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
   const { playDragClick, playDropSuccess, playDropFail } = useGameSounds();
 
   const handleDragStart = useCallback((pieceIndex: number, x: number, y: number, event: React.MouseEvent | React.TouchEvent) => {
+    // Prevent dragging if game is completed
+    if (isCompleted) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     // Prevent default behavior for touch events to avoid mouse event synthesis and scrolling
     if (event.type === 'touchstart') {
       event.preventDefault();
@@ -76,7 +84,7 @@ export function useDragAndDrop({ game, gameState, updateGameState }: {
     setDraggedBlockIndex(foundBlockIndex);
     document.body.style.cursor = 'grabbing';
     document.body.classList.add('overflow-hidden', 'touch-none');
-  }, [game, gameState.pieces]);
+  }, [game, gameState.pieces, isCompleted]);
 
   const handleDragMove = useCallback((event: MouseEvent | TouchEvent) => {
     // Prevent default for touch events to avoid scrolling

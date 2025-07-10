@@ -20,13 +20,14 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
     game,
     gameState,
     updateGameState,
+    isCompleted: gameState.isCompleted,
   });
 
   const gridSize = game.getGridSize();
 
   function getTileClasses(tileContent: TileContent) {
     return cn(
-      "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
+      "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center transition-all duration-150",
       {
         "ring-4 ring-green-400": tileContent?.isValid,
         "ring-4 ring-red-400": tileContent?.isValid === false,
@@ -34,8 +35,9 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
         "bg-gray-400/50 dark:bg-gray-600/50": !tileContent?.isInSolutionGrid,
         [`${getPieceColor(tileContent?.pieceIndex)} cursor-pointer`]:
           tileContent?.pieceIndex >= 0,
-        "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75": tileContent?.isEmptyTile,
-        "cursor-not-allowed": tileContent?.isLocked,
+        "cursor-not-allowed": tileContent?.isLocked || gameState.isCompleted,
+        "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75":
+          tileContent?.isEmptyTile,
         "z-10 opacity-50": tileContent?.isGhost,
       }
     );
@@ -71,7 +73,10 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
           game,
         });
         const pieceAtPosition = game.getPieceAtPosition(x, y);
-        const canDrag = pieceAtPosition && draggedPieceIndex === null;
+        const canDrag =
+          pieceAtPosition &&
+          draggedPieceIndex === null &&
+          !gameState.isCompleted;
         return (
           <div
             key={index}

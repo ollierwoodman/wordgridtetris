@@ -70,6 +70,7 @@ export function getTileContent({
       }
     }
   }
+  
   // Normal rendering
   const pieceAtPosition = game.getPieceAtPosition(x, y);
   if (pieceAtPosition) {
@@ -84,12 +85,8 @@ export function getTileContent({
     }
   }
 
-  // Check if this is the empty tile and if it should be revealed
-  const hintProgress = game.getHintProgress();
-  const isCompleted = gameState.isCompleted || game.isPuzzleCompleted();
-
-  // Only show empty tiles if hints are enabled (solution size <= 5) and either hints are revealed or puzzle is completed
-  if (game.areHintsEnabled() && (hintProgress >= 2 || isCompleted)) {
+  const isGameCompleted = gameState.isCompleted || game.isPuzzleCompleted();
+  if (isGameCompleted) {
     const emptyPositions = game.getEmptyTilePositions();
     const emptyPositionIndex = emptyPositions.findIndex(
       (emptyPosition) => x === emptyPosition.x && y === emptyPosition.y

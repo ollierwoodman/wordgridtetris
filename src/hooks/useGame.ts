@@ -47,7 +47,7 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
   }, [game]);
 
   const handleTileClick = useCallback((x: number, y: number) => {
-    if (!game) return;
+    if (!game || game.isPuzzleCompleted()) return;
     const pieceAtPosition = game.getPieceAtPosition(x, y);
     if (pieceAtPosition) {
       game.selectPiece(pieceAtPosition.pieceIndex);
@@ -59,7 +59,7 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
   }, [game, updateGameState]);
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!game) return;
+    if (!game || game.isPuzzleCompleted()) return;
     switch (event.key) {
       case 'ArrowLeft':
         if (game.movePiece(-1, 0)) {

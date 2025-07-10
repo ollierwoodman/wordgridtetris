@@ -3,7 +3,7 @@ import { useGame } from "./hooks/useGame";
 import { MenuButtonPanel } from "./components/MenuButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
 import { LoaderCircleIcon } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Modal } from "./components/ui/modal";
 import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
@@ -28,6 +28,9 @@ function App() {
     useState<boolean>(false);
 
   const { playMenuClick, playPuzzleComplete } = useGameSounds();
+
+  // Track if completion effect has already fired
+  const hasCompletedRef = useRef<boolean>(false);
 
   const {
     game,
@@ -55,11 +58,14 @@ function App() {
     setIsModalOpen(false);
     setShowSuccessButtonPanel(false);
     setSolutionSize(solutionSize + 1);
+    // Reset completion flag when leveling up
+    hasCompletedRef.current = false;
   }, [solutionSize]);
 
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
-    if (gameState?.isCompleted) {
+    if (gameState?.isCompleted && !hasCompletedRef.current) {
+      hasCompletedRef.current = true;
       setShowConfetti(true);
       playPuzzleComplete();
       setShowSuccessButtonPanel(true);
