@@ -8,7 +8,7 @@ TODO: Make more word lists and improve current word lists
 
 ## New features
 
-TODO: Use url path to set the puzzle difficulty (5x5, 6x6, etc.) as well as the puzzle seed
-TODO: Add a "share" button to share the puzzle to social media
+TODO: Use url path to set the puzzle difficulty (5x5, 6x6, etc.)
 TODO: Design and implement unique color schemes for increasing levels of difficulty
 TODO: Extend random puzzle selector to have with greetings and related word lists
+TODO: Add test suite to cover important functions particularly in useGame.ts and logic.ts
