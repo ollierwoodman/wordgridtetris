@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142 80" width="284" height="160">
+  <g transform="translate(-7, 70)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; -190,0"
+      keyTimes="0; 1"
+      dur="2s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="0" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="24" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="36" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="48" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="60" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="72" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="84" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="96" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="108" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="120" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="132" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="144" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="156" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="168" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="180" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="192" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="204" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="216" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="228" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="240" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="252" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="264" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="276" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="288" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="300" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="312" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+    <rect x="324" y="0" width="10" height="10" rx="2" fill="#6a7282" />
+  </g>
+
+  <!-- Bouncing block in center -->
+  <g transform="translate(66, 60)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,-60; 0,0"
+      keyTimes="0; 0.5; 1"
+      dur="2s"
+      repeatCount="indefinite"
+      calcMode="spline"
+      keySplines="0.25 0.46 0.45 0.94; 0.55 0.055 0.675 0.19"
+      additive="sum"
+    />
+    <rect x="0" y="0" width="10" height="10" rx="2" fill="#fff" />
+    <!-- <text x="5" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">B</text> -->
+  </g>
+
+  <!-- I piece -->
+  <g transform="translate(142, 60)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,0; -190,0; -190,0"
+      keyTimes="0; 0; 0.2; 1"
+      dur="10s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="0" y="0" width="10" height="10" rx="2" fill="#00b8db" />
+    <text x="5" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">N</text>
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#00b8db" />
+    <text x="17" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">I</text>
+    <rect x="24" y="0" width="10" height="10" rx="2" fill="#00b8db" />
+    <text x="29" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">C</text>
+    <rect x="36" y="0" width="10" height="10" rx="2" fill="#00b8db" />
+    <text x="41" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">E</text>
+  </g>
+
+  <!-- S piece -->
+  <g transform="translate(142, 48)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,0; -190,0; -190,0"
+      keyTimes="0; 0.2; 0.4; 1"
+      dur="10s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#ff6900" />
+    <text x="17" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">R</text>
+    <rect x="24" y="0" width="10" height="10" rx="2" fill="#ff6900" />
+    <text x="29" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">K</text>
+    <rect x="0" y="12" width="10" height="10" rx="2" fill="#ff6900" />
+    <text x="5" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">W</text>
+    <rect x="12" y="12" width="10" height="10" rx="2" fill="#ff6900" />
+    <text x="17" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">O</text>
+  </g>
+
+  <!-- Upside down T piece -->
+  <g transform="translate(142, 48)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,0; -190,0; -190,0"
+      keyTimes="0; 0.4; 0.6; 1"
+      dur="10s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#fa2b35" />
+    <text x="17" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">W</text>
+    <rect x="0" y="12" width="10" height="10" rx="2" fill="#fa2b35" />
+    <text x="5" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">O</text>
+    <rect x="12" y="12" width="10" height="10" rx="2" fill="#fa2b35" />
+    <text x="17" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">O</text>
+    <rect x="24" y="12" width="10" height="10" rx="2" fill="#fa2b35" />
+    <text x="29" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">O</text>
+  </g>
+
+  <!-- O piece -->
+  <g transform="translate(142, 48)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,0; -190,0; -190,0"
+      keyTimes="0; 0.6; 0.8; 1"
+      dur="10s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="0" y="0" width="10" height="10" rx="2" fill="#f0b100" />
+    <text x="5" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">B</text>
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#f0b100" />
+    <text x="17" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">L</text>
+    <rect x="0" y="12" width="10" height="10" rx="2" fill="#f0b100" />
+    <text x="5" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">K</text>
+    <rect x="12" y="12" width="10" height="10" rx="2" fill="#f0b100" />
+    <text x="17" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">L</text>
+  </g>
+
+  <!-- Green J piece -->
+  <g transform="translate(142, 36)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="0,0; 0,0; -190,0; -190,0"
+      keyTimes="0; 0.8; 1; 1"
+      dur="10s"
+      repeatCount="indefinite"
+      additive="sum"
+    />
+    <rect x="0" y="24" width="10" height="10" rx="2" fill="#00c950" />
+    <text x="5" y="31.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">!</text>
+    <rect x="12" y="24" width="10" height="10" rx="2" fill="#00c950" />
+    <text x="17" y="31.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">X</text>
+    <rect x="12" y="0" width="10" height="10" rx="2" fill="#00c950" />
+    <text x="17" y="7.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">R</text>
+    <rect x="12" y="12" width="10" height="10" rx="2" fill="#00c950" />
+    <text x="17" y="19.75" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white"
+      text-anchor="middle">O</text>
+  </g>
+</svg>

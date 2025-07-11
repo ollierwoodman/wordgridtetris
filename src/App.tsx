@@ -2,7 +2,6 @@ import "./App.css";
 import { useGame } from "./hooks/useGame";
 import { MenuButtonPanel } from "./components/MenuButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
-import { LoaderCircleIcon } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Modal } from "./components/ui/modal";
 import { About } from "./components/DialogContents/About";
@@ -19,6 +18,7 @@ import {
 import Tutorial from "./components/DialogContents/Tutorial";
 import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
+import { AnimatedEndlessRunner } from "./utils/svg";
 
 function App() {
   const { solutionSize, changeSolutionSize, canLevelUp } = useSolutionSizeFromURL();
@@ -143,9 +143,8 @@ function App() {
   if (!game || !gameState || loading) {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 p-4">
-        <p className="sr-only">Loading...</p>
         {/* Spinner */}
-        <LoaderCircleIcon className="size-24 text-gray-400 dark:text-gray-300 animate-spin mt-8" />
+        <AnimatedEndlessRunner className="max-w-md w-full text-white fill-gray-400/50 dark:fill-gray-600 bg-gray-300 dark:bg-gray-700 rounded-lg p-4" />
       </div>
     );
   }

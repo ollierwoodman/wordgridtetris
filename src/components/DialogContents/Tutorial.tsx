@@ -8,6 +8,7 @@ import {
 import { Game } from "../../game/logic";
 import { useShowTutorial } from "../../hooks/useLocalStorage";
 import { useGameSounds } from "../../hooks/sounds";
+import { AnimatedPuzzleDemo } from "../../utils/svg";
 
 interface TutorialProps {
   game?: Game;
@@ -32,8 +33,8 @@ const Tutorial: React.FC<TutorialProps> = ({ game, onClose }) => {
         the center to form {game?.getSolutionSize() ?? 5} horizontal words.
       </p>
       
-      <div className="flex justify-center items-center w-full aspect-square bg-gray-300 dark:bg-gray-800 p-4 rounded-lg">
-        <img src="/puzzle-demo.svg" alt="Puzzle solving demo" className="w-full h-full object-contain" />
+      <div className="flex justify-center items-center w-full px-16 rounded-lg">
+        <AnimatedPuzzleDemo className="w-full h-full bg-gray-300 dark:bg-gray-800 object-contain text-gray-400/50 dark:text-gray-600/50 p-2 rounded-lg" />
       </div>
 
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
