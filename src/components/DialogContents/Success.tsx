@@ -1,10 +1,8 @@
 import { CopyIcon, Grid2X2PlusIcon, Share2Icon } from "lucide-react";
 import type { Game } from "../../game/logic";
-import { MAX_SOLUTION_SIZE } from "../../App";
+import { MAX_SOLUTION_SIZE } from "../../hooks/useSolutionSizeFromURL";
 import { formatDurationMs } from "../../utils/game";
 import useShare from "../../hooks/useShare";
-
-const GAME_LINK = "https://blockle.au";
 
 interface SuccessProps {
   game: Game | null;
@@ -15,6 +13,7 @@ interface SuccessProps {
 export function Success({ game, handleLevelUp, completionTime }: SuccessProps) {
   const { copy, share, canShare } = useShare();
 
+  const GAME_LINK = `https://blockle.au/${game?.getSolutionSize()}x${game?.getSolutionSize()}`;
   const shareText = `I solved today's ${game?.getSolutionSize()}×${game?.getSolutionSize()} Blockle ${
     completionTime > 0 ? `in ${formatDurationMs(completionTime)}` : ""
   }!\n${GAME_LINK}`;

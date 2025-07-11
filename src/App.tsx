@@ -18,11 +18,10 @@ import {
 } from "./hooks/useLocalStorage";
 import Tutorial from "./components/DialogContents/Tutorial";
 import { cn } from "@sglara/cn";
-
-export const MAX_SOLUTION_SIZE = 7;
+import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 
 function App() {
-  const [solutionSize, setSolutionSize] = useState<number>(5);
+  const { solutionSize, changeSolutionSize, canLevelUp } = useSolutionSizeFromURL();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalHeader, setModalHeader] = useState<string>("");
@@ -78,16 +77,16 @@ function App() {
   }, [isModalOpen, currentModalType, game]);
 
   const handleLevelUp = useCallback(() => {
-    if (solutionSize < 5 || solutionSize >= MAX_SOLUTION_SIZE) {
+    if (!canLevelUp) {
       return;
     }
     setShowConfetti(false);
     setIsModalOpen(false);
     setShowSuccessButtonPanel(false);
-    setSolutionSize(solutionSize + 1);
+    changeSolutionSize(solutionSize + 1);
     // Reset completion flag when leveling up
     hasCompletedRef.current = false;
-  }, [solutionSize]);
+  }, [solutionSize, canLevelUp, changeSolutionSize]);
 
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
@@ -158,7 +157,7 @@ function App() {
           <ConfettiBoom
             mode="fall"
             className="z-50"
-            particleCount={200}
+            particleCount={100}
             colors={[
               "#FF6B6B",
               "#4ECDC4",
@@ -191,7 +190,7 @@ function App() {
             Blockle
           </h1>
         </button>
-        <div className="flex flex-row flex-wrap justify-center md:justify-end gap-4">
+        <div className="flex flex-row justify-center md:justify-end gap-4">
           {showSuccessButtonPanel && (
             <SuccessButtonPanel
               game={game}

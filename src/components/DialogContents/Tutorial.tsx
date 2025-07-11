@@ -32,7 +32,7 @@ const Tutorial: React.FC<TutorialProps> = ({ game, onClose }) => {
         the center to form {game?.getSolutionSize() ?? 5} horizontal words.
       </p>
       
-      <div className="w-full aspect-square bg-gray-300 dark:bg-gray-800 p-4 rounded-lg">
+      <div className="flex justify-center items-center w-full aspect-square bg-gray-300 dark:bg-gray-800 p-4 rounded-lg">
         <img src="/puzzle-demo.svg" alt="Puzzle solving demo" className="w-full h-full object-contain" />
       </div>
 
