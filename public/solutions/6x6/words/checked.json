@@ -73,20 +73,272 @@
   {
     "theme": "food",
     "words": [
-        "burger",
+      "burger",
+      "hungry",
+      "coffee",
+      "cooked",
+      "potato",
+      "dinner",
+      "kibble",
+      "liquor",
+      "cheese",
+      "cereal",
+      "recipe",
+      "edible",
+      "eatery",
+      "pantry"
+    ]
+  },
+  {
+    "theme": "winter",
+    "words": [
+      [
+        "arctic",
+        "freeze",
+        "frosty",
+        "frozen",
+        "colder",
+        "snowed",
+        "snowie",
+        "skiing",
+        "winter",
+        "chilly",
+        "season"
+      ]
+    ]
+  },
+  {
+    "theme": "breakfast",
+    "words": [
+      [
         "hungry",
-        "coffee",
+        "muffin",
         "cooked",
-        "potato",
-        "dinner",
-        "kibble",
-        "liquor",
-        "cheese",
         "cereal",
         "recipe",
-        "edible",
-        "eatery",
-        "pantry"
+        "eating",
+        "pantry",
+        "waffle"
+      ]
     ]
-}
+  },
+  {
+    "theme": "basketball",
+    "words": [
+      [
+        "dunked",
+        "sports",
+        "jordan",
+        "league",
+        "basket",
+        "harlem",
+        "lakers"
+      ]
+    ]
+  },
+  {
+    "theme": "sports",
+    "words": [
+      [
+        "boxing",
+        "hockey",
+        "soccer",
+        "skiing",
+        "tennis",
+        "karate"
+      ]
+    ]
+  },
+  {
+    "theme": "computers",
+    "words": [
+      [
+        "system",
+        "drives",
+        "images",
+        "floppy",
+        "device",
+        "cables",
+        "laptop"
+      ]
+    ]
+  },
+  {
+    "theme": "space",
+    "words": [
+      [
+        "cosmic",
+        "planet",
+        "saturn",
+        "galaxy",
+        "matter",
+        "vacuum",
+        "uranus"
+      ]
+    ]
+  },
+  {
+    "theme": "chemistry",
+    "words": [
+      [
+        "atomic",
+        "ionium",
+        "chemic",
+        "petrol",
+        "carbon"
+      ]
+    ]
+  },
+  {
+    "theme": "painting",
+    "words": [
+      [
+        "artist",
+        "crafts",
+        "depict",
+        "pencil",
+        "canvas",
+        "makeup"
+      ]
+    ]
+  },
+  {
+    "theme": "music",
+    "words": [
+      [
+        "guitar",
+        "stereo",
+        "artist",
+        "mozart",
+        "single",
+        "albums",
+        "singer",
+        "violin",
+        "choral",
+        "rhythm",
+        "melody",
+        "reggae",
+        "ballad",
+        "talent"
+      ]
+    ]
+  },
+  {
+    "theme": "cities",
+    "words": [
+      [
+        "sydney",
+        "athens",
+        "bombay",
+        "boston",
+        "london",
+        "moscow",
+        "berlin",
+        "venice",
+        "naples"
+      ]
+    ]
+  },
+  {
+    "theme": "transportation",
+    "words": [
+      [
+        "subway",
+        "travel",
+        "trucks",
+        "moving",
+        "towing",
+        "flight",
+        "pickup",
+        "parcel"
+      ]
+    ]
+  },
+  {
+    "theme": "countries",
+    "words": [
+      [
+        "sweden",
+        "guyana",
+        "kuwait",
+        "russia",
+        "israel",
+        "brazil",
+        "crimea",
+        "france",
+        "greece",
+        "norway",
+        "poland",
+        "angola",
+        "bhutan",
+        "uganda",
+        "mexico",
+        "serbia",
+        "canada",
+        "gambia",
+        "panama",
+        "taiwan",
+        "zambia"
+      ]
+    ]
+  },
+  {
+    "theme": "courage",
+    "words": [
+      [
+        "strong",
+        "braved",
+        "fright",
+        "coward",
+        "fierce",
+        "scared",
+        "daring"
+      ]
+    ]
+  },
+  {
+    "theme": "medical",
+    "words": [
+      [
+        "doctor",
+        "injury",
+        "clinic",
+        "kidney",
+        "dental",
+        "health"
+      ]
+    ]
+  },
+  {
+    "theme": "education",
+    "words": [
+      [
+        "degree",
+        "learnt",
+        "pedage",
+        "school",
+        "career",
+        "taught"
+      ]
+    ]
+  },
+  {
+    "theme": "cooking",
+    "words": [
+      [
+        "hungry",
+        "supper",
+        "boiled",
+        "cooked",
+        "cooker",
+        "dining",
+        "dinner",
+        "dishes",
+        "recipe",
+        "baking",
+        "eating",
+        "making"
+      ]
+    ]
+  }
 ]

@@ -56,6 +56,147 @@
       "council",
       "airport",
       "capital"
-  ]
+    ]
+  },
+  {
+    "theme": "winter",
+    "words": [
+      "sweater",
+      "freezer",
+      "frosted",
+      "coldest",
+      "holiday",
+      "snowcap",
+      "snowman",
+      "climate",
+      "glacier",
+      "chilled",
+      "weather"
+    ]
+  },
+  {
+    "theme": "breakfast",
+    "words": [
+      "granola",
+      "hotcake",
+      "yoghurt",
+      "toaster",
+      "eggroll",
+      "oatmeal",
+      "pancake"
+    ]
+  },
+  {
+    "theme": "italian food",
+    "words": [
+      "tuscany",
+      "italian",
+      "bologna",
+      "risotto",
+      "paretta",
+      "ravioli",
+      "sausage"
+    ]
+  },
+  {
+    "theme": "birds",
+    "words": [
+      "vulture",
+      "sparrow",
+      "rooster",
+      "chicken",
+      "peacock",
+      "peafowl",
+      "penguin",
+      "seagull"
+    ]
+  },
+  {
+    "theme": "basketball",
+    "words": [
+      "pregame",
+      "coached",
+      "college",
+      "tourney",
+      "playoff",
+      "shooter",
+      "agility",
+      "offense",
+      "defense"
+    ]
+  },
+  {
+    "theme": "soccer",
+    "words": [
+      "athlete",
+      "stadium",
+      "striker",
+      "arsenal",
+      "kickoff",
+      "defense",
+      "referee"
+    ]
+  },
+  {
+    "theme": "hiking",
+    "words": [
+      "explore",
+      "outdoor",
+      "outside",
+      "journey",
+      "climbed",
+      "terrain",
+      "scenery"
+    ]
+  },
+  {
+    "theme": "computers",
+    "words": [
+      "printer",
+      "program",
+      "monitor",
+      "robotic",
+      "digital",
+      "desktop",
+      "network",
+      "scanner",
+      "science",
+      "machine"
+    ]
+  },
+  {
+    "theme": "space",
+    "words": [
+      "gravity",
+      "orbital",
+      "voyager",
+      "distant",
+      "shuttle",
+      "science",
+      "neptune",
+      "jupiter",
+      "mercury"
+    ]
+  },
+  {
+    "theme": "chemistry",
+    "words": [
+      "isotope",
+      "arsenic",
+      "uranium",
+      "polymer",
+      "solvent",
+      "ammonia",
+      "mineral",
+      "mixture",
+      "chemist",
+      "thermal",
+      "mercury",
+      "methane",
+      "neutron",
+      "acetate",
+      "acidity",
+      "science"
+    ]
   }
 ]

@@ -1,112 +1,254 @@
 [
   {
-    "theme": "animals",
+    "theme": "winter",
     "words": [
-      "monkey",
-      "rabbit",
-      "turtle",
-      "wombat",
-      "possum",
-      "puffin"
+      [
+        "arctic",
+        "freeze",
+        "frosty",
+        "frozen",
+        "colder",
+        "snowed",
+        "snowie",
+        "skiing",
+        "winter",
+        "chilly",
+        "season"
+      ]
     ]
   },
   {
-    "theme": "fruits",
+    "theme": "breakfast",
     "words": [
-      "orange",
-      "banana",
-      "cherry",
-      "lychee",
-      "tomato",
-      "papaya"
+      [
+        "hungry",
+        "muffin",
+        "cooked",
+        "cereal",
+        "recipe",
+        "eating",
+        "pantry",
+        "waffle"
+      ]
     ]
   },
   {
-    "theme": "bad weather",
+    "theme": "basketball",
     "words": [
-      "breeze",
-      "stormy",
-      "cloudy",
-      "frozen",
-      "smoggy",
-      "thawed"
-    ]
-  },
-  {
-    "theme": "kitchen",
-    "words": [
-      "aprons",
-      "kettle",
-      "knives",
-      "plates",
-      "frying",
-      "baking"
-    ]
-  },
-  {
-    "theme": "travel",
-    "words": [
-      "flight",
-      "voyage",
-      "desert",
-      "resort",
-      "island",
-      "safari"
-    ]
-  },
-  {
-    "theme": "colors",
-    "words": [
-      "purple",
-      "indigo",
-      "violet",
-      "golden",
-      "silver",
-      "bronze"
+      [
+        "dunked",
+        "sports",
+        "jordan",
+        "league",
+        "basket",
+        "harlem",
+        "lakers"
+      ]
     ]
   },
   {
     "theme": "sports",
     "words": [
-      "tennis",
-      "bowling",
-      "",
-      "hockey",
-      "sprint",
-      "diving"
+      [
+        "boxing",
+        "hockey",
+        "soccer",
+        "skiing",
+        "tennis",
+        "karate"
+      ]
     ]
   },
   {
-    "theme": "emotions",
+    "theme": "computers",
     "words": [
-      "joyful",
-      "calmly",
-      "caring",
-      "kindly",
-      "wishes",
-      "bright"
+      [
+        "system",
+        "drives",
+        "images",
+        "floppy",
+        "device",
+        "cables",
+        "laptop"
+      ]
     ]
   },
   {
-    "theme": "body parts",
+    "theme": "space",
     "words": [
-      "brains",
-      "kidney",
-      "muscle",
-      "finger",
-      "ribbon",
-      "throat"
+      [
+        "cosmic",
+        "planet",
+        "saturn",
+        "galaxy",
+        "matter",
+        "vacuum",
+        "uranus"
+      ]
     ]
   },
   {
-    "theme": "clothing",
+    "theme": "chemistry",
     "words": [
-      "jacket",
-      "sweats",
-      "scarfs",
-      "gloves",
-      "tshirt",
-      "skirts"
+      [
+        "atomic",
+        "ionium",
+        "chemic",
+        "petrol",
+        "carbon"
+      ]
+    ]
+  },
+  {
+    "theme": "painting",
+    "words": [
+      [
+        "artist",
+        "crafts",
+        "depict",
+        "pencil",
+        "canvas",
+        "makeup"
+      ]
+    ]
+  },
+  {
+    "theme": "music",
+    "words": [
+      [
+        "guitar",
+        "stereo",
+        "artist",
+        "mozart",
+        "single",
+        "albums",
+        "singer",
+        "violin",
+        "choral",
+        "rhythm",
+        "melody",
+        "reggae",
+        "ballad",
+        "talent"
+      ]
+    ]
+  },
+  {
+    "theme": "cities",
+    "words": [
+      [
+        "sydney",
+        "athens",
+        "bombay",
+        "boston",
+        "london",
+        "moscow",
+        "berlin",
+        "venice",
+        "naples"
+      ]
+    ]
+  },
+  {
+    "theme": "transportation",
+    "words": [
+      [
+        "subway",
+        "travel",
+        "trucks",
+        "moving",
+        "towing",
+        "flight",
+        "pickup",
+        "parcel"
+      ]
+    ]
+  },
+  {
+    "theme": "countries",
+    "words": [
+      [
+        "sweden",
+        "guyana",
+        "kuwait",
+        "russia",
+        "israel",
+        "brazil",
+        "crimea",
+        "france",
+        "greece",
+        "norway",
+        "poland",
+        "angola",
+        "bhutan",
+        "uganda",
+        "mexico",
+        "serbia",
+        "canada",
+        "gambia",
+        "panama",
+        "taiwan",
+        "zambia"
+      ]
+    ]
+  },
+  {
+    "theme": "courage",
+    "words": [
+      [
+        "strong",
+        "braved",
+        "fright",
+        "coward",
+        "fierce",
+        "scared",
+        "daring"
+      ]
+    ]
+  },
+  {
+    "theme": "medical",
+    "words": [
+      [
+        "doctor",
+        "injury",
+        "clinic",
+        "kidney",
+        "dental",
+        "health"
+      ]
+    ]
+  },
+  {
+    "theme": "education",
+    "words": [
+      [
+        "degree",
+        "learnt",
+        "pedage",
+        "school",
+        "career",
+        "taught"
+      ]
+    ]
+  },
+  {
+    "theme": "cooking",
+    "words": [
+      [
+        "hungry",
+        "supper",
+        "boiled",
+        "cooked",
+        "cooker",
+        "dining",
+        "dinner",
+        "dishes",
+        "recipe",
+        "baking",
+        "eating",
+        "making"
+      ]
     ]
   }
 ]
