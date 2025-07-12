@@ -2,7 +2,6 @@
   {
     "theme": "winter",
     "words": [
-      [
         "arctic",
         "freeze",
         "frosty",
@@ -15,12 +14,10 @@
         "chilly",
         "season"
       ]
-    ]
   },
   {
     "theme": "breakfast",
     "words": [
-      [
         "hungry",
         "muffin",
         "cooked",
@@ -30,12 +27,10 @@
         "pantry",
         "waffle"
       ]
-    ]
   },
   {
     "theme": "basketball",
     "words": [
-      [
         "dunked",
         "sports",
         "jordan",
@@ -44,12 +39,10 @@
         "harlem",
         "lakers"
       ]
-    ]
   },
   {
     "theme": "sports",
     "words": [
-      [
         "boxing",
         "hockey",
         "soccer",
@@ -57,12 +50,10 @@
         "tennis",
         "karate"
       ]
-    ]
   },
   {
     "theme": "computers",
     "words": [
-      [
         "system",
         "drives",
         "images",
@@ -71,12 +62,10 @@
         "cables",
         "laptop"
       ]
-    ]
   },
   {
     "theme": "space",
     "words": [
-      [
         "cosmic",
         "planet",
         "saturn",
@@ -85,24 +74,20 @@
         "vacuum",
         "uranus"
       ]
-    ]
   },
   {
     "theme": "chemistry",
     "words": [
-      [
         "atomic",
         "ionium",
         "chemic",
         "petrol",
         "carbon"
       ]
-    ]
   },
   {
     "theme": "painting",
     "words": [
-      [
         "artist",
         "crafts",
         "depict",
@@ -110,12 +95,10 @@
         "canvas",
         "makeup"
       ]
-    ]
   },
   {
     "theme": "music",
     "words": [
-      [
         "guitar",
         "stereo",
         "artist",
@@ -131,12 +114,10 @@
         "ballad",
         "talent"
       ]
-    ]
   },
   {
     "theme": "cities",
     "words": [
-      [
         "sydney",
         "athens",
         "bombay",
@@ -147,12 +128,10 @@
         "venice",
         "naples"
       ]
-    ]
   },
   {
     "theme": "transportation",
     "words": [
-      [
         "subway",
         "travel",
         "trucks",
@@ -162,12 +141,10 @@
         "pickup",
         "parcel"
       ]
-    ]
   },
   {
     "theme": "countries",
     "words": [
-      [
         "sweden",
         "guyana",
         "kuwait",
@@ -190,12 +167,10 @@
         "taiwan",
         "zambia"
       ]
-    ]
   },
   {
     "theme": "courage",
     "words": [
-      [
         "strong",
         "braved",
         "fright",
@@ -204,12 +179,10 @@
         "scared",
         "daring"
       ]
-    ]
   },
   {
     "theme": "medical",
     "words": [
-      [
         "doctor",
         "injury",
         "clinic",
@@ -217,12 +190,10 @@
         "dental",
         "health"
       ]
-    ]
   },
   {
     "theme": "education",
     "words": [
-      [
         "degree",
         "learnt",
         "pedage",
@@ -230,12 +201,10 @@
         "career",
         "taught"
       ]
-    ]
   },
   {
     "theme": "cooking",
     "words": [
-      [
         "hungry",
         "supper",
         "boiled",
@@ -249,6 +218,5 @@
         "eating",
         "making"
       ]
-    ]
   }
 ]
