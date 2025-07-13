@@ -156,6 +156,8 @@ export class Game {
     if (shuffle) {
       // Shuffle the pieces
       randomHelper.shuffle(placePieceOrder);
+    } else {
+      placePieceOrder.reverse();
     }
 
     // Predefined positions spread across the grid to minimize collisions
