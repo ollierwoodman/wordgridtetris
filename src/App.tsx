@@ -15,8 +15,12 @@ import {
 import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
+import { useTheme } from "./hooks/useTheme";
 
 function App() {
+  // Initialize theme
+  useTheme();
+  
   const { solutionSize, changeSolutionSize, canLevelUp } = useSolutionSizeFromURL();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
