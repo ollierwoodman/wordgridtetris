@@ -10,10 +10,8 @@ import { useGameSounds } from "./hooks/sounds";
 import ConfettiBoom from "react-confetti-boom";
 import { SuccessButtonPanel } from "./components/SuccessButtonPanel";
 import {
-  useShowTutorial,
   useCompletedPuzzlesManager,
 } from "./hooks/useLocalStorage";
-import Tutorial from "./components/DialogContents/Tutorial";
 import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
@@ -30,9 +28,6 @@ function App() {
 
   const { playMenuClick, playPuzzleComplete } = useGameSounds();
 
-  const [showTutorial] = useShowTutorial();
-  const { hasCompletedToday } = useCompletedPuzzlesManager();
-
   const hasCompletedRef = useRef<boolean>(false);
 
   const {
@@ -46,16 +41,6 @@ function App() {
   } = useGame(solutionSize);
 
   const { addPuzzle } = useCompletedPuzzlesManager();
-
-  // Show tutorial modal on page load if showTutorial is true and user hasn't completed today's puzzle
-  useEffect(() => {
-    if (showTutorial && game && !loading && !hasCompletedToday()) {
-      handleOpenModal(
-        "Tutorial",
-        <Tutorial game={game} onClose={handleCloseModal} />
-      );
-    }
-  }, [showTutorial, game, loading, hasCompletedToday]);
 
   const handleLevelUp = useCallback(() => {
     if (!canLevelUp) {

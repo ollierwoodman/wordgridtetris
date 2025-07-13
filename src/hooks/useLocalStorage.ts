@@ -5,7 +5,7 @@ import { getCurrentDateSeed } from '../game/puzzle/random';
 export const STORAGE_KEYS = {
   IS_MUTED: 'isMuted',
   THEME: 'theme',
-  SHOW_TUTORIAL: 'showTutorial',
+  HAS_SEEN_TUTORIAL: 'hasSeenTutorial',
   COMPLETED_PUZZLES: 'completedPuzzles',
 } as const;
 
@@ -21,7 +21,7 @@ export interface CompletedPuzzle {
 export interface LocalStorageData {
   [STORAGE_KEYS.IS_MUTED]: boolean;
   [STORAGE_KEYS.THEME]: 'light' | 'dark' | 'system';
-  [STORAGE_KEYS.SHOW_TUTORIAL]: boolean;
+  [STORAGE_KEYS.HAS_SEEN_TUTORIAL]: boolean;
   [STORAGE_KEYS.COMPLETED_PUZZLES]: CompletedPuzzle[];
 }
 
@@ -29,7 +29,7 @@ export interface LocalStorageData {
 const DEFAULT_VALUES: LocalStorageData = {
   [STORAGE_KEYS.IS_MUTED]: false,
   [STORAGE_KEYS.THEME]: 'system',
-  [STORAGE_KEYS.SHOW_TUTORIAL]: true,
+  [STORAGE_KEYS.HAS_SEEN_TUTORIAL]: false,
   [STORAGE_KEYS.COMPLETED_PUZZLES]: [],
 };
 
@@ -105,8 +105,8 @@ export function useTheme() {
   return useLocalStorage(STORAGE_KEYS.THEME);
 }
 
-export function useShowTutorial() {
-  return useLocalStorage(STORAGE_KEYS.SHOW_TUTORIAL);
+export function useHasSeenTutorial() {
+  return useLocalStorage(STORAGE_KEYS.HAS_SEEN_TUTORIAL);
 }
 
 export function useCompletedPuzzles() {

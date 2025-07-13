@@ -1,31 +1,18 @@
 import {
-  EyeOffIcon,
   HeartIcon,
   KeyboardIcon,
   MouseIcon,
   SmartphoneIcon,
 } from "lucide-react";
 import { Game } from "../../game/logic";
-import { useShowTutorial } from "../../hooks/useLocalStorage";
-import { useGameSounds } from "../../hooks/sounds";
 import { AnimatedPuzzleDemo } from "../../utils/svg";
 
 interface TutorialProps {
   game?: Game;
-  onClose?: () => void;
 }
 
-const Tutorial: React.FC<TutorialProps> = ({ game, onClose }) => {
-  const [, setShowTutorial] = useShowTutorial();
-  const { playMenuClick } = useGameSounds();
-
-  const handleDontShowAgain = () => {
-    playMenuClick();
-    setShowTutorial(false);
-    onClose?.();
-  };
-
-  return (
+const Tutorial: React.FC<TutorialProps> = ({ game }) => {
+    return (
     <div className="space-y-4">
       <p className="text-gray-800 dark:text-gray-300">
         Drag and drop the {game?.getNumPieces() ?? 6} game pieces into the{" "}
@@ -73,18 +60,6 @@ const Tutorial: React.FC<TutorialProps> = ({ game, onClose }) => {
         The pieces are already in the correct orientation, so you don't need to
         rotate them
       </p>
-
-      {/* Don't show again button */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <button
-          type="button"
-          onClick={handleDontShowAgain}
-          className="cursor-pointer flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-        >
-          <EyeOffIcon className="size-4" />
-          Don't show this again
-        </button>
-      </div>
     </div>
   );
 };

@@ -8,7 +8,8 @@ export const BigRoundButton: React.FC<{
   playSound?: () => void;
   className?: string;
   disabled?: boolean;
-}> = ({ title, children, onClick, playSound, className, disabled }) => {
+  hasBadge?: boolean;
+}> = ({ title, children, onClick, playSound, className, disabled, hasBadge }) => {
   const { playMenuClick } = useGameSounds();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -24,13 +25,18 @@ export const BigRoundButton: React.FC<{
     <button
       title={title}
       className={cn(
-        "flex items-center justify-center bg-gray-600 dark:bg-gray-800 text-white rounded-full p-2 md:p-4 shadow-xl/20 dark:shadow-xl/40 cursor-pointer hover:opacity-80 transition-opacity",
+        "relative flex items-center justify-center bg-gray-600 dark:bg-gray-800 text-white rounded-full p-2 md:p-4 shadow-xl/20 dark:shadow-xl/40 cursor-pointer hover:opacity-80 transition-opacity",
         className,
         disabled && "opacity-50 cursor-not-allowed hover:opacity-50"
       )}
       onClick={handleClick}
       disabled={disabled}
     >
+      {hasBadge && (
+        <div className="absolute -top-0.5 -right-0.5 bg-red-500 rounded-full size-1/3 flex items-center justify-center">
+          <span className="sr-only">Unread</span>
+        </div>
+      )}
       {children}
     </button>
   );

@@ -13,6 +13,7 @@ import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { About } from "./DialogContents/About";
 import { Stats } from "./DialogContents/Stats";
+import { useHasSeenTutorial } from "../hooks/useLocalStorage";
 
 interface MenuButtonPanelProps {
   updateGameState: () => void;
@@ -27,15 +28,18 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   game,
   onOpenModal,
   updateGameState,
-  onCloseModal,
 }) => {
+  const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
+
   return (
     <>
       <BigRoundButton
         title="Tutorial"
         onClick={() => {
-          onOpenModal("Tutorial", <Tutorial game={game} onClose={onCloseModal} />);
+          setHasSeenTutorial(true);
+          onOpenModal("Tutorial", <Tutorial game={game} />);
         }}
+        hasBadge={!hasSeenTutorial}
       >
         <GraduationCapIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
