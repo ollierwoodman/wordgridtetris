@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  BarChart2Icon,
   GraduationCapIcon,
   Grid2X2CheckIcon,
   InfoIcon,
@@ -11,12 +12,13 @@ import Settings from "./DialogContents/Settings";
 import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { About } from "./DialogContents/About";
+import { Stats } from "./DialogContents/Stats";
 
 interface MenuButtonPanelProps {
   updateGameState: () => void;
   solvePuzzle: () => void;
   game?: Game;
-  onOpenModal: (type: string, header: string, content: React.ReactNode) => void;
+  onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
 }
 
@@ -30,9 +32,9 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   return (
     <>
       <BigRoundButton
-        title="Open tutorial"
+        title="Tutorial"
         onClick={() => {
-          onOpenModal("tutorial", "Tutorial", <Tutorial game={game} onClose={onCloseModal} />);
+          onOpenModal("Tutorial", <Tutorial game={game} onClose={onCloseModal} />);
         }}
       >
         <GraduationCapIcon className="size-8 md:size-10 xl:size-12" />
@@ -48,17 +50,25 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
-        title="Open settings"
+        title="Settings"
         onClick={() => {
-          onOpenModal("settings", "Settings", <Settings game={game} />);
+          onOpenModal("Settings", <Settings />);
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
-        title="Open about"
+        title="My stats"
         onClick={() => {
-          onOpenModal("about", "About Blockle", <About />);
+          onOpenModal("My stats", <Stats />);
+        }}
+      >
+        <BarChart2Icon className="size-8 md:size-10 xl:size-12" />
+      </BigRoundButton>
+      <BigRoundButton
+        title="About Blockle"
+        onClick={() => {
+          onOpenModal("About Blockle", <About />);
         }}
       >
         <InfoIcon className="size-8 md:size-10 xl:size-12" />
