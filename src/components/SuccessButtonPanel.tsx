@@ -35,13 +35,12 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
       {game.getSolutionSize() < MAX_SOLUTION_SIZE && (
         <BigRoundButton
           title="Begin a new, more difficult puzzle"
-          className="gap-4 px-4 md:px-6 animate-bounce"
           onClick={() => {
             handleLevelUp();
           }}
           playSound={playLevelUp}
+          hasBadge
         >
-          <span className="text-xl font-bold uppercase">Next&nbsp;puzzle</span>
           <Grid2X2PlusIcon className="size-8 md:size-10 xl:size-12" />
         </BigRoundButton>
       )}

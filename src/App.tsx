@@ -141,7 +141,7 @@ function App() {
       )}
       <div
         className={cn(
-          "flex flex-col md:flex-row items-center justify-center w-full max-w-[65vh] my-auto py-4 gap-4",
+          "flex flex-col md:flex-row items-center justify-center w-full max-w-[60vh] my-auto py-4 gap-4",
           {
             "justify-between": showSuccessButtonPanel,
           }
@@ -170,16 +170,23 @@ function App() {
           )}
         </div>
       </div>
-      <div className="w-full max-w-[65vh] flex flex-col justify-center">
-        {playingGrid}
-      </div>
-      {/* Greeting and theme */}
+      {/* Greeting */}
       {game.getGreeting() && (
-        <div className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
+        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl text-center text-balance mb-4">
           {game.getGreeting()}
         </div>
       )}
-      <div className="flex flex-row justify-center items-center w-full max-w-[65vh] my-auto py-4 gap-4">
+      {/* Playing grid */}
+      <div className="w-full max-w-[60vh] flex flex-col justify-center">
+        {playingGrid}
+      </div>
+      {/* Theme */}
+      {game.getWordTheme() && (
+        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl text-center text-balance mt-4">
+          Puzzle theme: <span className="font-bold uppercase">{game.getWordTheme()}</span>
+        </div>
+      )}
+      <div className="flex flex-row justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
         {/* Button Panel */}
         <MenuButtonPanel
           updateGameState={updateGameState}
