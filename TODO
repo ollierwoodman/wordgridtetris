@@ -2,6 +2,9 @@
 
 ## Fixes
 
+FIX: Loading directly into 7x7 or 6x6 will sometimes load the 5x5 piece set.
+FIX: The Blockle header title should not be selectable
+
 ## Ongoing tasks
 
 TODO: Make more word lists and improve current word lists
