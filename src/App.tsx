@@ -16,6 +16,7 @@ import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
+import { useTrackCompletedPuzzle } from "./hooks/useTrackGoals";
 
 function App() {
   // Initialize theme
@@ -44,6 +45,8 @@ function App() {
     getCompletionTime,
   } = useGame(isInitialized ? solutionSize : undefined);
 
+  const trackCompletedPuzzle = useTrackCompletedPuzzle();
+
   const { addPuzzle } = useCompletedPuzzlesManager();
 
   const handleLevelUp = useCallback(() => {
@@ -62,6 +65,7 @@ function App() {
   useEffect(() => {
     if (gameState?.isCompleted && !hasCompletedRef.current) {
       hasCompletedRef.current = true;
+      trackCompletedPuzzle();
       setShowConfetti(true);
       playPuzzleComplete();
       setShowSuccessButtonPanel(true);

@@ -2,6 +2,7 @@ import { CopyIcon, Grid2X2PlusIcon, Share2Icon } from "lucide-react";
 import { MAX_SOLUTION_SIZE } from "../../hooks/useSolutionSizeFromURL";
 import { formatDurationMs } from "../../utils/game";
 import useShare from "../../hooks/useShare";
+import { useTrackSharedResult } from "../../hooks/useTrackGoals";
 
 interface SuccessProps {
   solutionSize: number;
@@ -20,11 +21,7 @@ export function Success({
     completionTime > 0 ? `in ${formatDurationMs(completionTime)}` : ""
   }!`;
 
-  const handleTrackGoal = () => {
-    const SHARED_RESULTS_GOAL_ID = 3;
-    // @ts-expect-error - Matomo is not typed
-    _paq.push(["trackGoal", SHARED_RESULTS_GOAL_ID]);
-  };
+  const trackSharedResults = useTrackSharedResult();
 
   return (
     <>
@@ -37,7 +34,7 @@ export function Success({
           type="button"
           onClick={() => {
             share(shareText);
-            handleTrackGoal();
+            trackSharedResults();
           }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500  text-white px-4 py-2 mt-4 rounded-full hover:opacity-80"
         >
@@ -49,7 +46,7 @@ export function Success({
           type="button"
           onClick={() => {
             copy(shareText);
-            handleTrackGoal();
+            trackSharedResults();
           }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500 text-white px-4 py-2 mt-4 rounded-full hover:opacity-80"
         >
