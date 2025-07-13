@@ -21,7 +21,7 @@ function App() {
   // Initialize theme
   useTheme();
   
-  const { solutionSize, changeSolutionSize, canLevelUp } = useSolutionSizeFromURL();
+  const { solutionSize, changeSolutionSize, canLevelUp, isInitialized } = useSolutionSizeFromURL();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalHeader, setModalHeader] = useState<string>("");
@@ -42,7 +42,7 @@ function App() {
     loading,
     solvePuzzle,
     getCompletionTime,
-  } = useGame(solutionSize);
+  } = useGame(isInitialized ? solutionSize : undefined);
 
   const { addPuzzle } = useCompletedPuzzlesManager();
 
@@ -106,7 +106,7 @@ function App() {
       />
     ) : null;
 
-  if (!game || !gameState || loading) {
+  if (!isInitialized || !game || !gameState || loading) {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 p-4">
         {/* Spinner */}

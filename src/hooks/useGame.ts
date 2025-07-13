@@ -4,7 +4,7 @@ import type { GameState } from "../types/game";
 import { getCurrentDateSeed } from "../game/puzzle/random";
 import { useGameSounds } from "./sounds";
 
-export function useGame(solutionSize: number = 5, seed: string = getCurrentDateSeed()) {
+export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed()) {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -13,6 +13,14 @@ export function useGame(solutionSize: number = 5, seed: string = getCurrentDateS
   const { playDragClick } = useGameSounds();
 
   const initializeGame = useCallback(async () => {
+    // Don't initialize if solutionSize is not provided
+    if (solutionSize === undefined) {
+      setLoading(true);
+      setGame(null);
+      setGameState(null);
+      return;
+    }
+
     setLoading(true);
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
