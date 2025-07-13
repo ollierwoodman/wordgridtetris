@@ -72,7 +72,7 @@ function App() {
       addPuzzle({
         date: new Date().toISOString().split("T")[0],
         solutionSize: game?.getSolutionSize() || 0,
-        seed: game?.getSeed() || "",
+        theme: game?.getWordTheme() || "",
         timeToCompleteMs: getCompletionTime(),
       });
       handleOpenModal(

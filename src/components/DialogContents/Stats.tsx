@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useCompletedPuzzlesManager } from "../../hooks/useLocalStorage";
 import { ConfirmModal } from "../ui/ConfirmModal";
-import { formatDurationMs } from "../../utils/game";
+import { formatDateHowLongAgo, formatDurationMs } from "../../utils/game";
 
 export function Stats() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -27,10 +27,6 @@ export function Stats() {
   // Calculate statistics
   const totalPuzzles = completedPuzzles.length;
   const completedToday = hasCompletedToday();
-  
-  // Get today's puzzle completion data
-  const today = new Date().toISOString().split('T')[0];
-  const todaysPuzzle = completedPuzzles.find(puzzle => puzzle.date === today);
 
   // Group puzzles by size
   const puzzlesBySize = {
@@ -130,7 +126,7 @@ export function Stats() {
   const bestStreak = calcBestStreak();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       {/* Today's Status */}
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
         <div className="flex items-center gap-4">
@@ -144,16 +140,15 @@ export function Stats() {
             <p className="text-blue-600 dark:text-blue-300">
               {completedToday ? (
                 <span className="inline-flex items-center gap-1">
-                  <span><CheckCheckIcon className="size-4" /></span> Completed
-                  {todaysPuzzle && todaysPuzzle.timeToCompleteMs > 0 && (
-                    <span>
-                      {" "}in {formatDurationMs(todaysPuzzle.timeToCompleteMs)}
-                    </span>
-                  )}
+                  <CheckCheckIcon className="size-5" />
+                  <span>Completed</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1">
-                  <span><XIcon className="size-4" /></span> Not completed yet
+                  <span>
+                    <XIcon className="size-4" />
+                  </span>{" "}
+                  Not completed yet
                 </span>
               )}
             </p>
@@ -169,113 +164,128 @@ export function Stats() {
             {totalPuzzles}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Puzzles<br />Solved
+            Puzzles
+            <br />
+            Solved
           </div>
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-green-600 dark:text-green-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
-            {currentStreak}<span className="text-xs ml-0.5">day{currentStreak === 1 ? "" : "s"}</span>
+            {currentStreak}
+            <span className="text-xs ml-0.5">
+              day{currentStreak === 1 ? "" : "s"}
+            </span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Current<br />Streak
+            Current
+            <br />
+            Streak
           </div>
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-yellow-600 dark:text-yellow-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
-            {bestStreak}<span className="text-xs ml-0.5">day{bestStreak === 1 ? "" : "s"}</span>
+            {bestStreak}
+            <span className="text-xs ml-0.5">
+              day{bestStreak === 1 ? "" : "s"}
+            </span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Best<br />Streak
+            Best
+            <br />
+            Streak
           </div>
         </div>
       </div>
 
       {/* Best Times Breakdown */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
           <GaugeCircleIcon className="size-5" />
           Fastest Times
         </h3>
         {Object.entries(bestTimes).length > 0 ? (
-          <div className="space-y-3">
-            {Object.entries(bestTimes).map(([size, time]) => (
-              <div key={size} className="flex items-center justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  {size}×{size} Puzzles
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-right font-mono text-sm text-gray-800 dark:text-gray-200 min-w-[2rem]">
-                    {formatDurationMs(time)}
-                  </span>
+          Object.entries(bestTimes).map(([size, time]) => (
+            <div key={size} className="grid grid-cols-4 gap-4 items-center">
+              <div className="text-gray-600 dark:text-gray-400">
+                {size}×{size}
+              </div>
+              <div className="col-span-2">
+                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${
+                        totalPuzzles > 0
+                          ? (time / Math.max(...Object.values(bestTimes))) * 100
+                          : 0
+                      }%`,
+                    }}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="text-right text-sm text-gray-800 dark:text-gray-200">
+                {formatDurationMs(time)}
+              </div>
+            </div>
+          ))
         ) : (
           <p className="text-gray-600 dark:text-gray-400">No times yet.</p>
         )}
       </div>
 
       {/* Puzzle Size Breakdown */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
           <BarChartHorizontalIcon className="size-5" />
           Puzzles by Size
         </h3>
-        <div className="space-y-3">
-          {Object.entries(puzzlesBySize).map(([size, count]) => (
-            <div key={size} className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">
-                {size}×{size}
-              </span>
-              <div className="flex-1 flex items-center justify-end gap-2">
-                <div className="w-1/2 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
-                    style={{
-                      width: `${
-                        totalPuzzles > 0 ? (count / totalPuzzles) * 100 : 0
-                      }%`,
-                    }}
-                  />
-                </div>
-                <span className="text-right font-mono text-sm text-gray-800 dark:text-gray-200 min-w-[2rem]">
-                  {count}
-                </span>
+        {Object.entries(puzzlesBySize).map(([size, count]) => (
+          <div key={size} className="grid grid-cols-4 gap-4 items-center">
+            <div className="text-gray-600 dark:text-gray-400">
+              {size}×{size}
+            </div>
+            <div className="col-span-2">
+              <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${
+                      totalPuzzles > 0 ? (count / totalPuzzles) * 100 : 0
+                    }%`,
+                  }}
+                />
               </div>
             </div>
-          ))}
-        </div>
+            <div className="text-right text-sm min-w-[4rem] text-gray-800 dark:text-gray-200">
+              {count}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Recent Activity */}
       {completedPuzzles.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
           <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
             <HistoryIcon className="size-5" />
             Recent Activity
           </h3>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             {completedPuzzles.slice(0, 5).map((puzzle, index) => (
               <div
+                className="flex items-center justify-between gap-2"
                 key={index}
-                className="flex items-center justify-between"
               >
-                <span className="text-gray-600 dark:text-gray-400">
-                  {new Date(puzzle.date).toLocaleDateString()}
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Completed a {puzzle.solutionSize}×{puzzle.solutionSize}{" "}
                 </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-800 dark:text-gray-200 text-sm">
-                    {puzzle.solutionSize}×{puzzle.solutionSize}
-                  </span>
-                  <span className="text-right font-mono text-sm min-w-[4rem] text-gray-500 dark:text-gray-400">
-                    {formatDurationMs(puzzle.timeToCompleteMs)}
-                  </span>
-                </div>
+                <span className="text-right text-sm text-gray-800 dark:text-gray-200">
+                  {formatDateHowLongAgo(puzzle.completedAt)}
+                </span>
               </div>
             ))}
           </div>

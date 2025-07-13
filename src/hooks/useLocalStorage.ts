@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getCurrentDateSeed } from '../game/puzzle/random';
 
 // Storage keys for the application
 export const STORAGE_KEYS = {
@@ -13,7 +12,7 @@ export const STORAGE_KEYS = {
 export interface CompletedPuzzle {
   date: string; // ISO date string
   solutionSize: number;
-  seed: string;
+  theme: string;
   completedAt: string; // ISO timestamp
   timeToCompleteMs: number; // in milliseconds
 }
@@ -135,8 +134,8 @@ export function getPuzzleCompletionByDate(
 }
 
 export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[]): boolean {
-  const todaySeed = getCurrentDateSeed();
-  return puzzles.some(puzzle => puzzle.seed === todaySeed);
+  const today = new Date().toISOString().split("T")[0];
+  return puzzles.some(puzzle => puzzle.date === today);
 }
 
 export function getCompletedPuzzlesBySize(

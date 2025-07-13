@@ -12,5 +12,4 @@ TODO: Make more word lists and improve current word lists
 
 TODO: Design and implement unique color schemes for increasing levels of difficulty
 TODO: Add test suite to cover important functions particularly in useGame.ts and logic.ts
-TODO: Update stats screen to use tables for better more consistent spacing
 TODO: Set up SPA tracking https://developer.matomo.org/guides/spa-tracking
