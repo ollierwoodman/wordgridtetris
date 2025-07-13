@@ -58,6 +58,9 @@
         g.src = "%VITE_MATOMO_URL%";
         s.parentNode.insertBefore(g, s);
       })();
+      
+      // accurately measure the time spent in the visit
+      _paq.push(['enableHeartBeatTimer']);
     </script>
   </head>
   <body>
