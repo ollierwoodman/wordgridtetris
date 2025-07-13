@@ -8,7 +8,7 @@ import { useGameSounds } from "../hooks/sounds";
 
 interface SuccessButtonPanelProps {
   game: Game;
-  onOpenModal: (type: string, header: string, content: React.ReactNode) => void;
+  onOpenModal: (header: string, content: React.ReactNode) => void;
   handleLevelUp: () => void;
   completionTime: number;
 }
@@ -27,7 +27,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
         title="Open share"
         className="bg-yellow-600 dark:bg-yellow-800"
         onClick={() => {
-          onOpenModal("success", "Well done!", <Success solutionSize={game.getSolutionSize()} handleLevelUp={handleLevelUp} completionTime={completionTime} />);
+          onOpenModal("Well done!", <Success solutionSize={game.getSolutionSize()} handleLevelUp={handleLevelUp} completionTime={completionTime} />);
         }}
       >
         <TrophyIcon className="size-8 md:size-10 xl:size-12" />
