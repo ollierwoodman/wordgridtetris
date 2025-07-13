@@ -27,7 +27,7 @@ export const SuccessButtonPanel: React.FC<SuccessButtonPanelProps> = ({
         title="Open share"
         className="bg-yellow-600 dark:bg-yellow-800"
         onClick={() => {
-          onOpenModal("success", "Well done!", <Success game={game} handleLevelUp={handleLevelUp} completionTime={completionTime} />);
+          onOpenModal("success", "Well done!", <Success solutionSize={game.getSolutionSize()} handleLevelUp={handleLevelUp} completionTime={completionTime} />);
         }}
       >
         <TrophyIcon className="size-8 md:size-10 xl:size-12" />

@@ -74,7 +74,7 @@ function App() {
       handleOpenModal(
         "Well done!",
         <Success
-          game={game}
+          solutionSize={solutionSize}
           handleLevelUp={handleLevelUp}
           completionTime={getCompletionTime()}
         />

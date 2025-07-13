@@ -16,17 +16,18 @@ const useShare = () => {
     }
   };
 
-  const share = async (url: string, title: string, description: string) => {
+  // title is often ignored, url is by default the current page
+  const share = async (text: string = "", url: string = "", title: string = "") => {
     if (navigator.share) {
       try {
         await navigator.share({
           title,
-          text: description,
+          text,
           url,
         });
       } catch (error) {
         console.error("Error sharing:", error);
-        copy(description);
+        copy(text);
       }
     } else {
       console.error("Web Share API not supported");
