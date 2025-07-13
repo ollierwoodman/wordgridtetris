@@ -27,7 +27,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
 
   function getTileClasses(tileContent: TileContent) {
     return cn(
-      "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center transition-all duration-150",
+      "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
       {
         "ring-4 ring-green-400": tileContent?.isValid,
         "ring-4 ring-red-400": tileContent?.isValid === false,
