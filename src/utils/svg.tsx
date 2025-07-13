@@ -9,7 +9,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; -190,0"
           keyTimes="0; 1"
-          dur="2s"
+          dur="1s"
           repeatCount="indefinite"
           additive="sum"
         />
@@ -50,7 +50,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,-60; 0,0"
           keyTimes="0; 0.5; 1"
-          dur="2s"
+          dur="1s"
           repeatCount="indefinite"
           calcMode="spline"
           keySplines="0.25 0.46 0.45 0.94; 0.55 0.055 0.675 0.19"
@@ -66,7 +66,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,0; -190,0; -190,0"
           keyTimes="0; 0; 0.2; 1"
-          dur="10s"
+          dur="5s"
           repeatCount="indefinite"
           additive="sum"
         />
@@ -91,7 +91,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,0; -190,0; -190,0"
           keyTimes="0; 0.2; 0.4; 1"
-          dur="10s"
+          dur="5s"
           repeatCount="indefinite"
           additive="sum"
         />
@@ -116,7 +116,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,0; -190,0; -190,0"
           keyTimes="0; 0.4; 0.6; 1"
-          dur="10s"
+          dur="5s"
           repeatCount="indefinite"
           additive="sum"
         />
@@ -141,7 +141,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,0; -190,0; -190,0"
           keyTimes="0; 0.6; 0.8; 1"
-          dur="10s"
+          dur="5s"
           repeatCount="indefinite"
           additive="sum"
         />
@@ -166,7 +166,7 @@ export const AnimatedEndlessRunner: React.FC<{ className?: string }> = ({ classN
           type="translate"
           values="0,0; 0,0; -190,0; -190,0"
           keyTimes="0; 0.8; 1; 1"
-          dur="10s"
+          dur="5s"
           repeatCount="indefinite"
           additive="sum"
         />
