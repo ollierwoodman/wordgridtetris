@@ -6,9 +6,9 @@ export const GOAL_IDS = {
   COMPLETED_PUZZLE: 4,
 } as const;
 
-function trackGoal(goalId: number): void {
+function trackGoal(goalID: number): void {
   // @ts-expect-error - Matomo is not typed
-  _paq.push(["trackGoal", goalId]);
+  _mtm.push({ event: "trackGoal", goalID: goalID });
 }
 
 // Specific hooks for each storage key
