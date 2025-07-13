@@ -15,7 +15,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
     dragPosition,
     isValidDrop,
     gridRef,
-    handleDragStart,
+    handlePointerDown,
   } = useDragAndDrop({
     game,
     gameState,
@@ -82,14 +82,9 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
             key={index}
             className={getTileClasses(tileContent)}
             onClick={() => handleTileClick(x, y)}
-            onTouchStart={
+            onPointerDown={
               canDrag
-                ? (e) => handleDragStart(pieceAtPosition!.pieceIndex, x, y, e)
-                : undefined
-            }
-            onMouseDown={
-              canDrag
-                ? (e) => handleDragStart(pieceAtPosition!.pieceIndex, x, y, e)
+                ? (e) => handlePointerDown(pieceAtPosition!.pieceIndex, x, y, e)
                 : undefined
             }
           >

@@ -3,32 +3,6 @@ import type { Game } from "../game/logic";
 import type { Piece } from "../types/game";
 import { useGameSounds } from "./sounds";
 
-// Add proper type definitions for touch events
-interface TouchEvent extends Event {
-  touches: TouchList;
-  changedTouches: TouchList;
-  targetTouches: TouchList;
-}
-
-interface TouchList {
-  readonly length: number;
-  item(index: number): Touch | null;
-  [index: number]: Touch;
-}
-
-interface Touch {
-  readonly identifier: number;
-  readonly target: EventTarget;
-  readonly clientX: number;
-  readonly clientY: number;
-  readonly pageX: number;
-  readonly pageY: number;
-  readonly radiusX: number;
-  readonly radiusY: number;
-  readonly rotationAngle: number;
-  readonly force: number;
-}
-
 export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }: {
   game: Game;
   gameState: { pieces: Piece[] };
@@ -45,7 +19,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
   // Sound effects
   const { playDragClick, playDropSuccess, playDropFail } = useGameSounds();
 
-  const handleDragStart = useCallback((pieceIndex: number, x: number, y: number, event: React.MouseEvent | React.TouchEvent) => {
+  const handlePointerDown = useCallback((pieceIndex: number, x: number, y: number, event: React.PointerEvent) => {
     // Prevent dragging if game is completed
     if (isCompleted) {
       event.preventDefault();
@@ -53,13 +27,14 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       return;
     }
 
-    // Prevent default behavior for touch events to avoid mouse event synthesis and scrolling
-    if (event.type === 'touchstart') {
-      event.preventDefault();
-    }
+    // Prevent default behavior and set pointer capture
+    event.preventDefault();
     event.stopPropagation();
-
-    // playDragStart();
+    
+    // Set pointer capture to ensure we get all pointer events
+    if (event.currentTarget instanceof HTMLElement) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
     
     setDraggedPieceIndex(null); // Reset before checking
     setDraggedBlockIndex(null);
@@ -86,33 +61,15 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     document.body.classList.add('overflow-hidden', 'touch-none');
   }, [game, gameState.pieces, isCompleted]);
 
-  const handleDragMove = useCallback((event: MouseEvent | TouchEvent) => {
-    // Prevent default for touch events to avoid scrolling
-    if ('touches' in event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+  const handlePointerMove = useCallback((event: PointerEvent) => {
     if (draggedPieceIndex === null || !gridRef.current || draggedBlockIndex === null) {
       return;
     }
 
-    let clientX: number, clientY: number;
-    if ('touches' in event && event.touches.length > 0) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    } else if ('clientX' in event) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = 0;
-      clientY = 0;
-    }
-
     const rect = gridRef.current.getBoundingClientRect();
     const tileSize = rect.width / game.getGridSize();
-    const cursorTileX = Math.floor(Math.min(Math.max(0, clientX - rect.left) / tileSize, game.getGridSize() - 1));
-    const cursorTileY = Math.floor(Math.min(Math.max(0, clientY - rect.top) / tileSize, game.getGridSize() - 1));
+    const cursorTileX = Math.floor(Math.min(Math.max(0, event.clientX - rect.left) / tileSize, game.getGridSize() - 1));
+    const cursorTileY = Math.floor(Math.min(Math.max(0, event.clientY - rect.top) / tileSize, game.getGridSize() - 1));
 
     const piece = gameState.pieces[draggedPieceIndex];
     const block = piece.blocks[draggedBlockIndex];
@@ -134,7 +91,6 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       }
     }
 
-    
     setDragPosition({ x, y });
     
     // Check if valid drop (in bounds and no collision)
@@ -142,13 +98,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     setIsValidDrop(isValid);
   }, [draggedPieceIndex, draggedBlockIndex, game, gameState.pieces, dragPosition, playDragClick]);
 
-  const handleDragEnd = useCallback((event?: MouseEvent | TouchEvent) => {
-    // Prevent default for touch events
-    if (event && 'touches' in event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+  const handlePointerUp = useCallback(() => {
     if (draggedPieceIndex !== null && dragPosition) {
       // Always check collision and bounds on drop
       const piece = gameState.pieces[draggedPieceIndex];
@@ -184,38 +134,27 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     document.body.classList.remove('overflow-hidden', 'touch-none');
   }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDropSuccess, playDropFail]);
 
-  // Attach global listeners for drag move/end
+  // Attach global listeners for pointer move/up
   useEffect(() => {
     if (draggedPieceIndex !== null) {
-      const move = (e: MouseEvent | TouchEvent) => {
-        // Prevent scrolling during drag
-        if ('touches' in e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-        handleDragMove(e);
+      const move = (e: PointerEvent) => {
+        e.preventDefault();
+        handlePointerMove(e);
       };
-      const up = (e: MouseEvent | TouchEvent) => {
-        if ('touches' in e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-        handleDragEnd(e);
+      const up = (e: PointerEvent) => {
+        e.preventDefault();
+        handlePointerUp();
       };
       
-      window.addEventListener('mousemove', move);
-      window.addEventListener('touchmove', move);
-      window.addEventListener('mouseup', up);
-      window.addEventListener('touchend', up);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
       
       return () => {
-        window.removeEventListener('mousemove', move);
-        window.removeEventListener('touchmove', move);
-        window.removeEventListener('mouseup', up);
-        window.removeEventListener('touchend', up);
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
       };
     }
-  }, [draggedPieceIndex, dragPosition, isValidDrop, handleDragMove, handleDragEnd]);
+  }, [draggedPieceIndex, dragPosition, isValidDrop, handlePointerMove, handlePointerUp]);
 
   // Cleanup effect to remove dragging classes when component unmounts
   useEffect(() => {
@@ -237,8 +176,8 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     draggedBlockIndex,
     setDraggedBlockIndex,
     gridRef,
-    handleDragStart,
-    handleDragMove,
-    handleDragEnd
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp
   };
 } 
