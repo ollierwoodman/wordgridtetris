@@ -162,7 +162,7 @@ function App() {
             handleOpenModal("About Blockle", <About />);
           }}
         >
-          <h1 className="text-gray-600 dark:text-white text-6xl md:text-8xl font-bold">
+          <h1 className="text-gray-600 dark:text-white text-6xl md:text-8xl font-bold select-none">
             Blockle
           </h1>
         </button>
