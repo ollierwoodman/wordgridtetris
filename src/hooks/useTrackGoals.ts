@@ -8,8 +8,7 @@ export const GOAL_IDS = {
 
 function trackGoal(goalID: number): void {
   // @ts-expect-error - Matomo is not typed
-  const length = _mtm.push(['trackGoal', goalID]);
-  console.log('trackGoal', goalID, length);
+  _mtm.push(['trackGoal', goalID]);
 }
 
 // Specific hooks for each storage key
