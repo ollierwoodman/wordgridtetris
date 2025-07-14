@@ -2,8 +2,6 @@
 
 ## Fixes
 
-FIX: Browser errors are logged to the console, check heartbeat in index.html
-
 ## Ongoing tasks
 
 TODO: Make more word lists and improve current word lists
@@ -12,4 +10,4 @@ TODO: Make more word lists and improve current word lists
 
 TODO: Design and implement unique color schemes for increasing levels of difficulty
 TODO: Add test suite to cover important functions particularly in useGame.ts and logic.ts
-TODO: Set up SPA tracking https://developer.matomo.org/guides/spa-tracking
+TODO: Set up SPA tracking [see docs here](https://developer.matomo.org/guides/spa-tracking)

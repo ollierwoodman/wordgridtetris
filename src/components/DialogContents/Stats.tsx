@@ -126,9 +126,9 @@ export function Stats() {
   const bestStreak = calcBestStreak();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-4">
       {/* Today's Status */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2">
         <div className="flex items-center gap-4">
           <span className="px-2">
             <CalendarIcon className="size-6 text-blue-800 dark:text-blue-200" />
@@ -158,7 +158,7 @@ export function Stats() {
 
       {/* Key Stats Grid */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+        <div className="text-center">
           <BlocksIcon className="size-8 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
           <div className="text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
             {totalPuzzles}
@@ -170,7 +170,7 @@ export function Stats() {
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+        <div className="text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-green-600 dark:text-green-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
             {currentStreak}
@@ -185,7 +185,7 @@ export function Stats() {
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+        <div className="text-center">
           <TrendingUpIcon className="size-8 mx-auto mb-2 text-yellow-600 dark:text-yellow-400" />
           <div className="flex items-center justify-center w-full text-2xl font-bold text-gray-800 dark:text-gray-200 py-1">
             {bestStreak}
@@ -202,7 +202,7 @@ export function Stats() {
       </div>
 
       {/* Best Times Breakdown */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
+      <div>
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
           <GaugeCircleIcon className="size-5" />
           Fastest Times
@@ -238,7 +238,7 @@ export function Stats() {
       </div>
 
       {/* Puzzle Size Breakdown */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
+      <div>
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
           <BarChartHorizontalIcon className="size-5" />
           Puzzles by Size
@@ -260,7 +260,7 @@ export function Stats() {
                 />
               </div>
             </div>
-            <div className="text-right text-sm min-w-[4rem] text-gray-800 dark:text-gray-200">
+            <div className="text-right text-sm text-gray-800 dark:text-gray-200">
               {count}
             </div>
           </div>
@@ -269,7 +269,7 @@ export function Stats() {
 
       {/* Recent Activity */}
       {completedPuzzles.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
+        <div>
           <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
             <HistoryIcon className="size-5" />
             Recent Activity
