@@ -1,11 +1,11 @@
 import { cn } from '@sglara/cn';
-import React from 'react';
+import React, { type MouseEventHandler } from 'react';
 
 interface FlippableCardProps {
   frontContent: React.ReactNode;
   backContent: React.ReactNode;
-  isFlipped?: boolean;
-  onFlip?: () => void;
+  isFlipped: boolean;
+  onClick: MouseEventHandler<HTMLDivElement>;
   className?: string;
   frontClassName?: string;
   backClassName?: string;
@@ -15,26 +15,26 @@ const FlippableCard: React.FC<FlippableCardProps> = ({
   frontContent,
   backContent,
   isFlipped = false,
-  onFlip,
   className = '',
+  onClick,
   frontClassName = '',
   backClassName = '',
 }) => {
   return (
     <div
-      className={cn("relative w-full h-24 [perspective:1000px]", className)}
-      onClick={onFlip}
+      className={cn("relative w-full h-16 [perspective:1000px] select-none", className)}
+      onClick={onClick}
     >
       <div
         className={cn(
-          "relative w-full h-full duration-500 [transform-style:preserve-3d]",
+          "relative w-full h-full duration-1000 [transform-style:preserve-3d]",
           isFlipped ? "[transform:rotateY(180deg)]" : ""
         )}
       >
         {/* Front of card */}
         <div
           className={cn(
-            "absolute w-full h-full [backface-visibility:hidden] border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 shadow-md dark:shadow-gray-900/50 flex items-center justify-center p-4 cursor-pointer",
+            "absolute w-full h-full [backface-visibility:hidden] rounded-lg bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 cursor-pointer",
             isFlipped ? "opacity-0" : "opacity-100",
             frontClassName
           )}
@@ -45,7 +45,7 @@ const FlippableCard: React.FC<FlippableCardProps> = ({
         {/* Back of card */}
         <div
           className={cn(
-            "absolute w-full h-full [backface-visibility:hidden] border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 shadow-md dark:shadow-gray-900/50 flex items-center justify-center p-4 [transform:rotateY(180deg)]",
+            "absolute w-full h-full [backface-visibility:hidden] rounded-lg bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 [transform:rotateY(180deg)]",
             isFlipped ? "opacity-100" : "opacity-0",
             backClassName
           )}

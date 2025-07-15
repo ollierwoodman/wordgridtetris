@@ -9,20 +9,21 @@ import { Success } from "./components/DialogContents/Success";
 import { useGameSounds } from "./hooks/sounds";
 import ConfettiBoom from "react-confetti-boom";
 import { SuccessButtonPanel } from "./components/SuccessButtonPanel";
-import {
-  useCompletedPuzzlesManager,
-} from "./hooks/useLocalStorage";
+import { useCompletedPuzzlesManager } from "./hooks/useLocalStorage";
 import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
 import { useTrackCompletedPuzzle } from "./hooks/useTrackGoals";
+import FlippableCard from "./components/ui/flippableCard";
+import { LightbulbIcon } from "lucide-react";
 
 function App() {
   // Initialize theme
   useTheme();
-  
-  const { solutionSize, changeSolutionSize, canLevelUp, isInitialized } = useSolutionSizeFromURL();
+
+  const { solutionSize, changeSolutionSize, canLevelUp, isInitialized } =
+    useSolutionSizeFromURL();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalHeader, setModalHeader] = useState<string>("");
@@ -30,8 +31,17 @@ function App() {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showSuccessButtonPanel, setShowSuccessButtonPanel] =
     useState<boolean>(false);
+  const [isThemeFlipped, setIsThemeFlipped] = useState<boolean>(false);
+  
+  const { playMenuClick, playPuzzleComplete, playHintReveal } = useGameSounds();
 
-  const { playMenuClick, playPuzzleComplete } = useGameSounds();
+  const handleThemeReveal = useCallback(() => {
+    if (isThemeFlipped) {
+      return;
+    }
+    setIsThemeFlipped(true);
+    playHintReveal();
+  }, [playHintReveal, isThemeFlipped]);
 
   const hasCompletedRef = useRef<boolean>(false);
 
@@ -46,7 +56,6 @@ function App() {
   } = useGame(isInitialized ? solutionSize : undefined);
 
   const trackCompletedPuzzle = useTrackCompletedPuzzle();
-
   const { addPuzzle } = useCompletedPuzzlesManager();
 
   const handleLevelUp = useCallback(() => {
@@ -57,6 +66,7 @@ function App() {
     setIsModalOpen(false);
     setShowSuccessButtonPanel(false);
     changeSolutionSize(solutionSize + 1);
+    setIsThemeFlipped(false);
     // Reset completion flag when leveling up
     hasCompletedRef.current = false;
   }, [solutionSize, canLevelUp, changeSolutionSize]);
@@ -87,10 +97,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState]);
 
-  const handleOpenModal = (
-    header: string,
-    content: React.ReactNode
-  ) => {
+  const handleOpenModal = (header: string, content: React.ReactNode) => {
     setModalHeader(header);
     setModalContent(content);
     setIsModalOpen(true);
@@ -182,8 +189,28 @@ function App() {
       </div>
       {/* Theme */}
       {game.getWordTheme() && (
-        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl text-center text-balance mt-4">
-          Puzzle theme: <span className="font-bold uppercase">{game.getWordTheme()}</span>
+        <div className="flex items-center w-full max-w-[60vh] text-lg md:text-xl xl:text-2xl text-center text-balance mt-4">
+          <FlippableCard
+            className="w-full"
+            frontContent={
+              <>
+                <LightbulbIcon className="size-6" />
+                <span className="font-bold uppercase ml-2">
+                  Tap to reveal theme
+                </span>
+              </>
+            }
+            backContent={
+              <>
+                <span>Theme:</span>
+                <span className="font-bold uppercase ml-2">
+                  {game.getWordTheme()}
+                </span>
+              </>
+            }
+            isFlipped={isThemeFlipped}
+            onClick={handleThemeReveal}
+          />
         </div>
       )}
       <div className="flex flex-row justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">

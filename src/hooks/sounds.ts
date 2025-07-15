@@ -8,6 +8,7 @@ const SOUND_PATHS = {
   DRAG_CLICK: createUrl("sounds/drag_blong.ogg"),
   DROP_SUCCESS: createUrl("sounds/drop_success.ogg"),
   DROP_FAIL: createUrl("sounds/drop_fail.ogg"),
+  HINT_REVEAL: createUrl("sounds/hint_reveal.ogg"),
   LEVEL_COMPLETE: createUrl("sounds/level_complete.ogg"),
   LEVEL_UP: createUrl("sounds/level_up.ogg"),
 } as const;
@@ -64,6 +65,11 @@ export function useGameSounds() {
     soundEnabled: !isMuted,
   });
 
+  const [playHintReveal] = useSound(SOUND_PATHS.HINT_REVEAL, {
+    ...SOUND_OPTIONS,
+    soundEnabled: !isMuted,
+  });
+
   const [playPuzzleComplete] = useSound(SOUND_PATHS.LEVEL_COMPLETE, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
@@ -79,6 +85,7 @@ export function useGameSounds() {
     playDragClick,
     playDropSuccess,
     playDropFail,
+    playHintReveal,
     playPuzzleComplete,
     playLevelUp,
   };
