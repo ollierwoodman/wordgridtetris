@@ -17,9 +17,9 @@ export function Success({
 }: SuccessProps) {
   const { copy, share, canShare } = useShare();
 
-  const shareText = `I solved today's ${solutionSize}×${solutionSize} Blockle ${
-    completionTime > 0 ? `in ${formatDurationMs(completionTime)}` : ""
-  }!`;
+  const url = `https://blockle.au/${solutionSize}x${solutionSize}`;
+  const shareTitle = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionTime)}! ${url}`;
+  const shareText = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionTime)}! ${url}`;
 
   const trackSharedResults = useTrackSharedResult();
 
@@ -33,7 +33,7 @@ export function Success({
         <button
           type="button"
           onClick={() => {
-            share(shareText);
+            share(shareText, url, shareTitle);
             trackSharedResults();
           }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500  text-white px-4 py-2 mt-4 rounded-full hover:opacity-80"
