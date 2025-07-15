@@ -9,6 +9,7 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
   const gameStartTimeRef = useRef<number | null>(null);
+  const gameEndTimeRef = useRef<number | null>(null);
   
   const { playDragClick } = useGameSounds();
 
@@ -24,8 +25,9 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
     setLoading(true);
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
-    // Record the start time when initializing a new game
+    // Reset both time refs when initializing a new game
     gameStartTimeRef.current = Date.now();
+    gameEndTimeRef.current = null;
     
     const newGame = new Game(solutionSize, seed);
     setGame(newGame);
@@ -49,12 +51,17 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
 
   const updateGameState = useCallback(() => {
     if (!game) return;
+    const isCompleted = game.isPuzzleCompleted();
+    // If the puzzle is newly completed, record the end time
+    if (isCompleted && !gameEndTimeRef.current) {
+      gameEndTimeRef.current = Date.now();
+    }
     setGameState({
       grid: game.getGrid(),
       pieces: game.getPieces(),
       selectedPieceIndex: game.getSelectedPieceIndex(),
       hintProgress: game.getHintProgress(),
-      isCompleted: game.isPuzzleCompleted()
+      isCompleted
     });
   }, [game]);
 
@@ -121,6 +128,11 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
 
   const getCompletionTime = useCallback(() => {
     if (!gameStartTimeRef.current) return 0;
+    // If the game is completed, return the frozen completion time
+    if (gameEndTimeRef.current) {
+      return gameEndTimeRef.current - gameStartTimeRef.current;
+    }
+    // Otherwise return the current elapsed time
     return Date.now() - gameStartTimeRef.current;
   }, []);
 
