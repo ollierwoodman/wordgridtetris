@@ -31,19 +31,10 @@ function App() {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showSuccessButtonPanel, setShowSuccessButtonPanel] =
     useState<boolean>(false);
-  const [isThemeFlipped, setIsThemeFlipped] = useState<boolean>(false);
-  
-  const { playMenuClick, playPuzzleComplete, playHintReveal } = useGameSounds();
-
-  const handleThemeReveal = useCallback(() => {
-    if (isThemeFlipped) {
-      return;
-    }
-    setIsThemeFlipped(true);
-    playHintReveal();
-  }, [playHintReveal, isThemeFlipped]);
-
   const hasCompletedRef = useRef<boolean>(false);
+  
+  const { playMenuClick, playPuzzleComplete, playThemeReveal } = useGameSounds();
+
 
   const {
     game,
@@ -52,8 +43,16 @@ function App() {
     handleTileClick,
     loading,
     solvePuzzle,
-    getCompletionTime,
+    revealTheme,
   } = useGame(isInitialized ? solutionSize : undefined);
+
+  const handleThemeReveal = useCallback(() => {
+    if (gameState?.isThemeRevealed) {
+      return;
+    }
+    revealTheme();
+    playThemeReveal();
+  }, [revealTheme, gameState, playThemeReveal]);
 
   const trackCompletedPuzzle = useTrackCompletedPuzzle();
   const { addPuzzle } = useCompletedPuzzlesManager();
@@ -66,7 +65,6 @@ function App() {
     setIsModalOpen(false);
     setShowSuccessButtonPanel(false);
     changeSolutionSize(solutionSize + 1);
-    setIsThemeFlipped(false);
     // Reset completion flag when leveling up
     hasCompletedRef.current = false;
   }, [solutionSize, canLevelUp, changeSolutionSize]);
@@ -83,14 +81,13 @@ function App() {
         date: new Date().toISOString().split("T")[0],
         solutionSize: game?.getSolutionSize() || 0,
         theme: game?.getWordTheme() || "",
-        timeToCompleteMs: getCompletionTime(),
+        timeToCompleteMs: game?.getCompletionDurationMs() || 0,
       });
       handleOpenModal(
         "Well done!",
         <Success
-          solutionSize={solutionSize}
+          game={game!}
           handleLevelUp={handleLevelUp}
-          completionTime={getCompletionTime()}
         />
       );
     }
@@ -117,7 +114,7 @@ function App() {
       />
     ) : null;
 
-  if (!isInitialized || !game || !gameState || loading) {
+  if (!isInitialized || game === null || gameState === null || loading) {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 p-4">
         {/* Spinner */}
@@ -172,7 +169,6 @@ function App() {
               game={game}
               handleLevelUp={handleLevelUp}
               onOpenModal={handleOpenModal}
-              completionTime={getCompletionTime()}
             />
           )}
         </div>
@@ -208,7 +204,7 @@ function App() {
                 </span>
               </>
             }
-            isFlipped={isThemeFlipped}
+            isFlipped={gameState?.isThemeRevealed}
             onClick={handleThemeReveal}
           />
         </div>

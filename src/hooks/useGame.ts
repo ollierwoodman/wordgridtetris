@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
 import { getCurrentDateSeed } from "../game/puzzle/random";
@@ -8,8 +8,6 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
-  const gameStartTimeRef = useRef<number | null>(null);
-  const gameEndTimeRef = useRef<number | null>(null);
   
   const { playDragClick } = useGameSounds();
 
@@ -25,9 +23,6 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
     setLoading(true);
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
-    // Reset both time refs when initializing a new game
-    gameStartTimeRef.current = Date.now();
-    gameEndTimeRef.current = null;
     
     const newGame = new Game(solutionSize, seed);
     setGame(newGame);
@@ -39,8 +34,8 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
       grid: newGame.getGrid(),
       pieces: newGame.getPieces(),
       selectedPieceIndex: newGame.getSelectedPieceIndex(),
-      hintProgress: newGame.getHintProgress(),
-      isCompleted: newGame.isPuzzleCompleted()
+      isCompleted: newGame.isPuzzleCompleted(),
+      isThemeRevealed: false
     });
     setLoading(false);
   }, [solutionSize, seed]);
@@ -52,16 +47,18 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
   const updateGameState = useCallback(() => {
     if (!game) return;
     const isCompleted = game.isPuzzleCompleted();
-    // If the puzzle is newly completed, record the end time
-    if (isCompleted && !gameEndTimeRef.current) {
-      gameEndTimeRef.current = Date.now();
+    
+    // If the puzzle is newly completed
+    if (isCompleted) {
+      game.setGameCompleted();
     }
+
     setGameState({
       grid: game.getGrid(),
       pieces: game.getPieces(),
       selectedPieceIndex: game.getSelectedPieceIndex(),
-      hintProgress: game.getHintProgress(),
-      isCompleted
+      isCompleted,
+      isThemeRevealed: game.getIsThemeRevealed()
     });
   }, [game]);
 
@@ -126,15 +123,12 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
     }
   }, [game, updateGameState]);
 
-  const getCompletionTime = useCallback(() => {
-    if (!gameStartTimeRef.current) return 0;
-    // If the game is completed, return the frozen completion time
-    if (gameEndTimeRef.current) {
-      return gameEndTimeRef.current - gameStartTimeRef.current;
+  const revealTheme = useCallback(() => {
+    if (game) {
+      game.revealTheme();
+      updateGameState();
     }
-    // Otherwise return the current elapsed time
-    return Date.now() - gameStartTimeRef.current;
-  }, []);
+  }, [game, updateGameState]);
 
   return {
     game,
@@ -144,6 +138,6 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
     handleKeyDown,
     loading,
     solvePuzzle,
-    getCompletionTime
+    revealTheme,
   };
 } 

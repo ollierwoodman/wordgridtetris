@@ -50,8 +50,8 @@ export interface GameState {
   grid: Tile[][];
   pieces: Piece[];
   selectedPieceIndex: number | null;
-  hintProgress: number; // 0-3: 0=no hints, 1=theme, 2=position, 3=letter
   isCompleted: boolean;
+  isThemeRevealed: boolean;
 }
 
 // UI types
@@ -104,7 +104,6 @@ export interface HintsProps {
 
 export interface WordSolution {
   theme: string;
-  greeting?: string;
   words: string[];
 }
 

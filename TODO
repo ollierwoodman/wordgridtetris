@@ -1,6 +1,10 @@
 # TODOs
 
-## Fixes
+## Bugs
+
+FIX: Long load times for 7x7 puzzles
+FIX: Disallow the I piece from being placed in the top left
+FIX: Left padding on stats modal
 
 ## Ongoing tasks
 

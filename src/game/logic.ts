@@ -29,7 +29,9 @@ export class Game {
   private pieceRotationStates: number[]; // Track current rotation state for each piece
   private emptyTilePositions: { x: number; y: number }[] = [];
   private emptyTileLetters: string[] = [];
-  private hintProgress: number = 0; // 0-3: 0=no hints, 1=theme, 2=position, 3=letter
+  private isThemeRevealed: boolean = false;
+  private gameStartTime: Date = new Date();
+  private gameEndTime: Date | null = null;
   private initializationPromise: Promise<void>;
 
   constructor(solutionSize: number, seed: string) {
@@ -56,7 +58,6 @@ export class Game {
       .then(([wordSolution, pieceSolution]) => {
         this.wordSolution = wordSolution;
         this.pieceSolution = pieceSolution;
-        this.greeting = wordSolution.greeting || "";
         this.grid = this.initializeGrid();
         this.pieces = this.initializePieces();
         // Initialize rotation states only for valid pieces (pieceIndex >= 0)
@@ -156,20 +157,19 @@ export class Game {
     if (shuffle) {
       // Shuffle the pieces
       randomHelper.shuffle(placePieceOrder);
-    } else {
-      placePieceOrder.reverse();
     }
 
     // Predefined positions spread across the grid to minimize collisions
     const placementPositions = [
-      { x: 1, y: 1 },
-      { x: this.gridSize - 3, y: 1 },
-      { x: 1, y: this.gridSize - 3 },
-      { x: this.gridSize - 3, y: this.gridSize - 3 },
-      { x: Math.floor(this.gridSize / 2), y: 1 },
-      { x: 1, y: Math.floor(this.gridSize / 2) },
-      { x: this.gridSize - 3, y: Math.floor(this.gridSize / 2) },
-      { x: Math.floor(this.gridSize / 2), y: this.gridSize - 3 },
+      { x: Math.floor(this.gridSize / 2), y: Math.floor(this.gridSize / 2) }, // Center
+      { x: this.gridSize - 3, y: 1 }, // Top right
+      { x: 1, y: this.gridSize - 3 }, // Bottom left
+      { x: this.gridSize - 3, y: this.gridSize - 3 }, // Bottom right
+      { x: Math.floor(this.gridSize / 2), y: 1 }, // Top center
+      { x: this.gridSize - 3, y: Math.floor(this.gridSize / 2) }, // Right center
+      { x: Math.floor(this.gridSize / 2), y: this.gridSize - 3 }, // Bottom center
+      { x: 1, y: Math.floor(this.gridSize / 2) }, // Left center
+      { x: 1, y: 1 }, // Top left
     ];
 
     // Place each piece in the first available valid position
@@ -242,6 +242,7 @@ export class Game {
   }
 
   // Move piece away from empty tile if it's occupying it
+  // @ts-expect-error - may need in future
   private movePieceAwayFromEmptyTile(): boolean {
     const piecesAtEmptyTiles = this.isPieceOccupyingEmptyTile();
 
@@ -370,42 +371,6 @@ export class Game {
     return false;
   }
 
-  // // Rotate selected piece
-  // rotatePiece(): boolean {
-  //   if (this.selectedPieceIndex === null) return false;
-
-  //   const piece = this.pieces[this.selectedPieceIndex];
-  //   const currentRotationState =
-  //     this.pieceRotationStates[this.selectedPieceIndex];
-  //   const pieceType = this.pieces[this.selectedPieceIndex].type;
-  //   const numRotationStates = TETRIS_PIECE_SHAPES[pieceType].length;
-  //   const nextRotationState = (currentRotationState + 1) % numRotationStates;
-  //   const nextPieceTemplate = TETRIS_PIECE_SHAPES[pieceType][nextRotationState];
-
-  //   // Check if rotation is valid
-  //   for (const block of nextPieceTemplate) {
-  //     const blockX = piece.x + block.x;
-  //     const blockY = piece.y + block.y;
-
-  //     if (
-  //       blockX < 0 ||
-  //       blockX >= this.gridSize ||
-  //       blockY < 0 ||
-  //       blockY >= this.gridSize
-  //     ) {
-  //       return false;
-  //     }
-
-  //     if (this.wouldCollideWithPiece(blockX, blockY, this.selectedPieceIndex)) {
-  //       return false;
-  //     }
-  //   }
-
-  //   // Apply rotation by updating the rotation state
-  //   this.pieceRotationStates[this.selectedPieceIndex] = nextRotationState;
-  //   return true;
-  // }
-
   // Get piece at specific grid position
   getPieceAtPosition(
     x: number,
@@ -502,33 +467,23 @@ export class Game {
     return this.numPieces;
   }
 
-  // Hint progress methods
-  public getHintProgress(): number {
-    return this.hintProgress;
+  public getIsThemeRevealed(): boolean {
+    return this.isThemeRevealed;
   }
 
-  public areHintsEnabled(): boolean {
-    return this.solutionSize <= 5;
+  public revealTheme(): void {
+    this.isThemeRevealed = true;
   }
 
-  public revealNextHint(): boolean {
-    // Disable hints for solution sizes above 5
-    if (this.solutionSize > 5) {
-      return false;
+  public getCompletionDurationMs(): number | null {
+    if (this.gameEndTime) {
+      return this.gameEndTime.getTime() - this.gameStartTime.getTime();
     }
-    
-    if (this.hintProgress < 3) {
-      this.hintProgress++;
+    return null;
+  }
 
-      // When revealing the empty tile position (hintProgress becomes 2),
-      // check if any piece is occupying that position and move it if necessary
-      if (this.hintProgress === 2) {
-        this.movePieceAwayFromEmptyTile();
-      }
-
-      return true;
-    }
-    return false;
+  public setGameCompleted(): void {
+    this.gameEndTime = new Date();
   }
 
   // Check if the puzzle is completed by verifying all solution words are present in any order

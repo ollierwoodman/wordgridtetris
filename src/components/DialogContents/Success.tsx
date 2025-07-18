@@ -3,23 +3,27 @@ import { MAX_SOLUTION_SIZE } from "../../hooks/useSolutionSizeFromURL";
 import { formatDurationMs } from "../../utils/game";
 import useShare from "../../hooks/useShare";
 import { useTrackSharedResult } from "../../hooks/useTrackGoals";
+import type { Game } from "../../game/logic";
 
 interface SuccessProps {
-  solutionSize: number;
+  game: Game;
   handleLevelUp: () => void;
-  completionTime: number;
 }
 
 export function Success({
-  solutionSize,
+  game,
   handleLevelUp,
-  completionTime,
 }: SuccessProps) {
+
+  const solutionSize = game.getSolutionSize();
+  const completionDurationMs = game.getCompletionDurationMs() || 0;
+  const isThemeRevealed = game.getIsThemeRevealed();
+
   const { copy, share, canShare } = useShare();
 
   const url = `https://blockle.au/${solutionSize}x${solutionSize}`;
-  const shareTitle = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionTime)}! ${url}`;
-  const shareText = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionTime)}! ${url}`;
+  const shareTitle = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionDurationMs)}${isThemeRevealed ? " (with theme revealed)" : ""}! ${url}`;
+  const shareText = shareTitle;
 
   const trackSharedResults = useTrackSharedResult();
 
@@ -27,7 +31,7 @@ export function Success({
     <>
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
         You've completed today's {solutionSize}×{solutionSize} Blockle
-        {completionTime > 0 ? ` in ${formatDurationMs(completionTime)}` : ""}!
+        {completionDurationMs > 0 ? ` in ${formatDurationMs(completionDurationMs)}` : ""}!
       </p>
       {(canShare && (
         <button
