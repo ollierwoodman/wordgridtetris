@@ -105,6 +105,7 @@ export interface HintsProps {
 export interface WordSolution {
   theme: string;
   words: string[];
+  greeting?: string;
 }
 
 export interface UserSettings {

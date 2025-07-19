@@ -20,9 +20,8 @@ export class Game {
   private solutionOffset: number;
   private numPieces: number;
   private numEmptyTiles: number;
-  private wordSolution: WordSolution = { words: [], theme: "" };
+  private wordSolution: WordSolution = { words: [], theme: "", greeting: undefined };
   private pieceSolution: PieceSolutionEntry[] = [];
-  private greeting: string = "";
   private grid: Tile[][] = [];
   private pieces: Piece[] = [];
   private selectedPieceIndex: number | null = null;
@@ -445,10 +444,6 @@ export class Game {
 
   public getWordTheme(): string {
     return this.wordSolution.theme;
-  }
-
-  public getGreeting(): string {
-    return this.greeting;
   }
 
   public getGridSize(): number {

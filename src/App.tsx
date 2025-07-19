@@ -174,9 +174,9 @@ function App() {
         </div>
       </div>
       {/* Greeting */}
-      {game.getGreeting() && (
-        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl text-center text-balance mb-4">
-          {game.getGreeting()}
+      {game.getWordSolution().greeting && (
+        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl font-bold text-center text-balance mb-4">
+          {game.getWordSolution().greeting}
         </div>
       )}
       {/* Playing grid */}
@@ -190,7 +190,7 @@ function App() {
             className="w-full"
             frontContent={
               <>
-                <LightbulbIcon className="size-6" />
+                <LightbulbIcon className="size-8" />
                 <span className="font-bold uppercase ml-2">
                   Tap to reveal theme
                 </span>
