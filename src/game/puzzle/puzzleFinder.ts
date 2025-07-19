@@ -1,12 +1,12 @@
 // GRID_SIZE should be the only constant you need to change to generate new solutions
-const GRID_SIZE = 9;
+const GRID_SIZE = 6;
+const NUM_PIECE_COMBOS = 62;
+const MAX_NUM_SOLUTIONS_PER_COMBO = 100;
+const TIME_LIMIT_PER_PIECE_COMBO_MS = 1 * 60 * 1000;
 // ==================================================================================
 
 const HAS_EMPTY_TILE = (GRID_SIZE * GRID_SIZE) % 4 === 1;
 const NUM_PIECES = (GRID_SIZE * GRID_SIZE - (HAS_EMPTY_TILE ? 1 : 0)) / 4;
-const NUM_PIECE_COMBOS = 50; // 62 unique piece combos for 6x6 grid
-const MAX_NUM_SOLUTIONS_PER_COMBO = 100;
-const TIME_LIMIT_PER_PIECE_COMBO_MS = 10 * 60 * 1000; // 10 minutes per combo
 
 // import { TETRIS_PIECES } from './constants';
 import { TETRIS_PIECE_SHAPES } from "../pieceDefs.ts";
@@ -14,6 +14,44 @@ import { TETRIS_PIECE_SHAPES } from "../pieceDefs.ts";
 import * as fs from "fs";
 import type { PiecePlacement, Solution } from "../../types/game";
 import { SeededRandom } from "../../utils/random.ts";
+
+// Function to get a canonical string representation of a solution
+// This will be the same for solutions that are equivalent but have pieces in different order
+function getCanonicalString(solution: Solution): string {
+  // Create a grid representation
+  const grid = Array.from<unknown, number[]>({ length: GRID_SIZE }, () => Array.from<unknown, number>({ length: GRID_SIZE }, () => -1));
+  
+  // Fill grid with piece indices
+  for (const placement of solution) {
+    if (placement.pieceIndex === -1) continue; // Skip empty tiles
+    const shape = TETRIS_PIECE_SHAPES[placement.pieceIndex][placement.rotation];
+    for (const block of shape) {
+      const x = placement.x + block.x;
+      const y = placement.y + block.y;
+      grid[y][x] = placement.pieceIndex;
+    }
+  }
+  
+  // Convert grid to string
+  const rows: string[] = [];
+  for (let y = 0; y < GRID_SIZE; y++) {
+    const row: string[] = [];
+    for (let x = 0; x < GRID_SIZE; x++) {
+      row.push(grid[y][x].toString().padStart(2, '0'));
+    }
+    rows.push(row.join(','));
+  }
+  return rows.join('|');
+}
+
+// Function to check if a piece placement is allowed based on position restrictions
+function isPlacementAllowed(placement: PiecePlacement): boolean {
+  // I piece (index 0) cannot be placed at x = 0
+  if (placement.pieceIndex === 0 && placement.x === 0) {
+    return false;
+  }
+  return true;
+}
 
 // Generate all possible placements for a piece
 function getAllPlacementsForPiece(pieceIndex: number): PiecePlacement[] {
@@ -47,6 +85,11 @@ function getBitIndex(x: number, y: number): number {
 }
 
 function canPlaceBitboard(grid: bigint, placement: PiecePlacement): boolean {
+  // First check position restrictions
+  if (!isPlacementAllowed(placement)) {
+    return false;
+  }
+
   const shape = TETRIS_PIECE_SHAPES[placement.pieceIndex][placement.rotation];
   for (const block of shape) {
     const gx = placement.x + block.x;
@@ -157,6 +200,7 @@ function findSolutions(
   piecesUsed: boolean[],
   solution: PiecePlacement[],
   solutions: Solution[],
+  canonicalSolutions: Set<string>,
   maxSolutions = 100,
   depth = 0,
   startTime: number,
@@ -182,6 +226,7 @@ function findSolutions(
       }
     }
     if (emptyTiles.length === (HAS_EMPTY_TILE ? 1 : 0)) {
+      // Add empty tiles to solution
       emptyTiles.forEach((emptyTile) => {
         solution.push({
           pieceIndex: -1,
@@ -190,12 +235,22 @@ function findSolutions(
           y: emptyTile.y,
         });
       });
-      solutions.push(JSON.parse(JSON.stringify(solution)) as Solution);
-      logWithTime(
-        `FOUND a new solution! (total: ${solutions.length.toString()})`
-      );
+
+      // Check if this solution is canonically unique
+      const canonicalString = getCanonicalString(solution);
+      if (!canonicalSolutions.has(canonicalString)) {
+        canonicalSolutions.add(canonicalString);
+        solutions.push(JSON.parse(JSON.stringify(solution)) as Solution);
+        logWithTime(
+          `FOUND a new unique solution! (total: ${solutions.length.toString()})`
+        );
+      } else {
+        logWithTime('Found duplicate solution, skipping...');
+      }
+
+      // Remove empty tiles for backtracking
       for (let i = 0; i < (HAS_EMPTY_TILE ? 1 : 0); i++) {
-        solution.pop(); // Remove the empty tile for backtracking
+        solution.pop();
       }
       if (solutions.length >= maxSolutions) return;
     }
@@ -219,6 +274,7 @@ function findSolutions(
           piecesUsed,
           solution,
           solutions,
+          canonicalSolutions,
           maxSolutions,
           depth + 1,
           startTime,
@@ -313,7 +369,10 @@ function main() {
   const PUBLIC_SOLUTIONS_DIR = `./public/solutions/${GRID_SIZE.toString()}x${GRID_SIZE.toString()}/pieces`;
   const GAME_SOLUTIONS_DIR = `./src/game/puzzle/numPieceSolutions`;
 
+  // Track canonical solutions across all piece combinations
+  const canonicalSolutions = new Set<string>();
   let totalNumSolutions = 0;
+
   for (let comboIdx = 0; comboIdx < pieceCombos.length; comboIdx++) {
     const pieceCombo = pieceCombos[comboIdx];
     logWithTime(
@@ -336,13 +395,14 @@ function main() {
       piecesUsed,
       solution,
       solutions,
+      canonicalSolutions,
       MAX_NUM_SOLUTIONS_PER_COMBO,
       0,
       startCombo,
       TIME_LIMIT_PER_PIECE_COMBO_MS
     );
     logWithTime(
-      `Found ${solutions.length.toString()} solutions for combo ${(comboIdx + 1).toString()}`
+      `Found ${solutions.length.toString()} unique solutions for combo ${(comboIdx + 1).toString()}`
     );
     solutions.forEach((solution, index) => {
       fs.writeFileSync(
@@ -362,6 +422,6 @@ function main() {
       `Finished combo ${(comboIdx + 1).toString()} in ${((endCombo - startCombo) / 1000).toFixed(2)}s`
     );
   }
-  logWithTime(`Wrote ${totalNumSolutions.toString()} solutions to JSON files`);
+  logWithTime(`Wrote ${totalNumSolutions.toString()} unique solutions to JSON files`);
 }
 main();
