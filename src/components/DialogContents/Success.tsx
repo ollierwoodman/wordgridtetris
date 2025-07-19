@@ -1,10 +1,10 @@
 import { CopyIcon, Grid2X2PlusIcon, Share2Icon } from "lucide-react";
-import { MAX_SOLUTION_SIZE } from "../../hooks/useSolutionSizeFromURL";
 import { formatDurationMs } from "../../utils/game";
 import useShare from "../../hooks/useShare";
 import { useTrackSharedResult } from "../../hooks/useTrackGoals";
-import type { Game } from "../../game/logic";
+import { SOLUTION_SIZES, type Game } from "../../game/logic";
 
+const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
 interface SuccessProps {
   game: Game;
   handleLevelUp: () => void;

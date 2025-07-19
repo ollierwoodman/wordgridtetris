@@ -11,6 +11,8 @@ import {
 } from "./puzzle/random";
 import { SeededRandom } from "../utils/random";
 
+export const SOLUTION_SIZES = [5, 6, 7];
+
 const NUMBER_BLOCK_PER_PIECE = 4;
 
 export class Game {

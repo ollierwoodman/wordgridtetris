@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
+import { SOLUTION_SIZES } from "../game/logic";
 
-export const MAX_SOLUTION_SIZE = 7;
-export const MIN_SOLUTION_SIZE = 5;
+const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
+const MIN_SOLUTION_SIZE = Math.min(...SOLUTION_SIZES);
 
 export function useSolutionSizeFromURL() {
   const [solutionSize, setSolutionSize] = useState<number>(MIN_SOLUTION_SIZE);

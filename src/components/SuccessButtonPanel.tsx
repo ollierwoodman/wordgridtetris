@@ -1,10 +1,11 @@
 import React from "react";
 import { Grid2X2PlusIcon, TrophyIcon } from "lucide-react";
-import type { Game } from "../game/logic";
+import { SOLUTION_SIZES, type Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { Success } from "./DialogContents/Success";
-import { MAX_SOLUTION_SIZE } from "../hooks/useSolutionSizeFromURL";
 import { useGameSounds } from "../hooks/sounds";
+
+const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
 
 interface SuccessButtonPanelProps {
   game: Game;
