@@ -1,42 +1,62 @@
 [
   {
-    "theme": "fruits",
+    "theme": "fruit",
     "words": [
-      "apple",
-      "grape",
       "mango",
+      "grape",
+      "peach",
+      "juice",
+      "ripen",
       "melon",
-      "peach"
+      "berry",
+      "lemon",
+      "juicy",
+      "apple",
+      "guava"
     ]
   },
   {
     "theme": "animals",
     "words": [
-      "bison",
+      "sheep",
       "horse",
-      "llama",
-      "mouse",
-      "zebra"
+      "geese",
+      "puppy",
+      "whale",
+      "bison",
+      "doggy",
+      "tiger",
+      "moose",
+      "hyena",
+      "zebra",
+      "camel",
+      "hound",
+      "pooch",
+      "snake",
+      "kitty",
+      "snail",
+      "quail",
+      "shark",
+      "bunny",
+      "rhino",
+      "goose",
+      "guppy",
+      "koala",
+      "gecko",
+      "lemur"
     ]
   },
   {
     "theme": "colors",
     "words": [
-      "black",
-      "blond",
-      "brown",
+      "white",
       "green",
-      "white"
-    ]
-  },
-  {
-    "theme": "weather",
-    "words": [
-      "cloud",
-      "rainy",
-      "snowy",
-      "storm",
-      "windy"
+      "black",
+      "beige",
+      "shade",
+      "light",
+      "brown",
+      "lilac"
     ]
   },
   {
