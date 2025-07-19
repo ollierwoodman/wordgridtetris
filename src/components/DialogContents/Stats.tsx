@@ -301,8 +301,6 @@ export function Stats() {
           >
             Clear all statistics
           </button>
-        </div>
-      )}
 
       {/* Clear Confirmation Modal */}
       <ConfirmModal
@@ -315,6 +313,8 @@ export function Stats() {
         cancelText="Cancel"
         variant="danger"
       />
+        </div>
+      )}
 
       {/* Empty State */}
       {completedPuzzles.length === 0 && (
