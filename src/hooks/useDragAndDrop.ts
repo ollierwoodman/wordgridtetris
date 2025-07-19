@@ -76,15 +76,15 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     const x = cursorTileX - block.x;
     const y = cursorTileY - block.y;
 
-    if (dragPosition?.x !== x || dragPosition?.y !== y) {
+    if (dragPosition && (dragPosition.x !== x || dragPosition.y !== y)) {
       playDragClick();
     }
     
     // Check if the piece would be fully within bounds
     let inBounds = true;
-    for (let i = 0; i < piece.blocks.length; i++) {
-      const blockX = x + piece.blocks[i].x;
-      const blockY = y + piece.blocks[i].y;
+    for (const block of piece.blocks) {
+      const blockX = x + block.x;
+      const blockY = y + block.y;
       if (blockX < 0 || blockX >= game.getGridSize() || blockY < 0 || blockY >= game.getGridSize()) {
         inBounds = false;
         break;
@@ -103,9 +103,9 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       // Always check collision and bounds on drop
       const piece = gameState.pieces[draggedPieceIndex];
       let inBounds = true;
-      for (let i = 0; i < piece.blocks.length; i++) {
-        const blockX = dragPosition.x + piece.blocks[i].x;
-        const blockY = dragPosition.y + piece.blocks[i].y;
+      for (const block of piece.blocks) {
+        const blockX = dragPosition.x + block.x;
+        const blockY = dragPosition.y + block.y;
         if (blockX < 0 || blockX >= game.getGridSize() || blockY < 0 || blockY >= game.getGridSize()) {
           inBounds = false;
           break;

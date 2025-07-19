@@ -11,7 +11,7 @@ export function useSolutionSizeFromURL() {
   // Function to parse solution size from URL
   const parseSolutionSizeFromURL = useCallback(() => {
     const path = window.location.pathname;
-    const match = path.match(/^\/(\d+)x\d+$/);
+    const match = /^\/(\d+)x\d+$/.exec(path);
     
     if (match) {
       const size = parseInt(match[1]);
@@ -22,8 +22,8 @@ export function useSolutionSizeFromURL() {
     }
     
     // If no valid URL pattern or invalid size, redirect to default
-    if (path !== `/${MIN_SOLUTION_SIZE}x${MIN_SOLUTION_SIZE}`) {
-      window.history.replaceState({}, '', `/${MIN_SOLUTION_SIZE}x${MIN_SOLUTION_SIZE}`);
+    if (path !== `/${MIN_SOLUTION_SIZE.toString()}x${MIN_SOLUTION_SIZE.toString()}`) {
+      window.history.replaceState({}, '', `/${MIN_SOLUTION_SIZE.toString()}x${MIN_SOLUTION_SIZE.toString()}`);
     }
     
     return MIN_SOLUTION_SIZE; // Default fallback
@@ -44,7 +44,9 @@ export function useSolutionSizeFromURL() {
     };
 
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, [parseSolutionSizeFromURL]);
 
   // Update URL when solution size changes (only after initialization)
@@ -52,7 +54,7 @@ export function useSolutionSizeFromURL() {
     if (!isInitialized) return; // Skip during initialization
     
     const currentPath = window.location.pathname;
-    const newPath = `/${solutionSize}x${solutionSize}`;
+    const newPath = `/${solutionSize.toString()}x${solutionSize.toString()}`;
     
     // Only update URL if it's different from current path
     if (currentPath !== newPath) {

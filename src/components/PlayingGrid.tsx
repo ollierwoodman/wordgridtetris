@@ -29,16 +29,18 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
     return cn(
       "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
       {
-        "ring-4 ring-green-400": tileContent?.isValid,
-        "ring-4 ring-red-400": tileContent?.isValid === false,
-        "shadow-xl/30 dark:shadow-xl/0": tileContent?.isInSolutionGrid,
-        "bg-gray-400/50 dark:bg-gray-600/50": !tileContent?.isInSolutionGrid,
-        [`${getPieceColor(tileContent?.pieceIndex)} cursor-pointer`]:
-          tileContent?.pieceIndex >= 0,
-        "cursor-not-allowed": tileContent?.isLocked || gameState.isCompleted,
+        "ring-4 ring-green-400": tileContent.isValid,
+        "ring-4 ring-red-400": tileContent.isValid === false,
+        "shadow-xl/30 dark:shadow-xl/0": tileContent.isInSolutionGrid,
+        "bg-gray-400/50 dark:bg-gray-600/50": !tileContent.isInSolutionGrid,
+        [`${getPieceColor(tileContent.pieceIndex)} cursor-pointer`]:
+          tileContent.pieceIndex >= 0,
+        "cursor-not-allowed": tileContent.isLocked
+          ? gameState.isCompleted
+          : false,
         "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75":
-          tileContent?.isEmptyTile,
-        "z-10 opacity-50": tileContent?.isGhost,
+          tileContent.isEmptyTile,
+        "z-10 opacity-50": tileContent.isGhost,
       }
     );
   }
@@ -57,7 +59,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
         }
       )}
       style={{
-        gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${gridSize.toString()}, minmax(0, 1fr))`,
       }}
     >
       {Array.from({ length: gridSize * gridSize }).map((_, index) => {
@@ -81,24 +83,24 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
           <div
             key={index}
             className={getTileClasses(tileContent)}
-            onClick={() => handleTileClick(x, y)}
+            onClick={() => { handleTileClick(x, y); }}
             onPointerDown={
               canDrag
-                ? (e) => handlePointerDown(pieceAtPosition!.pieceIndex, x, y, e)
+                ? (e) => { handlePointerDown(pieceAtPosition.pieceIndex, x, y, e); }
                 : undefined
             }
           >
-            {tileContent?.isSelected && (
+            {tileContent.isSelected && (
               <div className="absolute top-1/8 left-1/8 bg-white rounded-full w-1/8 h-1/8 flex items-center justify-center">
                 <span className="sr-only">Selected</span>
               </div>
             )}
-            {tileContent?.isEmptyTile && (
+            {tileContent.isEmptyTile && (
               <div className="absolute top-1/8 left-1/8 text-white">
                 <LockIcon />
               </div>
             )}
-            {tileContent?.letter && (
+            {tileContent.letter && (
               <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
                 {tileContent.letter}
               </span>

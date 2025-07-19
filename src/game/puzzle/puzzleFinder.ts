@@ -96,7 +96,10 @@ function checkFillableRegions(grid: bigint): boolean {
 
       // Perform flood fill (DFS)
       while (stack.length > 0) {
-        const [currentX, currentY] = stack.pop()!;
+        const current = stack.pop();
+        if (current === undefined) continue;
+        
+        const [currentX, currentY] = current;
         regionSize++;
 
         // Check all four neighbors (up, down, left, right)
@@ -154,8 +157,8 @@ function findSolutions(
   piecesUsed: boolean[],
   solution: PiecePlacement[],
   solutions: Solution[],
-  maxSolutions: number = 100,
-  depth: number = 0,
+  maxSolutions = 100,
+  depth = 0,
   startTime: number,
   timeLimitMs: number
 ) {
@@ -187,8 +190,10 @@ function findSolutions(
           y: emptyTile.y,
         });
       });
-      solutions.push(JSON.parse(JSON.stringify(solution)));
-      logWithTime(`FOUND a new solution! (total: ${solutions.length})`);
+      solutions.push(JSON.parse(JSON.stringify(solution)) as Solution);
+      logWithTime(
+        `FOUND a new solution! (total: ${solutions.length.toString()})`
+      );
       for (let i = 0; i < (HAS_EMPTY_TILE ? 1 : 0); i++) {
         solution.pop(); // Remove the empty tile for backtracking
       }
@@ -248,7 +253,7 @@ function pickRandomPieces(numPieces: number, random: SeededRandom): number[] {
       pieceTypes.push(...pieceTypes);
       break;
     default:
-      throw new Error(`Unsupported grid size: ${GRID_SIZE}`);
+      throw new Error(`Unsupported grid size: ${GRID_SIZE.toString()}`);
   }
 
   // Shuffle pieceTypes and pick the first numPieces
@@ -272,7 +277,7 @@ function getUniquePieceCombos(
     if (pieceCombos.length >= numCombos) return pieceCombos;
   }
   throw new Error(
-    `Only found ${pieceCombos.length}/${numCombos} unique piece combos, you can increase the max attempts to find more or decrease the number of required piece combos`
+    `Only found ${pieceCombos.length.toString()}/${numCombos.toString()} unique piece combos, you can increase the max attempts to find more or decrease the number of required piece combos`
   );
 }
 
@@ -296,7 +301,7 @@ function main() {
 
   // Use random pieces with constraints
   const pieceCombos = getUniquePieceCombos(NUM_PIECE_COMBOS, randomHelper);
-  logWithTime(`Generated ${NUM_PIECE_COMBOS} piece combos`);
+  logWithTime(`Generated ${NUM_PIECE_COMBOS.toString()} piece combos`);
 
   logWithTime("Precomputing placements...");
   // Precompute all placements for each piece
@@ -305,14 +310,14 @@ function main() {
     placements[i] = getAllPlacementsForPiece(i);
   }
 
-  const PUBLIC_SOLUTIONS_DIR = `./public/solutions/${GRID_SIZE}x${GRID_SIZE}/pieces`;
+  const PUBLIC_SOLUTIONS_DIR = `./public/solutions/${GRID_SIZE.toString()}x${GRID_SIZE.toString()}/pieces`;
   const GAME_SOLUTIONS_DIR = `./src/game/puzzle/numPieceSolutions`;
 
   let totalNumSolutions = 0;
   for (let comboIdx = 0; comboIdx < pieceCombos.length; comboIdx++) {
     const pieceCombo = pieceCombos[comboIdx];
     logWithTime(
-      `Processing piece combo ${comboIdx + 1}/${pieceCombos.length}:`,
+      `Processing piece combo ${(comboIdx + 1).toString()}/${pieceCombos.length.toString()}:`,
       pieceCombo
     );
     const startCombo = Date.now();
@@ -321,7 +326,7 @@ function main() {
       (a, b) => placements[a].length - placements[b].length
     );
     const gridState = 0n;
-    const piecesUsed = Array(NUM_PIECES).fill(false);
+    const piecesUsed = Array(NUM_PIECES).fill(false) as boolean[];
     const solution: PiecePlacement[] = [];
     const solutions: Solution[] = [];
     findSolutions(
@@ -337,26 +342,26 @@ function main() {
       TIME_LIMIT_PER_PIECE_COMBO_MS
     );
     logWithTime(
-      `Found ${solutions.length} solutions for combo ${comboIdx + 1}`
+      `Found ${solutions.length.toString()} solutions for combo ${(comboIdx + 1).toString()}`
     );
     solutions.forEach((solution, index) => {
       fs.writeFileSync(
-        `${PUBLIC_SOLUTIONS_DIR}/${index + totalNumSolutions}.json`,
+        `${PUBLIC_SOLUTIONS_DIR}/${(index + totalNumSolutions).toString()}.json`,
         JSON.stringify(solution, null, 2),
         "utf-8"
       );
     });
     totalNumSolutions += solutions.length;
     fs.writeFileSync(
-      `${GAME_SOLUTIONS_DIR}/${GRID_SIZE}x${GRID_SIZE}.ts`,
-      `export const TOTAL_NUM_SOLUTIONS_${GRID_SIZE}x${GRID_SIZE} = ${totalNumSolutions};`,
+      `${GAME_SOLUTIONS_DIR}/${GRID_SIZE.toString()}x${GRID_SIZE.toString()}.ts`,
+      `export const TOTAL_NUM_SOLUTIONS_${GRID_SIZE.toString()}x${GRID_SIZE.toString()} = ${totalNumSolutions.toString()};`,
       "utf-8"
     );
     const endCombo = Date.now();
     logWithTime(
-      `Finished combo ${comboIdx + 1} in ${(endCombo - startCombo) / 1000}s`
+      `Finished combo ${(comboIdx + 1).toString()} in ${((endCombo - startCombo) / 1000).toFixed(2)}s`
     );
   }
-  logWithTime(`Wrote ${totalNumSolutions} solutions to JSON files`);
+  logWithTime(`Wrote ${totalNumSolutions.toString()} solutions to JSON files`);
 }
 main();

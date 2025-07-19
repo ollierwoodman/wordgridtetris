@@ -47,14 +47,16 @@ const Settings: React.FC = () => {
         <div className="grid grid-cols-2 gap-2 w-full">
           {[5, 6, 7].map((size) => {
             if (size === solutionSize) return null;
+
+            const strSize = size.toString();
             return (
               <a
-                href={`/${size}x${size}`}
+                href={`/${strSize}x${strSize}`}
                 key={size}
-                title={`Switch to ${size}x${size} puzzle`}
+                title={`Switch to ${strSize}x${strSize} puzzle`}
                 className="cursor-pointer rounded-full w-full text-center bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
               >
-                Play {size}×{size}
+                Play {strSize}×{strSize}
               </a>
             );
           })}

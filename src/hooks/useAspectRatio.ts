@@ -21,10 +21,14 @@ export function useAspectRatio(): {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const handleResize = () => setAspectRatio(getAspectRatio());
+    const handleResize = () => {
+      setAspectRatio(getAspectRatio());
+    };
     window.addEventListener("resize", handleResize);
     setAspectRatio(getAspectRatio());
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const isSquare = useCallback((aspectRatio: number): boolean => {

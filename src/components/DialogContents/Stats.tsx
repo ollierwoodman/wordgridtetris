@@ -40,13 +40,16 @@ export function Stats() {
     (p) => p.timeToCompleteMs > 0
   );
   // Get best time for each puzzle size
-  const bestTimes = puzzlesWithTime.reduce((acc, puzzle) => {
-    const size = puzzle.solutionSize;
-    if (!acc[size] || puzzle.timeToCompleteMs < acc[size]) {
-      acc[size] = puzzle.timeToCompleteMs;
-    }
-    return acc;
-  }, {} as Record<number, number>);
+  const bestTimes = puzzlesWithTime.reduce<Record<number, number>>(
+    (acc, puzzle) => {
+      const size = puzzle.solutionSize;
+      if (!acc[size] || puzzle.timeToCompleteMs < acc[size]) {
+        acc[size] = puzzle.timeToCompleteMs;
+      }
+      return acc;
+    },
+    {}
+  );
 
   // Calculate completion streak (consecutive days)
   const calcCurrentStreak = () => {
@@ -218,11 +221,10 @@ export function Stats() {
                   <div
                     className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${
-                        totalPuzzles > 0
-                          ? (time / Math.max(...Object.values(bestTimes))) * 100
-                          : 0
-                      }%`,
+                      width: `${(totalPuzzles > 0
+                        ? (time / Math.max(...Object.values(bestTimes))) * 100
+                        : 0
+                      ).toString()}%`,
                     }}
                   />
                 </div>
@@ -243,28 +245,30 @@ export function Stats() {
           <BarChartHorizontalIcon className="size-5" />
           Puzzles by Size
         </h3>
-        {Object.entries(puzzlesBySize).map(([size, count]) => (
-          <div key={size} className="grid grid-cols-4 gap-4 items-center">
-            <div className="text-gray-600 dark:text-gray-400">
-              {size}×{size}
-            </div>
-            <div className="col-span-2">
-              <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div
-                  className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
-                  style={{
-                    width: `${
-                      totalPuzzles > 0 ? (count / totalPuzzles) * 100 : 0
-                    }%`,
-                  }}
-                />
+        {Object.entries(puzzlesBySize).map(([size, count]) => {
+          const countProportion =
+            totalPuzzles > 0 ? (count / totalPuzzles) * 100 : 0;
+          return (
+            <div key={size} className="grid grid-cols-4 gap-4 items-center">
+              <div className="text-gray-600 dark:text-gray-400">
+                {size}×{size}
+              </div>
+              <div className="col-span-2">
+                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${countProportion.toString()}%`,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="text-right text-sm text-gray-800 dark:text-gray-200">
+                {count}
               </div>
             </div>
-            <div className="text-right text-sm text-gray-800 dark:text-gray-200">
-              {count}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Recent Activity */}
@@ -296,23 +300,28 @@ export function Stats() {
       {completedPuzzles.length > 0 && (
         <div className="text-center">
           <button
-            onClick={() => setShowClearConfirm(true)}
-            className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition-colors"
+            type="button"
+            onClick={() => {
+              setShowClearConfirm(true);
+            }}
+            className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition-colors cursor-pointer hover:opacity-80"
           >
             Clear all statistics
           </button>
 
-      {/* Clear Confirmation Modal */}
-      <ConfirmModal
-        isOpen={showClearConfirm}
-        onClose={() => setShowClearConfirm(false)}
-        onConfirm={clearCompletedPuzzles}
-        title="Clear All Statistics"
-        message="Are you sure you want to clear all your puzzle statistics? This action cannot be undone."
-        confirmText="Clear All"
-        cancelText="Cancel"
-        variant="danger"
-      />
+          {/* Clear Confirmation Modal */}
+          <ConfirmModal
+            isOpen={showClearConfirm}
+            onClose={() => {
+              setShowClearConfirm(false);
+            }}
+            onConfirm={clearCompletedPuzzles}
+            title="Clear All Statistics"
+            message="Are you sure you want to clear all your puzzle statistics? This action cannot be undone."
+            confirmText="Clear All"
+            cancelText="Cancel"
+            variant="danger"
+          />
         </div>
       )}
 

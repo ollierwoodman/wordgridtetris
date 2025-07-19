@@ -46,13 +46,13 @@ export const useTheme = () => {
     if (theme === "system") {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => {
-        if (theme === "system") {
-          document.documentElement.classList.toggle("dark", mediaQuery.matches);
-        }
+        document.documentElement.classList.toggle("dark", mediaQuery.matches);
       };
 
       mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange);
+      };
     }
   }, [theme]);
 

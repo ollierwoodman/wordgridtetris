@@ -32,27 +32,25 @@ describe('Special Date Word Lists', () => {
     test('word solutions should be valid for supported grid sizes', () => {
       Object.values(SPECIAL_DATE_WORD_LISTS).forEach(solutions => {
         solutions.forEach(solution => {
-          if (solution.wordSolutions) {
-            Object.entries(solution.wordSolutions).forEach(([size, wordList]) => {
-              const gridSize = Number(size);
-              expect([5, 6, 7]).toContain(gridSize); // Only valid grid sizes
-              
-              if (wordList.length > 0) {
-                wordList.forEach(wordSolution => {
-                  expect(wordSolution).toHaveProperty('theme');
-                  expect(wordSolution).toHaveProperty('words');
-                  expect(Array.isArray(wordSolution.words)).toBe(true);
-                  
-                  // Check word lengths match grid size
-                  wordSolution.words.forEach(word => {
-                    if (word.length > 0) { // Skip empty strings
-                      expect(word.length).toBe(gridSize);
-                    }
-                  });
+          Object.entries(solution.wordSolutions).forEach(([size, wordList]) => {
+            const gridSize = Number(size);
+            expect([5, 6, 7]).toContain(gridSize); // Only valid grid sizes
+            
+            if (wordList.length > 0) {
+              wordList.forEach(wordSolution => {
+                expect(wordSolution).toHaveProperty('theme');
+                expect(wordSolution).toHaveProperty('words');
+                expect(Array.isArray(wordSolution.words)).toBe(true);
+                
+                // Check word lengths match grid size
+                wordSolution.words.forEach(word => {
+                  if (word.length > 0) { // Skip empty strings
+                    expect(word.length).toBe(gridSize);
+                  }
                 });
-              }
-            });
-          }
+              });
+            }
+          });
         });
       });
     });
@@ -74,17 +72,15 @@ describe('Special Date Word Lists', () => {
     test('words should only contain valid characters', () => {
       Object.values(SPECIAL_DATE_WORD_LISTS).forEach(solutions => {
         solutions.forEach(solution => {
-          if (solution.wordSolutions) {
-            Object.values(solution.wordSolutions).forEach(wordList => {
-              wordList.forEach(wordSolution => {
-                wordSolution.words.forEach(word => {
-                  if (word.length > 0) {
-                    expect(word).toMatch(/^[A-Za-z]+$/); // Only uppercase or lowercase letters
-                  }
-                });
+          Object.values(solution.wordSolutions).forEach(wordList => {
+            wordList.forEach(wordSolution => {
+              wordSolution.words.forEach(word => {
+                if (word.length > 0) {
+                  expect(word).toMatch(/^[A-Za-z]+$/); // Only uppercase or lowercase letters
+                }
               });
             });
-          }
+          });
         });
       });
     });
@@ -92,14 +88,12 @@ describe('Special Date Word Lists', () => {
     test('themes should be non-empty strings', () => {
       Object.values(SPECIAL_DATE_WORD_LISTS).forEach(solutions => {
         solutions.forEach(solution => {
-          if (solution.wordSolutions) {
-            Object.values(solution.wordSolutions).forEach(wordList => {
-              wordList.forEach(wordSolution => {
-                expect(typeof wordSolution.theme).toBe('string');
-                expect(wordSolution.theme.length).toBeGreaterThan(0);
-              });
+          Object.values(solution.wordSolutions).forEach(wordList => {
+            wordList.forEach(wordSolution => {
+              expect(typeof wordSolution.theme).toBe('string');
+              expect(wordSolution.theme.length).toBeGreaterThan(0);
             });
-          }
+          });
         });
       });
     });

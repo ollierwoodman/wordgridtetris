@@ -1,5 +1,11 @@
 import { useCallback } from 'react';
 
+declare global {
+  interface Window {
+    _mtm: (string | number)[][];
+  }
+}
+
 // Storage keys for the application
 export const GOAL_IDS = {
   SHARED_RESULT: 3,
@@ -7,8 +13,7 @@ export const GOAL_IDS = {
 } as const;
 
 function trackGoal(goalID: number): void {
-  // @ts-expect-error - Matomo is not typed
-  _mtm.push(['trackGoal', goalID]);
+  window._mtm.push(['trackGoal', goalID]);
 }
 
 // Specific hooks for each storage key

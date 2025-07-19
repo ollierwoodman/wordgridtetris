@@ -41,7 +41,7 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
   }, [solutionSize, seed]);
 
   useEffect(() => {
-    initializeGame();
+    void initializeGame();
   }, [initializeGame]);
 
   const updateGameState = useCallback(() => {
@@ -113,7 +113,9 @@ export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [handleKeyDown]);
 
   const solvePuzzle = useCallback(() => {

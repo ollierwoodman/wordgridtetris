@@ -9,9 +9,9 @@ export function formatDurationMs(ms: number): string {
   const remainingSeconds = seconds % 60;
   
   if (minutes > 0) {
-    return `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`;
+    return `${String(minutes)}m ${remainingSeconds.toString().padStart(2, '0')}s`;
   } else {
-    return `${remainingSeconds}s`;
+    return `${String(remainingSeconds)}s`;
   }
 }
 
@@ -29,17 +29,17 @@ export function formatDateHowLongAgo(date: string): string {
   if (diffMinutes < 1) {
     return "just now";
   } else if (diffMinutes < 60) {
-    return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+    return `${String(diffMinutes)} minute${diffMinutes === 1 ? '' : 's'} ago`;
   } else if (diffHours < 24) {
-    return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    return `${String(diffHours)} hour${diffHours === 1 ? '' : 's'} ago`;
   } else if (diffDays < 7) {
-    return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+    return `${String(diffDays)} day${diffDays === 1 ? '' : 's'} ago`;
   } else if (diffWeeks < 4) {
-    return `${diffWeeks} week${diffWeeks === 1 ? '' : 's'} ago`;
+    return `${String(diffWeeks)} week${diffWeeks === 1 ? '' : 's'} ago`;
   } else if (diffMonths < 12) {
-    return `${diffMonths} month${diffMonths === 1 ? '' : 's'} ago`;
+    return `${String(diffMonths)} month${diffMonths === 1 ? '' : 's'} ago`;
   } else {
-    return `${diffYears} year${diffYears === 1 ? '' : 's'} ago`;
+    return `${String(diffYears)} year${diffYears === 1 ? '' : 's'} ago`;
   }
 }
 
@@ -94,21 +94,18 @@ export function getTileContent({
 
   if (draggedPieceIndex !== null && dragPosition) {
     const piece = gameState.pieces[draggedPieceIndex];
-    if (piece && piece.blocks) {
-      for (let blockIndex = 0; blockIndex < piece.blocks.length; blockIndex++) {
-        const block = piece.blocks[blockIndex];
-        const blockX = dragPosition.x + block.x;
-        const blockY = dragPosition.y + block.y;
-        if (blockX === x && blockY === y) {
-          return {
-            letter: piece.blocks[blockIndex].letter,
-            isSelected: true,
-            isGhost: true,
-            isValid: isValidDrop,
-            pieceIndex: draggedPieceIndex,
-            isInSolutionGrid,
-          };
-        }
+    for (const block of piece.blocks) {
+      const blockX = dragPosition.x + block.x;
+      const blockY = dragPosition.y + block.y;
+      if (blockX === x && blockY === y) {
+        return {
+          letter: block.letter,
+          isSelected: true,
+          isGhost: true,
+          isValid: isValidDrop,
+          pieceIndex: draggedPieceIndex,
+          isInSolutionGrid,
+        };
       }
     }
   }
@@ -117,17 +114,16 @@ export function getTileContent({
   const pieceAtPosition = game.getPieceAtPosition(x, y);
   if (pieceAtPosition) {
     const piece = gameState.pieces[pieceAtPosition.pieceIndex];
-    if (piece && piece.blocks && piece.blocks[pieceAtPosition.blockIndex]) {
-      return {
-        letter: piece.blocks[pieceAtPosition.blockIndex].letter,
-        isSelected: piece.isSelected,
-        pieceIndex: pieceAtPosition.pieceIndex,
-        isInSolutionGrid,
-      };
-    }
+    const block = piece.blocks[pieceAtPosition.blockIndex];
+    return {
+      letter: block.letter,
+      isSelected: piece.isSelected,
+      pieceIndex: pieceAtPosition.pieceIndex,
+      isInSolutionGrid,
+    };
   }
 
-  const isGameCompleted = gameState.isCompleted || game.isPuzzleCompleted();
+  const isGameCompleted = gameState.isCompleted ?? game.isPuzzleCompleted();
   if (isGameCompleted) {
     const emptyPositions = game.getEmptyTilePositions();
     const emptyPositionIndex = emptyPositions.findIndex(

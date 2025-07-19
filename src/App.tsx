@@ -71,6 +71,10 @@ function App() {
 
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
+    if (!game) {
+      return;
+    }
+
     if (gameState?.isCompleted && !hasCompletedRef.current) {
       hasCompletedRef.current = true;
       trackCompletedPuzzle();
@@ -79,14 +83,14 @@ function App() {
       setShowSuccessButtonPanel(true);
       addPuzzle({
         date: new Date().toISOString().split("T")[0],
-        solutionSize: game?.getSolutionSize() || 0,
-        theme: game?.getWordTheme() || "",
-        timeToCompleteMs: game?.getCompletionDurationMs() || 0,
+        solutionSize: game.getSolutionSize(),
+        theme: game.getWordTheme(),
+        timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
       });
       handleOpenModal(
         "Well done!",
         <Success
-          game={game!}
+          game={game}
           handleLevelUp={handleLevelUp}
         />
       );
@@ -204,7 +208,7 @@ function App() {
                 </span>
               </>
             }
-            isFlipped={gameState?.isThemeRevealed}
+            isFlipped={gameState.isThemeRevealed}
             onClick={handleThemeReveal}
           />
         </div>

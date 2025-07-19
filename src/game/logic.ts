@@ -30,7 +30,7 @@ export class Game {
   private pieceRotationStates: number[]; // Track current rotation state for each piece
   private emptyTilePositions: { x: number; y: number }[] = [];
   private emptyTileLetters: string[] = [];
-  private isThemeRevealed: boolean = false;
+  private isThemeRevealed = false;
   private gameStartTime: Date = new Date();
   private gameEndTime: Date | null = null;
   private initializationPromise: Promise<void>;
@@ -49,10 +49,10 @@ export class Game {
       case 7:
         break;
       default:
-        throw new Error(`Grid size ${solutionSize} not supported`);
+        throw new Error(`Grid size ${solutionSize.toString()} not supported`);
     }
 
-    this.pieceRotationStates = new Array(this.numPieces).fill(0);
+    this.pieceRotationStates = new Array(this.numPieces).fill(0) as number[];
 
     // Initialize async data - this should be handled by the caller
     this.initializationPromise = this.initializeAsyncData(solutionSize, seed)
@@ -89,7 +89,7 @@ export class Game {
           }
         );
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error(error);
         throw error;
       });
@@ -147,7 +147,7 @@ export class Game {
       });
   }
 
-  private placePieces(shuffle: boolean = false): void {
+  private placePieces(shuffle = false): void {
     // Move all pieces to temporary positions outside the grid to avoid initial collisions
     for (let i = 0; i < this.pieces.length; i++) {
       this.setPiecePosition(i, -10, -10);
@@ -485,7 +485,7 @@ export class Game {
 
   // Check if the puzzle is completed by verifying all solution words are present in any order
   public isPuzzleCompleted(): boolean {
-    const actualWordsSet: Set<string> = new Set();
+    const actualWordsSet = new Set<string>();
     const emptyTileX = this.emptyTilePositions[0]?.x || null;
     const emptyTileLetter = this.emptyTileLetters[0] || null;
     let emptyTileUsed = false;
@@ -498,7 +498,7 @@ export class Game {
         if (letter !== "") {
           word += letter;
         } else if (x + this.solutionOffset === emptyTileX && !emptyTileUsed) {
-          word += emptyTileLetter;
+          word += emptyTileLetter ?? "";
           emptyTileUsed = true;
         }
       }

@@ -47,7 +47,7 @@ function getStorageItem<T>(key: string, defaultValue: T): T {
 }
 
 // Helper function to safely set item in localStorage
-function setStorageItem<T>(key: string, value: T): void {
+function setStorageItem(key: string, value: unknown): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
@@ -89,7 +89,9 @@ export function useLocalStorage<T extends keyof LocalStorageData>(
     };
 
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, [key]);
 
   return [storedValue, setValue];

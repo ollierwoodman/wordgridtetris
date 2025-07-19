@@ -71,8 +71,8 @@ export class SeededRandom {
    * @param max - The maximum value (exclusive)
    */
   randFloat(min?: number, max?: number): number {
-    if (min === undefined) min = 0;
-    if (max === undefined) max = 1;
+    min ??= 0;
+    max ??= 1;
     return this.random() * (max - min) + min;
   }
 
@@ -111,7 +111,7 @@ export class SeededRandom {
    * Generates a random boolean value.
    * @param probability - The probability of returning true (0-1, default 0.5)
    */
-  randBool(probability: number = 0.5): boolean {
+  randBool(probability = 0.5): boolean {
     return this.random() < probability;
   }
 

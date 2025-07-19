@@ -17,26 +17,30 @@ const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
 
 export function getCurrentDateSeed() {
   const date = new Date();
-  return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
+  const strYear = date.getFullYear().toString();
+  const strMonth = (date.getMonth() + 1).toString();
+  const strDay = date.getDate().toString();
+  return `${strYear}${strMonth}${strDay}`;
 }
 
 function getRandomSpecialDateWordList(solutionSize: number, randomHelper: SeededRandom): WordSolution | null {
   const dateSlug = getDateSlug(new Date());
-
   const currentDateEntries = SPECIAL_DATE_WORD_LISTS[dateSlug];
-  if (!currentDateEntries) {
+  
+  if (!Array.isArray(currentDateEntries) || currentDateEntries.length === 0) {
     return null;
   }
 
   const currentDateEntryIndex = randomHelper.randInt(0, currentDateEntries.length - 1);
-
   const currentDateEntry = currentDateEntries[currentDateEntryIndex];
-  if (!currentDateEntry.wordSolutions[solutionSize]) {
+  
+  const solutionWords = currentDateEntry.wordSolutions[solutionSize];
+  if (!Array.isArray(solutionWords) || solutionWords.length === 0) {
     return null;
   }
 
-  const currentSolutionSizeCurrentDateWordListIndex = randomHelper.randInt(0, currentDateEntry.wordSolutions[solutionSize].length - 1);
-  const wordSolution = currentDateEntry.wordSolutions[solutionSize][currentSolutionSizeCurrentDateWordListIndex];
+  const currentSolutionSizeCurrentDateWordListIndex = randomHelper.randInt(0, solutionWords.length - 1);
+  const wordSolution = solutionWords[currentSolutionSizeCurrentDateWordListIndex];
   wordSolution.greeting = currentDateEntry.greeting;
   return wordSolution;
 }
@@ -48,9 +52,9 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
 
   // If no special date word list is found, fetch a random word solution from the checked.json file
   if (solution === null) {
-    const res = await fetch(createUrl(`solutions/${solutionSize}x${solutionSize}/words/checked.json`));
-    const data = await res.json();
-    solution = data[randomHelper.randInt(0, data.length - 1)] as WordSolution;
+    const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/words/checked.json`));
+    const data = (await res.json()) as WordSolution[];
+    solution = data[randomHelper.randInt(0, data.length - 1)];
   }
 
   solution.words = solution.words.map((word: string) => word.toUpperCase());
@@ -58,13 +62,11 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
   return solution;
 }
 
-export async function fetchRandomPieceSolution(solutionSize: number, seed: string): Promise<
-  PieceSolutionEntry[]
-> {
+export async function fetchRandomPieceSolution(solutionSize: number, seed: string): Promise<PieceSolutionEntry[]> {
   const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[solutionSize]; // 0.json to [TOTAL_NUM_SOLUTIONS - 1].json
   const randomHelper = SeededRandom.fromString(seed);
   const index = randomHelper.randInt(0, numAvailableSolutions - 1);
-  const res = await fetch(createUrl(`solutions/${solutionSize}x${solutionSize}/pieces/${index}.json`));
-  const data = await res.json();
+  const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/pieces/${String(index)}.json`));
+  const data = (await res.json()) as PieceSolutionEntry[];
   return data;
 }

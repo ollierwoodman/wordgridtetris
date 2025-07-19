@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
 const useShare = () => {
-  const canShare = !!navigator.share;
+  const canShare = !!navigator.share as boolean;
 
   const copy = async (text: string) => {
     try {
@@ -17,8 +17,8 @@ const useShare = () => {
   };
 
   // title is often ignored, url is by default the current page
-  const share = async (text: string = "", url: string = "", title: string = "") => {
-    if (navigator.share) {
+  const share = async (text = "", url = "", title = "") => {
+    if (canShare) {
       try {
         await navigator.share({
           title,
@@ -27,11 +27,11 @@ const useShare = () => {
         });
       } catch (error) {
         console.error("Error sharing:", error);
-        copy(text);
+        void copy(text);
       }
     } else {
       console.error("Web Share API not supported");
-      copy(url);
+      void copy(url);
     }
   };
 

@@ -10,19 +10,18 @@ interface SuccessProps {
   handleLevelUp: () => void;
 }
 
-export function Success({
-  game,
-  handleLevelUp,
-}: SuccessProps) {
-
+export function Success({ game, handleLevelUp }: SuccessProps) {
   const solutionSize = game.getSolutionSize();
-  const completionDurationMs = game.getCompletionDurationMs() || 0;
+  const strSolutionSize = solutionSize.toString();
+  const completionDurationMs = game.getCompletionDurationMs() ?? 0;
   const isThemeRevealed = game.getIsThemeRevealed();
 
   const { copy, share, canShare } = useShare();
 
-  const url = `https://blockle.au/${solutionSize}x${solutionSize}`;
-  const shareTitle = `I solved today's ${solutionSize}×${solutionSize} Blockle in ${formatDurationMs(completionDurationMs)}${isThemeRevealed ? " (with theme revealed)" : ""}! ${url}`;
+  const url = `https://blockle.au/${strSolutionSize}x${strSolutionSize}`;
+  const shareTitle = `I solved today's ${strSolutionSize}×${strSolutionSize} Blockle in ${formatDurationMs(
+    completionDurationMs
+  )}${isThemeRevealed ? " (with theme revealed)" : ""}! ${url}`;
   const shareText = shareTitle;
 
   const trackSharedResults = useTrackSharedResult();
@@ -30,14 +29,17 @@ export function Success({
   return (
     <>
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
-        You've completed today's {solutionSize}×{solutionSize} Blockle
-        {completionDurationMs > 0 ? ` in ${formatDurationMs(completionDurationMs)}` : ""}!
+        You've completed today's {strSolutionSize}×{strSolutionSize} Blockle
+        {completionDurationMs > 0
+          ? ` in ${formatDurationMs(completionDurationMs)}`
+          : ""}
+        !
       </p>
-      {(canShare && (
+      {canShare ? (
         <button
           type="button"
           onClick={() => {
-            share(shareText, url, shareTitle);
+            void share(shareText, url, shareTitle);
             trackSharedResults();
           }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500  text-white px-4 py-2 mt-4 rounded-full hover:opacity-80"
@@ -45,11 +47,11 @@ export function Success({
           <span>Share</span>
           <Share2Icon className="size-5" />
         </button>
-      )) || (
+      ) : (
         <button
           type="button"
           onClick={() => {
-            copy(shareText);
+            void copy(shareText);
             trackSharedResults();
           }}
           className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500 text-white px-4 py-2 mt-4 rounded-full hover:opacity-80"

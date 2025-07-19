@@ -1,7 +1,9 @@
 import type { WordSolution } from "../../../types/game";
 
 export function getDateSlug(date: Date) {
-  return `${date.getMonth() + 1}-${date.getDate()}`;
+  const strMonth = (date.getMonth() + 1).toString();
+  const strDay = date.getDate().toString();
+  return `${strMonth}-${strDay}`;
 }
 
 export const SPECIAL_DATE_WORD_LISTS: Record<
