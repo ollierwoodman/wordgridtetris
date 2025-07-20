@@ -7,7 +7,6 @@ import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
 import { useGameSounds } from "./hooks/sounds";
 import ConfettiBoom from "react-confetti-boom";
-import { SuccessButtonPanel } from "./components/SuccessButtonPanel";
 import { useCompletedPuzzlesManager } from "./hooks/useLocalStorage";
 import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
@@ -15,7 +14,16 @@ import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
 import { useTrackCompletedPuzzle } from "./hooks/useTrackGoals";
 import FlippableCard from "./components/ui/flippableCard";
-import { LightbulbIcon } from "lucide-react";
+import { LightbulbIcon, TrophyIcon } from "lucide-react";
+import { AlreadyPlayed } from "./components/DialogContents/AlreadyPlayed";
+import { BigRoundButton } from "./components/ui/bigRoundButton";
+import { SOLUTION_SIZES } from "./game/logic";
+
+// Constants for particle count interpolation
+const MIN_PARTICLES = 50;
+const MAX_PARTICLES = 100;
+const MIN_SOLUTION_SIZE = Math.min(...SOLUTION_SIZES);
+const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
 
 function App() {
   // Initialize theme
@@ -24,16 +32,20 @@ function App() {
   const { solutionSize, changeSolutionSize, canLevelUp, isInitialized } =
     useSolutionSizeFromURL();
 
+  const { getPuzzleByDate, hasCompletedTodayWithSize } =
+    useCompletedPuzzlesManager();
+  const alreadyCompletedThisPuzzleToday =
+    hasCompletedTodayWithSize(solutionSize);
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalHeader, setModalHeader] = useState<string>("");
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [showSuccessButtonPanel, setShowSuccessButtonPanel] =
-    useState<boolean>(false);
+  const [showSuccessButton, setShowSuccessButton] = useState<boolean>(false);
   const hasCompletedRef = useRef<boolean>(false);
-  
-  const { playMenuClick, playPuzzleComplete, playThemeReveal } = useGameSounds();
 
+  const { playMenuClick, playPuzzleComplete, playThemeReveal } =
+    useGameSounds();
 
   const {
     game,
@@ -44,6 +56,30 @@ function App() {
     solvePuzzle,
     revealTheme,
   } = useGame(isInitialized ? solutionSize : undefined);
+
+  // Check if puzzle was already completed when loading
+  useEffect(() => {
+    if (!game || !isInitialized || !solutionSize) {
+      return;
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    if (hasCompletedTodayWithSize(solutionSize)) {
+      const completedPuzzle = getPuzzleByDate(today);
+      if (completedPuzzle) {
+        handleOpenModal(
+          "Back again?",
+          <AlreadyPlayed puzzle={completedPuzzle} />
+        );
+      }
+    }
+  }, [
+    game,
+    isInitialized,
+    solutionSize,
+    hasCompletedTodayWithSize,
+    getPuzzleByDate,
+  ]);
 
   const handleThemeReveal = useCallback(() => {
     if (gameState?.isThemeRevealed) {
@@ -62,7 +98,7 @@ function App() {
     }
     setShowConfetti(false);
     setIsModalOpen(false);
-    setShowSuccessButtonPanel(false);
+    setShowSuccessButton(false);
     changeSolutionSize(solutionSize + 1);
     // Reset completion flag when leveling up
     hasCompletedRef.current = false;
@@ -76,26 +112,37 @@ function App() {
 
     if (gameState?.isCompleted && !hasCompletedRef.current) {
       hasCompletedRef.current = true;
-      trackCompletedPuzzle();
+
+      // Always show confetti for fun!
       setShowConfetti(true);
       playPuzzleComplete();
-      setShowSuccessButtonPanel(true);
-      addPuzzle({
-        date: new Date().toISOString().split("T")[0],
-        solutionSize: game.getSolutionSize(),
-        theme: game.getWordTheme(),
-        timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
-      });
+      trackCompletedPuzzle();
+      setShowSuccessButton(true);
+
+      if (!alreadyCompletedThisPuzzleToday) {
+        addPuzzle({
+          date: new Date().toISOString().split("T")[0],
+          solutionSize: game.getSolutionSize(),
+          theme: game.getWordTheme(),
+          isThemeRevealed: gameState.isThemeRevealed,
+          timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
+        });
+      }
+
       handleOpenModal(
         "Well done!",
-        <Success
-          game={game}
-          handleLevelUp={handleLevelUp}
-        />
+        <Success game={game} isReplay={alreadyCompletedThisPuzzleToday} />
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameState]);
+  }, [
+    gameState,
+    game,
+    trackCompletedPuzzle,
+    addPuzzle,
+    playPuzzleComplete,
+    handleLevelUp,
+    alreadyCompletedThisPuzzleToday,
+  ]);
 
   const handleOpenModal = (header: string, content: React.ReactNode) => {
     setModalHeader(header);
@@ -133,7 +180,14 @@ function App() {
           <ConfettiBoom
             mode="fall"
             className="z-50"
-            particleCount={100}
+            particleCount={
+              MIN_PARTICLES +
+              Math.round(
+                ((solutionSize - MIN_SOLUTION_SIZE) *
+                  (MAX_PARTICLES - MIN_PARTICLES)) /
+                  (MAX_SOLUTION_SIZE - MIN_SOLUTION_SIZE)
+              )
+            }
             colors={[
               "#FF6B6B",
               "#4ECDC4",
@@ -150,7 +204,7 @@ function App() {
         className={cn(
           "flex flex-col md:flex-row items-center justify-center w-full max-w-[60vh] my-auto py-4 gap-4",
           {
-            "justify-between": showSuccessButtonPanel,
+            "justify-between": showSuccessButton,
           }
         )}
       >
@@ -167,12 +221,22 @@ function App() {
           </h1>
         </button>
         <div className="flex flex-row justify-center md:justify-end gap-4">
-          {showSuccessButtonPanel && (
-            <SuccessButtonPanel
-              game={game}
-              handleLevelUp={handleLevelUp}
-              onOpenModal={handleOpenModal}
-            />
+          {showSuccessButton && (
+            <BigRoundButton
+              title="Open share"
+              className="bg-yellow-600 dark:bg-yellow-800"
+              onClick={() => {
+                handleOpenModal(
+                  "Well done!",
+                  <Success
+                    game={game}
+                    isReplay={alreadyCompletedThisPuzzleToday}
+                  />
+                );
+              }}
+            >
+              <TrophyIcon className="size-8 md:size-10 xl:size-12" />
+            </BigRoundButton>
           )}
         </div>
       </div>

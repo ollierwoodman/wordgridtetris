@@ -30,7 +30,7 @@ const Settings: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Difficulty Section */}
+      {/* Puzzle size select section */}
       <div className="flex flex-col items-center gap-4">
         <div className="flex items-center dark:text-gray-200 w-full gap-4">
           <div className="flex flex-col">

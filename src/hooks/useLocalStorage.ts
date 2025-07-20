@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { SOLUTION_SIZES } from '../game/logic';
 
 // Storage keys for the application
 export const STORAGE_KEYS = {
@@ -13,6 +14,7 @@ export interface CompletedPuzzle {
   date: string; // ISO date string
   solutionSize: number;
   theme: string;
+  isThemeRevealed: boolean;
   completedAt: string; // ISO timestamp
   timeToCompleteMs: number; // in milliseconds
 }
@@ -135,9 +137,22 @@ export function getPuzzleCompletionByDate(
   return puzzles.find(puzzle => puzzle.date === date);
 }
 
+export function getPuzzleCompletionByDateAndSize(
+  puzzles: CompletedPuzzle[],
+  date: string,
+  solutionSize: number
+): CompletedPuzzle | undefined {
+  return puzzles.find(puzzle => puzzle.date === date && puzzle.solutionSize === solutionSize);
+}
+
 export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[]): boolean {
   const today = new Date().toISOString().split("T")[0];
   return puzzles.some(puzzle => puzzle.date === today);
+}
+
+export function hasCompletedPuzzleTodayWithSize(puzzles: CompletedPuzzle[], solutionSize: number): boolean {
+  const today = new Date().toISOString().split("T")[0];
+  return puzzles.some(puzzle => puzzle.date === today && puzzle.solutionSize === solutionSize);
 }
 
 export function getCompletedPuzzlesBySize(
@@ -159,8 +174,20 @@ export function useCompletedPuzzlesManager() {
     return getPuzzleCompletionByDate(completedPuzzles, date);
   }, [completedPuzzles]);
 
+  const getPuzzleByDateAndSize = useCallback((date: string, solutionSize: number) => {
+    return getPuzzleCompletionByDateAndSize(completedPuzzles, date, solutionSize);
+  }, [completedPuzzles]);
+
+  const getTodaysPuzzles = useCallback(() => {
+    return SOLUTION_SIZES.map((size) => getPuzzleCompletionByDateAndSize(completedPuzzles, new Date().toISOString().split("T")[0], size));
+  }, [completedPuzzles]);
+
   const hasCompletedToday = useCallback(() => {
     return hasCompletedPuzzleToday(completedPuzzles);
+  }, [completedPuzzles]);
+
+  const hasCompletedTodayWithSize = useCallback((solutionSize: number) => {
+    return hasCompletedPuzzleTodayWithSize(completedPuzzles, solutionSize);
   }, [completedPuzzles]);
 
   const getPuzzlesBySize = useCallback((solutionSize: number) => {
@@ -175,7 +202,10 @@ export function useCompletedPuzzlesManager() {
     completedPuzzles,
     addPuzzle,
     getPuzzleByDate,
+    getPuzzleByDateAndSize,
     hasCompletedToday,
+    hasCompletedTodayWithSize,
+    getTodaysPuzzles,
     getPuzzlesBySize,
     clearCompletedPuzzles,
   };

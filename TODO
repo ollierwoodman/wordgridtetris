@@ -3,17 +3,15 @@
 ## Bugs
 
 FIX: Long load times for 7x7 puzzles
-FIX: Disallow the I piece from being placed in the top left
+TODO: Improve current word lists
 
 ## Ongoing tasks
 
-TODO: Make more word lists and improve current word lists
+TODO: Build out special dates word lists
 
 ## New features
 
-TODO: Add test suite to cover important functions particularly in useGame.ts and logic.ts
 TODO: Set up SPA tracking [see docs here](https://developer.matomo.org/guides/spa-tracking)
-TODO: Fix metadata images (og-image.png)
 TODO: Check for game completion upon puzzle load
 
 ## Wishlist features
