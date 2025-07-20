@@ -3,7 +3,7 @@ export const TETRIS_PIECE_SHAPES = [
   // I piece - 2 rotation states
   [
     // Removed State 0: Pointing to the right
-    // Remvoed because a horizontal piece gives too much of a word away
+    // Removed because a horizontal piece gives too much of a word away
     // [
     //   { x: 0, y: 0 },
     //   { x: 1, y: 0 },

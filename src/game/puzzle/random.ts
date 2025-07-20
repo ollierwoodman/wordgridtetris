@@ -1,18 +1,17 @@
 import type { PieceSolutionEntry, WordSolution } from "../../types/game";
 import { SeededRandom } from "../../utils/random";
 import { createUrl } from "../../utils/game";
+import { TOTAL_NUM_SOLUTIONS_4x4 } from "./numPieceSolutions/4x4";
 import { TOTAL_NUM_SOLUTIONS_6x6 } from "./numPieceSolutions/6x6";
 import { TOTAL_NUM_SOLUTIONS_5x5 } from "./numPieceSolutions/5x5";
 import { TOTAL_NUM_SOLUTIONS_7x7 } from "./numPieceSolutions/7x7";
-import { TOTAL_NUM_SOLUTIONS_8x8 } from "./numPieceSolutions/8x8";
 import { getDateSlug, SPECIAL_DATE_WORD_LISTS } from "./wordLists/specialDates";
 
 const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
+  4: TOTAL_NUM_SOLUTIONS_4x4,
   5: TOTAL_NUM_SOLUTIONS_5x5,
   6: TOTAL_NUM_SOLUTIONS_6x6,
   7: TOTAL_NUM_SOLUTIONS_7x7,
-  8: TOTAL_NUM_SOLUTIONS_8x8,
-  // 9: TOTAL_NUM_SOLUTIONS_9x9,
 };
 
 export function getCurrentDateSeed() {
@@ -63,10 +62,49 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
 }
 
 export async function fetchRandomPieceSolution(solutionSize: number, seed: string): Promise<PieceSolutionEntry[]> {
-  const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[solutionSize]; // 0.json to [TOTAL_NUM_SOLUTIONS - 1].json
   const randomHelper = SeededRandom.fromString(seed);
+  
+  // Special case for 8x8: fetch 4 random 4x4 solutions and translate them
+  if (solutionSize === 8) {
+    return await fetchCombined4x4Solutions(randomHelper);
+  }
+  
+  // Original logic for other sizes
+  const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[solutionSize];
   const index = randomHelper.randInt(0, numAvailableSolutions - 1);
   const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/pieces/${String(index)}.json`));
   const data = (await res.json()) as PieceSolutionEntry[];
   return data;
+}
+
+async function fetchCombined4x4Solutions(randomHelper: SeededRandom): Promise<PieceSolutionEntry[]> {
+  const combinedSolution: PieceSolutionEntry[] = [];
+  
+  // Define quadrant offsets: [x_offset, y_offset]
+  const quadrantOffsets = [
+    [0, 0], // top-left
+    [4, 0], // top-right
+    [0, 4], // bottom-left
+    [4, 4], // bottom-right
+  ];
+  
+  // Fetch 4 random 4x4 solutions
+  for (let quadrant = 0; quadrant < 4; quadrant++) {
+    const numAvailable4x4Solutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[4];
+    const index = randomHelper.randInt(0, numAvailable4x4Solutions - 1);
+    const res = await fetch(createUrl(`solutions/4x4/pieces/${String(index)}.json`));
+    const quadrantSolution = (await res.json()) as PieceSolutionEntry[];
+    
+    // Translate coordinates for this quadrant
+    const [xOffset, yOffset] = quadrantOffsets[quadrant];
+    const translatedSolution = quadrantSolution.map(placement => ({
+      ...placement,
+      x: placement.x + xOffset,
+      y: placement.y + yOffset,
+    }));
+    
+    combinedSolution.push(...translatedSolution);
+  }
+  
+  return combinedSolution;
 }

@@ -11,7 +11,7 @@ import {
 } from "./puzzle/random";
 import { SeededRandom } from "../utils/random";
 
-export const SOLUTION_SIZES = [5, 6, 7];
+export const SOLUTION_SIZES = [5, 6, 7, 8];
 
 const NUMBER_BLOCK_PER_PIECE = 4;
 
@@ -47,6 +47,7 @@ export class Game {
       case 5:
       case 6:
       case 7:
+      case 8:
         break;
       default:
         throw new Error(`Grid size ${solutionSize.toString()} not supported`);

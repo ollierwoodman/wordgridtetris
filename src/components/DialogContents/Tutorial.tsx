@@ -8,18 +8,18 @@ import { Game } from "../../game/logic";
 import { AnimatedPuzzleDemo } from "../../utils/svg";
 
 interface TutorialProps {
-  game?: Game;
+  game: Game;
 }
 
 const Tutorial: React.FC<TutorialProps> = ({ game }) => {
-    return (
+  return (
     <div className="space-y-4">
       <p className="text-gray-800 dark:text-gray-300">
-        Drag and drop the {game?.getNumPieces() ?? 6} game pieces into the{" "}
-        {game?.getSolutionSize() ?? 9}x{game?.getSolutionSize() ?? 9} grid in
-        the center to form {game?.getSolutionSize() ?? 5} horizontal words.
+        Drag and drop the {game.getNumPieces()} game pieces into the{" "}
+        {game.getSolutionSize()}×{game.getSolutionSize()} grid in the center to
+        form {game.getSolutionSize()} horizontal words.
       </p>
-      
+
       <div className="flex justify-center items-center w-full px-16 rounded-lg">
         <AnimatedPuzzleDemo className="w-full h-full bg-gray-300 dark:bg-gray-800 object-contain text-gray-400/50 dark:text-gray-600/50 p-2 rounded-lg" />
       </div>
@@ -37,7 +37,8 @@ const Tutorial: React.FC<TutorialProps> = ({ game }) => {
         <h3>Keyboard controls</h3>
       </div>
       <p className="text-gray-800 dark:text-gray-300">
-        Use the spacebar to cycle through the pieces and the arrow keys to move pieces around.
+        Use the spacebar to cycle through the pieces and the arrow keys to move
+        pieces around.
       </p>
 
       <div className="flex flex-row gap-2 items-center text-lg font-bold dark:text-gray-200">
@@ -45,21 +46,25 @@ const Tutorial: React.FC<TutorialProps> = ({ game }) => {
         <h3>Tips</h3>
       </div>
       <p className="text-gray-800 dark:text-gray-300">
-        Each of the {game?.getSolutionSize() ?? 5} words in the puzzle's
-        solution are related to a common theme
+        Each of the {game.getSolutionSize()} words in the puzzle's solution are
+        related to a common theme
       </p>
-      {game?.getEmptyTilePositions() &&
-        game.getEmptyTilePositions().length > 0 && (
-          <p className="text-gray-800 dark:text-gray-300">
-            There is {game.getEmptyTilePositions().length} empty tile
-            {game.getEmptyTilePositions().length > 1 ? "s" : ""} on the grid.
-            The tile's letter is revealed when the puzzle is solved
-          </p>
-        )}
       <p className="text-gray-800 dark:text-gray-300">
         The pieces are already in the correct orientation, so you don't need to
         rotate them
       </p>
+      {game.getEmptyTilePositions().length > 0 && (
+        <p className="text-gray-800 dark:text-gray-300">
+          There is {game.getEmptyTilePositions().length} empty tile
+          {game.getEmptyTilePositions().length > 1 ? "s" : ""} on the grid. The
+          tile's letter is revealed when the puzzle is solved
+        </p>
+      )}
+      {game.getSolutionSize() === 8 && (
+        <p className="text-gray-800 dark:text-gray-300">
+          The 8×8 grid is made up of four 4×4 grids
+        </p>
+      )}
     </div>
   );
 };

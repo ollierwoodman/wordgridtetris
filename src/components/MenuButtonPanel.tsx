@@ -18,7 +18,7 @@ import { useHasSeenTutorial } from "../hooks/useLocalStorage";
 interface MenuButtonPanelProps {
   updateGameState: () => void;
   solvePuzzle: () => void;
-  game?: Game;
+  game: Game;
   onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
 }
@@ -45,9 +45,9 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
       </BigRoundButton>
       <BigRoundButton
         title="Shuffle pieces"
-        disabled={game?.isPuzzleCompleted()}
+        disabled={game.isPuzzleCompleted()}
         onClick={() => {
-          game?.resetPieces();
+          game.resetPieces();
           updateGameState();
         }}
       >

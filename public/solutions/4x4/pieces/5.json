@@ -1,0 +1,26 @@
+[
+  {
+    "pieceIndex": 4,
+    "rotation": 0,
+    "x": 0,
+    "y": 0
+  },
+  {
+    "pieceIndex": 4,
+    "rotation": 0,
+    "x": 1,
+    "y": 2
+  },
+  {
+    "pieceIndex": 5,
+    "rotation": 0,
+    "x": 0,
+    "y": 3
+  },
+  {
+    "pieceIndex": 5,
+    "rotation": 2,
+    "x": 3,
+    "y": 0
+  }
+]
