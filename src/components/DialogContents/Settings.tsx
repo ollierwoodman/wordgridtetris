@@ -9,6 +9,7 @@ import {
 import { useGameSounds, useSoundContext } from "../../hooks/sounds";
 import { useTheme } from "../../hooks/useTheme";
 import { useSolutionSizeFromURL } from "../../hooks/useSolutionSizeFromURL";
+import { SOLUTION_SIZES } from "../../game/logic";
 
 const Settings: React.FC = () => {
   const { solutionSize, isInitialized } =
@@ -44,8 +45,13 @@ const Settings: React.FC = () => {
             </span>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-2 w-full">
-          {[5, 6, 7].map((size) => {
+        <div 
+          className="grid gap-2 w-full"
+          style={{
+            gridTemplateColumns: `repeat(${(SOLUTION_SIZES.length - 1).toString()}, minmax(0, 1fr))`,
+          }}
+        >
+          {SOLUTION_SIZES.map((size: number) => {
             if (size === solutionSize) return null;
 
             const strSize = size.toString();

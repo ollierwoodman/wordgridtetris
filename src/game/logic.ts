@@ -11,7 +11,7 @@ import {
 } from "./puzzle/random";
 import { SeededRandom } from "../utils/random";
 
-export const SOLUTION_SIZES = [5, 6, 7, 8];
+export const SOLUTION_SIZES = [5, 6, 7];
 
 const NUMBER_BLOCK_PER_PIECE = 4;
 
@@ -43,14 +43,8 @@ export class Game {
     this.numEmptyTiles = (this.solutionSize * this.solutionSize) % NUMBER_BLOCK_PER_PIECE;
     this.numPieces = (this.solutionSize * this.solutionSize - this.numEmptyTiles) / NUMBER_BLOCK_PER_PIECE;
 
-    switch (solutionSize) {
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-        break;
-      default:
-        throw new Error(`Grid size ${solutionSize.toString()} not supported`);
+    if (!SOLUTION_SIZES.includes(solutionSize)) {
+      throw new Error(`Grid size ${solutionSize.toString()} not supported`);
     }
 
     this.pieceRotationStates = new Array(this.numPieces).fill(0) as number[];
