@@ -1,4 +1,3 @@
-import "./App.css";
 import { useGame } from "./hooks/useGame";
 import { MenuButtonPanel } from "./components/MenuButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
