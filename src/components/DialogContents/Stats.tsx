@@ -129,10 +129,10 @@ export function Stats() {
   const bestStreak = calcBestStreak();
 
   return (
-    <div className="space-y-8 px-4">
+    <div className="space-y-8">
       {/* Today's Status */}
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 p-2">
           <span className="px-2">
             <CalendarIcon className="size-6 text-blue-800 dark:text-blue-200" />
           </span>
