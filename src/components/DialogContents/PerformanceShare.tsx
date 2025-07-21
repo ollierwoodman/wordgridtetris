@@ -77,7 +77,7 @@ export function PerformanceShare() {
             })}
           </div>
         </div>
-        <div className="flex flex-col md:flex-row md:gap-2">
+        <div className="flex flex-col md:flex-row">
           <button
             type="button"
             onClick={() => {
