@@ -12,7 +12,11 @@ import { cn } from "@sglara/cn";
 import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
-import { useTrackCompletedPuzzle } from "./hooks/useTrackGoals";
+import {
+  GOAL_IDS,
+  useTrackCompletedPuzzle,
+  useTrackMatomoGoalById,
+} from "./hooks/useTrackGoals";
 import FlippableCard from "./components/ui/flippableCard";
 import { LightbulbIcon, TrophyIcon } from "lucide-react";
 import { AlreadyPlayed } from "./components/DialogContents/AlreadyPlayed";
@@ -46,6 +50,9 @@ function App() {
 
   const { playMenuClick, playPuzzleComplete, playThemeReveal } =
     useGameSounds();
+
+  const trackGoal = useTrackMatomoGoalById();
+  const trackCompletedPuzzle = useTrackCompletedPuzzle();
 
   const {
     game,
@@ -87,9 +94,9 @@ function App() {
     }
     revealTheme();
     playThemeReveal();
-  }, [revealTheme, gameState, playThemeReveal]);
+    trackGoal(GOAL_IDS.REVEALED_THEME);
+  }, [revealTheme, gameState, playThemeReveal, trackGoal]);
 
-  const trackCompletedPuzzle = useTrackCompletedPuzzle();
   const { addPuzzle } = useCompletedPuzzlesManager();
 
   const handleLevelUp = useCallback(() => {
@@ -113,10 +120,9 @@ function App() {
     if (gameState?.isCompleted && !hasCompletedRef.current) {
       hasCompletedRef.current = true;
 
-      // Always show confetti for fun!
       setShowConfetti(true);
       playPuzzleComplete();
-      trackCompletedPuzzle();
+      trackCompletedPuzzle(game.getSolutionSize());
       setShowSuccessButton(true);
 
       if (!alreadyCompletedThisPuzzleToday) {
@@ -213,6 +219,7 @@ function App() {
           className="cursor-pointer hover:opacity-80 transition-opacity"
           onClick={() => {
             playMenuClick();
+            trackGoal(GOAL_IDS.OPENED_ABOUT);
             handleOpenModal("About Blockle", <About />);
           }}
         >
@@ -226,6 +233,7 @@ function App() {
               title="Open share"
               className="bg-yellow-600 dark:bg-yellow-800"
               onClick={() => {
+                trackGoal(GOAL_IDS.OPENED_SUCCESS);
                 handleOpenModal(
                   "Well done!",
                   <Success

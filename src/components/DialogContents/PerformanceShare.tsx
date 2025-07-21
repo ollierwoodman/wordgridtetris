@@ -26,7 +26,7 @@ export function PerformanceShare() {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 rounded-lg">
           <p className="font-bold text-xl text-center text-balance mb-2">
             Your Results ({new Date().toLocaleDateString()})
@@ -77,7 +77,7 @@ export function PerformanceShare() {
             })}
           </div>
         </div>
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row gap-4">
           <button
             type="button"
             onClick={() => {

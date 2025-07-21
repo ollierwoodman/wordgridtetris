@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { Game } from "../../game/logic";
 import { AnimatedPuzzleDemo } from "../../utils/svg";
-
 interface TutorialProps {
   game: Game;
 }

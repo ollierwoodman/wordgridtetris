@@ -14,6 +14,7 @@ import { BigRoundButton } from "./ui/bigRoundButton";
 import { About } from "./DialogContents/About";
 import { Stats } from "./DialogContents/Stats";
 import { useHasSeenTutorial } from "../hooks/useLocalStorage";
+import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 
 interface MenuButtonPanelProps {
   updateGameState: () => void;
@@ -31,12 +32,15 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
 }) => {
   const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
 
+  const trackGoal = useTrackMatomoGoalById();
+
   return (
     <>
       <BigRoundButton
         title="Tutorial"
         onClick={() => {
           setHasSeenTutorial(true);
+          trackGoal(GOAL_IDS.OPENED_TUTORIAL);
           onOpenModal("Tutorial", <Tutorial game={game} />);
         }}
         hasBadge={!hasSeenTutorial}
@@ -49,6 +53,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         onClick={() => {
           game.resetPieces();
           updateGameState();
+          trackGoal(GOAL_IDS.SHUFFLED_PIECES);
         }}
       >
         <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
@@ -56,6 +61,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
       <BigRoundButton
         title="Settings"
         onClick={() => {
+          trackGoal(GOAL_IDS.OPENED_SETTINGS);
           onOpenModal("Settings", <Settings />);
         }}
       >
@@ -64,6 +70,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
       <BigRoundButton
         title="My stats"
         onClick={() => {
+          trackGoal(GOAL_IDS.OPENED_STATS);
           onOpenModal("My stats", <Stats />);
         }}
       >
@@ -72,6 +79,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
       <BigRoundButton
         title="About Blockle"
         onClick={() => {
+          trackGoal(GOAL_IDS.OPENED_ABOUT);
           onOpenModal("About Blockle", <About />);
         }}
       >

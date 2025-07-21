@@ -1,4 +1,3 @@
-import React from "react";
 import {
   MonitorIcon,
   MoonIcon,
@@ -12,8 +11,7 @@ import { useSolutionSizeFromURL } from "../../hooks/useSolutionSizeFromURL";
 import { SOLUTION_SIZES } from "../../game/logic";
 
 const Settings: React.FC = () => {
-  const { solutionSize, isInitialized } =
-    useSolutionSizeFromURL();
+  const { solutionSize, isInitialized } = useSolutionSizeFromURL();
   const { theme, cycleTheme, getNextTheme } = useTheme();
   const { isMuted, setIsMuted } = useSoundContext();
   const { playMenuClick } = useGameSounds();
@@ -45,10 +43,12 @@ const Settings: React.FC = () => {
             </span>
           )}
         </div>
-        <div 
+        <div
           className="grid gap-2 w-full"
           style={{
-            gridTemplateColumns: `repeat(${(SOLUTION_SIZES.length - 1).toString()}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${(
+              SOLUTION_SIZES.length - 1
+            ).toString()}, minmax(0, 1fr))`,
           }}
         >
           {SOLUTION_SIZES.map((size: number) => {
