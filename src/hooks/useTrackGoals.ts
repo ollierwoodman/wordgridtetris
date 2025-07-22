@@ -1,8 +1,9 @@
 import { useCallback } from "react";
+import type { MatomoFunction } from "./useTrackingOptOut";
 
 declare global {
   interface Window {
-    _paq: (string | number)[][] | undefined;
+    _paq: (string | number | MatomoFunction)[][] | undefined;
   }
 }
 
