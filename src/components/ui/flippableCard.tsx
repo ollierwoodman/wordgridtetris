@@ -34,7 +34,7 @@ const FlippableCard: React.FC<FlippableCardProps> = ({
         {/* Front of card */}
         <div
           className={cn(
-            "absolute w-full h-full [backface-visibility:hidden] rounded-lg bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 cursor-pointer",
+            "absolute w-full h-full [backface-visibility:hidden] rounded-full bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 cursor-pointer",
             isFlipped ? "opacity-0" : "opacity-100",
             frontClassName
           )}
@@ -45,7 +45,7 @@ const FlippableCard: React.FC<FlippableCardProps> = ({
         {/* Back of card */}
         <div
           className={cn(
-            "absolute w-full h-full [backface-visibility:hidden] rounded-lg bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 [transform:rotateY(180deg)]",
+            "absolute w-full h-full [backface-visibility:hidden] rounded-full bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white flex items-center justify-center p-4 [transform:rotateY(180deg)]",
             isFlipped ? "opacity-100" : "opacity-0",
             backClassName
           )}

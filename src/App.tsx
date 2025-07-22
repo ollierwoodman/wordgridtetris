@@ -265,7 +265,7 @@ function App() {
             className="w-full"
             frontContent={
               <>
-                <LightbulbIcon className="size-8" />
+                <LightbulbIcon className="size-10" />
                 <span className="font-bold uppercase ml-2">
                   Tap to reveal theme
                 </span>
