@@ -142,6 +142,31 @@ export class Game {
       });
   }
 
+  // Helper: check if a block is inside the solution grid
+  private isInSolutionGrid(x: number, y: number): boolean {
+    return (
+      x >= this.solutionOffset &&
+      x < this.solutionOffset + this.solutionSize &&
+      y >= this.solutionOffset &&
+      y < this.solutionOffset + this.solutionSize
+    );
+  }
+
+  // Helper: check if all blocks of a piece at (x, y) are outside the solution grid
+  private areAllBlocksOutsideSolutionGrid(pieceIndex: number, x: number, y: number): boolean {
+    const rotationState = this.pieceRotationStates[pieceIndex];
+    const pieceType = this.pieces[pieceIndex].type;
+    const pieceTemplate = TETRIS_PIECE_SHAPES[pieceType][rotationState];
+    for (const block of pieceTemplate) {
+      const blockX = x + block.x;
+      const blockY = y + block.y;
+      if (this.isInSolutionGrid(blockX, blockY)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   private placePieces(shuffle = false): void {
     // Move all pieces to temporary positions outside the grid to avoid initial collisions
     for (let i = 0; i < this.pieces.length; i++) {
@@ -156,25 +181,18 @@ export class Game {
     }
 
     // Predefined positions spread across the grid to minimize collisions
-    const placementPositions = [
-      { x: Math.floor(this.gridSize / 2), y: Math.floor(this.gridSize / 2) }, // Center
-      { x: this.gridSize - 3, y: 1 }, // Top right
-      { x: 1, y: this.gridSize - 3 }, // Bottom left
-      { x: this.gridSize - 3, y: this.gridSize - 3 }, // Bottom right
-      { x: Math.floor(this.gridSize / 2), y: 1 }, // Top center
-      { x: this.gridSize - 3, y: Math.floor(this.gridSize / 2) }, // Right center
-      { x: Math.floor(this.gridSize / 2), y: this.gridSize - 3 }, // Bottom center
-      { x: 1, y: Math.floor(this.gridSize / 2) }, // Left center
-      { x: 1, y: 1 }, // Top left
-    ];
+    const placementPositions = new Array(this.gridSize * this.gridSize).fill(0).map((_, i) => ({ x: i % this.gridSize, y: Math.floor(i / this.gridSize) }));
 
     // Place each piece in the first available valid position
     for (const pieceIndex of placePieceOrder) {
       let placed = false;
-
+      randomHelper.shuffle(placementPositions);
       // Try predefined positions first
       for (const pos of placementPositions) {
-        if (this.isValidMoveInternal(pieceIndex, pos.x, pos.y)) {
+        if (
+          this.isValidMoveInternal(pieceIndex, pos.x, pos.y) &&
+          this.areAllBlocksOutsideSolutionGrid(pieceIndex, pos.x, pos.y)
+        ) {
           this.setPiecePosition(pieceIndex, pos.x, pos.y);
           placed = true;
           break;
