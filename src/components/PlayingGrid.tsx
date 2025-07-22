@@ -31,7 +31,6 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
       {
         "ring-4 ring-green-400": tileContent.isValid,
         "ring-4 ring-red-400": tileContent.isValid === false,
-        "shadow-xl/30 dark:shadow-xl/0": tileContent.isInSolutionGrid,
         "bg-gray-400/50 dark:bg-gray-600/50": !tileContent.isInSolutionGrid,
         [`${getPieceColor(tileContent.pieceIndex)} cursor-pointer`]:
           tileContent.pieceIndex >= 0,
@@ -40,7 +39,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
           : false,
         "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75":
           tileContent.isEmptyTile,
-        "z-10 opacity-50": tileContent.isGhost,
+        "z-20 opacity-50": tileContent.isGhost,
       }
     );
   }

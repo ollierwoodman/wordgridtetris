@@ -3,13 +3,15 @@ import type { Piece, TileContent, PuzzleData } from "../types/game";
 
 export function formatDurationMs(ms: number): string {
   if (ms === 0) return "N/A";
-  
+
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  
+
   if (minutes > 0) {
-    return `${String(minutes)}m ${remainingSeconds.toString().padStart(2, '0')}s`;
+    return `${String(minutes)}m ${remainingSeconds
+      .toString()
+      .padStart(2, "0")}s`;
   } else {
     return `${String(remainingSeconds)}s`;
   }
@@ -18,43 +20,45 @@ export function formatDurationMs(ms: number): string {
 export function formatDateHowLongAgo(date: string): string {
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - new Date(date).getTime());
-  
+
   const diffMinutes = Math.floor(diffTime / (1000 * 60));
   const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   const diffWeeks = Math.floor(diffDays / 7);
   const diffMonths = Math.floor(diffDays / 30.44); // Average days per month
   const diffYears = Math.floor(diffDays / 365.25); // Account for leap years
-  
+
   if (diffMinutes < 1) {
     return "just now";
   } else if (diffMinutes < 60) {
-    return `${String(diffMinutes)} minute${diffMinutes === 1 ? '' : 's'} ago`;
+    return `${String(diffMinutes)} minute${diffMinutes === 1 ? "" : "s"} ago`;
   } else if (diffHours < 24) {
-    return `${String(diffHours)} hour${diffHours === 1 ? '' : 's'} ago`;
+    return `${String(diffHours)} hour${diffHours === 1 ? "" : "s"} ago`;
   } else if (diffDays < 7) {
-    return `${String(diffDays)} day${diffDays === 1 ? '' : 's'} ago`;
+    return `${String(diffDays)} day${diffDays === 1 ? "" : "s"} ago`;
   } else if (diffWeeks < 4) {
-    return `${String(diffWeeks)} week${diffWeeks === 1 ? '' : 's'} ago`;
+    return `${String(diffWeeks)} week${diffWeeks === 1 ? "" : "s"} ago`;
   } else if (diffMonths < 12) {
-    return `${String(diffMonths)} month${diffMonths === 1 ? '' : 's'} ago`;
+    return `${String(diffMonths)} month${diffMonths === 1 ? "" : "s"} ago`;
   } else {
-    return `${String(diffYears)} year${diffYears === 1 ? '' : 's'} ago`;
+    return `${String(diffYears)} year${diffYears === 1 ? "" : "s"} ago`;
   }
 }
 
 export function getPieceColor(pieceIndex: number) {
   const colors = [
-    "bg-cyan-500 inset-shadow-sm inset-shadow-cyan-200/75 dark:bg-cyan-800 dark:inset-shadow-cyan-500/75",
-    "bg-yellow-500 inset-shadow-sm inset-shadow-yellow-200/75 dark:bg-yellow-800 dark:inset-shadow-yellow-500/75",
-    "bg-purple-500 inset-shadow-sm inset-shadow-purple-200/75 dark:bg-purple-800 dark:inset-shadow-purple-500/75",
-    "bg-green-500 inset-shadow-sm inset-shadow-green-200/75 dark:bg-green-800 dark:inset-shadow-green-500/75",
-    "bg-red-500 inset-shadow-sm inset-shadow-red-200/75 dark:bg-red-800 dark:inset-shadow-red-500/75",
-    "bg-orange-500 inset-shadow-sm inset-shadow-orange-200/75 dark:bg-orange-800 dark:inset-shadow-orange-500/75",
-    "bg-teal-500 inset-shadow-sm inset-shadow-teal-200/75 dark:bg-teal-800 dark:inset-shadow-teal-500/75",
-    "bg-blue-500 inset-shadow-sm inset-shadow-blue-200/75 dark:bg-blue-800 dark:inset-shadow-blue-500/75",
-    "bg-pink-500 inset-shadow-sm inset-shadow-pink-200/75 dark:bg-pink-800 dark:inset-shadow-pink-500/75",
-    "bg-fuchsia-500 inset-shadow-sm inset-shadow-fuchsia-200/75 dark:bg-fuchsia-800 dark:inset-shadow-fuchsia-500/75",
+    "z-10 bg-cyan-600 inset-shadow-sm inset-shadow-white/50 dark:bg-cyan-800 dark:inset-shadow-white/40",
+    "z-10 bg-yellow-600 inset-shadow-sm inset-shadow-white/50 dark:bg-yellow-800 dark:inset-shadow-white/40",
+    "z-10 bg-purple-600 inset-shadow-sm inset-shadow-white/50 dark:bg-purple-800 dark:inset-shadow-white/40",
+    "z-10 bg-green-600 inset-shadow-sm inset-shadow-white/50 dark:bg-green-800 dark:inset-shadow-white/40",
+    "z-10 bg-red-600 inset-shadow-sm inset-shadow-white/50 dark:bg-red-800 dark:inset-shadow-white/40",
+    "z-10 bg-orange-600 inset-shadow-sm inset-shadow-white/50 dark:bg-orange-800 dark:inset-shadow-white/40",
+    "z-10 bg-blue-600 inset-shadow-sm inset-shadow-white/50 dark:bg-blue-800 dark:inset-shadow-white/40",
+    "z-10 bg-teal-600 inset-shadow-sm inset-shadow-white/50 dark:bg-teal-800 dark:inset-shadow-white/40",
+    "z-10 bg-pink-600 inset-shadow-sm inset-shadow-white/50 dark:bg-pink-800 dark:inset-shadow-white/40",
+    "z-10 bg-fuchsia-600 inset-shadow-sm inset-shadow-white/50 dark:bg-fuchsia-800 dark:inset-shadow-white/40",
+    "z-10 bg-indigo-600 inset-shadow-sm inset-shadow-white/50 dark:bg-indigo-800 dark:inset-shadow-white/40",
+    "z-10 bg-rose-600 inset-shadow-sm inset-shadow-white/50 dark:bg-rose-800 dark:inset-shadow-white/40",
   ];
   return colors[pieceIndex % colors.length];
 }
@@ -87,7 +91,7 @@ export function getTileContent({
   const gridSize = game.getGridSize();
   const solutionOffset = (gridSize - solutionSize) / 2;
   const isInSolutionGrid =
-    x >= solutionOffset && 
+    x >= solutionOffset &&
     x <= solutionSize + solutionOffset - 1 &&
     y >= solutionOffset &&
     y <= solutionSize + solutionOffset - 1;
@@ -109,7 +113,7 @@ export function getTileContent({
       }
     }
   }
-  
+
   // Normal rendering
   const pieceAtPosition = game.getPieceAtPosition(x, y);
   if (pieceAtPosition) {
