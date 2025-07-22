@@ -9,6 +9,7 @@ declare global {
 export const GOAL_IDS = {
   // PLAY_TIME: 1 // managed in Matomo
   // BUY_ME_A_COFFEE_CLICKS: 2 // managed in Matomo
+  // JOINED_DISCORD: 15 // managed in Matomo
   CLICKED_SHARE_BUTTON: 3,
   COMPLETED_PUZZLE_5X5: 4,
   COMPLETED_PUZZLE_6X6: 5,
