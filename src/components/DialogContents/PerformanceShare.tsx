@@ -123,7 +123,7 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     if (puzzle) {
       out += `\n${strSize}x${strSize} - ${formatDurationMs(
         puzzle.timeToCompleteMs
-      )} ${puzzle.isThemeRevealed ? "(with theme revealed)" : ""}`;
+      )} ${puzzle.isThemeRevealed ? "(theme revealed)" : ""}`;
     }
   });
   return out;
