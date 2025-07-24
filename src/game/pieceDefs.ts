@@ -79,17 +79,17 @@ export const TETRIS_PIECE_SHAPES = [
   [
     // State 0: Horizontal Z
     [
+      { x: -1, y: 0 },
       { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: 1, y: 1 },
-      { x: 2, y: 1 }
+      { x: 0, y: 1 },
+      { x: 1, y: 1 }
     ],
     // State 1: Vertical Z
     [
-      { x: 2, y: 0 },
-      { x: 2, y: 1 },
+      { x: 1, y: 0 },
       { x: 1, y: 1 },
-      { x: 1, y: 2 }
+      { x: 0, y: 1 },
+      { x: 0, y: 2 }
     ]
   ],
   // L piece - 4 rotation states
