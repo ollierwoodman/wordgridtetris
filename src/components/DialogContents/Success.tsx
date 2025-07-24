@@ -6,9 +6,10 @@ import { PerformanceShare } from "./PerformanceShare";
 interface SuccessProps {
   game: Game;
   isReplay: boolean;
+  handleChangePuzzle: (size: number) => void;
 }
 
-export function Success({ game, isReplay }: SuccessProps) {
+export function Success({ game, isReplay, handleChangePuzzle }: SuccessProps) {
   const solutionSize = game.getSolutionSize();
   const strSolutionSize = solutionSize.toString();
   const { hasCompletedTodayWithSize } = useCompletedPuzzlesManager();
@@ -22,7 +23,7 @@ export function Success({ game, isReplay }: SuccessProps) {
       <p className="text-gray-600 dark:text-gray-300 text-lg text-center text-balance">
         {`You completed today's ${strSolutionSize}×${strSolutionSize} Blockle${isReplay ? " again" : ""}!`}
       </p>
-      <PerformanceShare />
+      <PerformanceShare handleChangePuzzle={handleChangePuzzle} />
       <p className="text-center text-balance text-gray-500 dark:text-gray-400">
         {hasCompletedAllTodaysPuzzles
           ? "Come back tomorrow for new puzzles!"

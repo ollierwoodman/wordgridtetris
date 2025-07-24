@@ -16,7 +16,13 @@ import { cn } from "@sglara/cn";
 
 const URL = "https://blockle.au";
 
-export function PerformanceShare() {
+interface PerformanceShareProps {
+  handleChangePuzzle: (size: number) => void;
+};
+
+export function PerformanceShare({
+  handleChangePuzzle,
+}: PerformanceShareProps) {
   const { copy, share, canShare } = useShare();
 
   const { completedPuzzles } = useCompletedPuzzlesManager();
@@ -58,19 +64,18 @@ export function PerformanceShare() {
                       Completed in {formatDurationMs(puzzle.timeToCompleteMs)}
                     </p>
                   ) : (
-                    <a
-                      href={`/${strSize}x${strSize}`}
-                      key={size}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleChangePuzzle(size);
+                      }}
                       title={`Switch to ${strSize}x${strSize} puzzle`}
                       className={cn(
-                        "flex items-center justify-center rounded-full text-center bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:opacity-80 px-4 py-2 gap-2",
-                        {
-                          "bg-green-200": isCompleted,
-                        }
+                        "flex items-center justify-center rounded-full text-center bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:opacity-80 px-4 py-2 gap-2"
                       )}
                     >
                       Play the {strSize}×{strSize}
-                    </a>
+                    </button>
                   )}
                 </div>
               );

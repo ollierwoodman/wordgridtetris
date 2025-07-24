@@ -13,7 +13,11 @@ import { useSolutionSizeFromURL } from "../../hooks/useSolutionSizeFromURL";
 import { SOLUTION_SIZES } from "../../game/logic";
 import { useMatomoOptOut } from "../../hooks/useTrackingOptOut";
 
-const Settings: React.FC = () => {
+interface SettingsProps {
+  handleChangePuzzle: (size: number) => void;
+}
+
+const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
   const { solutionSize, isInitialized } = useSolutionSizeFromURL();
   const { theme, cycleTheme, getNextTheme } = useTheme();
   const { isMuted, setIsMuted } = useSoundContext();
@@ -65,14 +69,17 @@ const Settings: React.FC = () => {
 
             const strSize = size.toString();
             return (
-              <a
-                href={`/${strSize}x${strSize}`}
+              <button
+                type="button"
+                onClick={() => {
+                  handleChangePuzzle(size);
+                }}
                 key={size}
                 title={`Switch to ${strSize}x${strSize} puzzle`}
                 className="cursor-pointer rounded-full w-full text-center bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
               >
                 Play {strSize}×{strSize}
-              </a>
+              </button>
             );
           })}
         </div>

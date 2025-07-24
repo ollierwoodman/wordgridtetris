@@ -33,7 +33,7 @@ function App() {
   // Initialize theme
   useTheme();
 
-  const { solutionSize, changeSolutionSize, canLevelUp, isInitialized } =
+  const { solutionSize, changeSolutionSize, isInitialized } =
     useSolutionSizeFromURL();
 
   const { getPuzzleByDate, hasCompletedTodayWithSize } =
@@ -64,6 +64,23 @@ function App() {
     revealTheme,
   } = useGame(isInitialized ? solutionSize : undefined);
 
+  const handleChangePuzzle = useCallback((size: number) => {
+    if (size === solutionSize) {
+      return;
+    }
+
+    if (!SOLUTION_SIZES.includes(size)) {
+      return;
+    }
+
+    setShowConfetti(false);
+    setIsModalOpen(false);
+    setShowSuccessButton(false);
+    changeSolutionSize(size);
+    // Reset completion flag when changing puzzle
+    hasCompletedRef.current = false;
+  }, [changeSolutionSize, hasCompletedRef, solutionSize]);
+
   // Check if puzzle was already completed when loading
   useEffect(() => {
     if (!game || !isInitialized || !solutionSize) {
@@ -76,7 +93,10 @@ function App() {
       if (completedPuzzle) {
         handleOpenModal(
           "Back again?",
-          <AlreadyPlayed puzzle={completedPuzzle} />
+          <AlreadyPlayed
+            puzzle={completedPuzzle}
+            handleChangePuzzle={handleChangePuzzle}
+          />
         );
       }
     }
@@ -86,6 +106,7 @@ function App() {
     solutionSize,
     hasCompletedTodayWithSize,
     getPuzzleByDate,
+    handleChangePuzzle,
   ]);
 
   const handleThemeReveal = useCallback(() => {
@@ -99,17 +120,6 @@ function App() {
 
   const { addPuzzle } = useCompletedPuzzlesManager();
 
-  const handleLevelUp = useCallback(() => {
-    if (!canLevelUp) {
-      return;
-    }
-    setShowConfetti(false);
-    setIsModalOpen(false);
-    setShowSuccessButton(false);
-    changeSolutionSize(solutionSize + 1);
-    // Reset completion flag when leveling up
-    hasCompletedRef.current = false;
-  }, [solutionSize, canLevelUp, changeSolutionSize]);
 
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
@@ -137,7 +147,11 @@ function App() {
 
       handleOpenModal(
         "Well done!",
-        <Success game={game} isReplay={alreadyCompletedThisPuzzleToday} />
+        <Success
+          game={game}
+          isReplay={alreadyCompletedThisPuzzleToday}
+          handleChangePuzzle={handleChangePuzzle}
+        />
       );
     }
   }, [
@@ -146,8 +160,8 @@ function App() {
     trackCompletedPuzzle,
     addPuzzle,
     playPuzzleComplete,
-    handleLevelUp,
     alreadyCompletedThisPuzzleToday,
+    handleChangePuzzle,
   ]);
 
   const handleOpenModal = (header: string, content: React.ReactNode) => {
@@ -239,6 +253,7 @@ function App() {
                   <Success
                     game={game}
                     isReplay={alreadyCompletedThisPuzzleToday}
+                    handleChangePuzzle={handleChangePuzzle}
                   />
                 );
               }}
@@ -292,6 +307,7 @@ function App() {
           game={game}
           onOpenModal={handleOpenModal}
           onCloseModal={handleCloseModal}
+          handleChangePuzzle={handleChangePuzzle}
         />
       </div>
       <Modal

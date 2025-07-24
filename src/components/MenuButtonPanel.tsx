@@ -22,6 +22,7 @@ interface MenuButtonPanelProps {
   game: Game;
   onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
+  handleChangePuzzle: (size: number) => void;
 }
 
 export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
@@ -29,6 +30,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   game,
   onOpenModal,
   updateGameState,
+  handleChangePuzzle,
 }) => {
   const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
 
@@ -62,7 +64,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         title="Settings"
         onClick={() => {
           trackGoal(GOAL_IDS.OPENED_SETTINGS);
-          onOpenModal("Settings", <Settings />);
+          onOpenModal("Settings", <Settings handleChangePuzzle={handleChangePuzzle} />);
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />

@@ -11,8 +11,9 @@ TODO: Build out special dates word lists
 
 ## New features
 
-TODO: Set up SPA tracking [see docs here](https://developer.matomo.org/guides/spa-tracking)
+TODO: Add a 'grace region' around tiles with valid placements
 
 ## Wishlist features
 
+TODO: Set up SPA tracking [see docs here](https://developer.matomo.org/guides/spa-tracking)
 TODO: Design and implement unique color schemes for increasing levels of difficulty
