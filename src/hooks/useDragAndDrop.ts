@@ -57,6 +57,9 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     setDraggedPieceIndex(pieceIndex);
     game.selectPiece(pieceIndex);
     setDraggedBlockIndex(foundBlockIndex);
+    // Set initial drag position to current piece position so ghost appears immediately
+    setDragPosition({ x: gameState.pieces[pieceIndex].x, y: gameState.pieces[pieceIndex].y });
+    setIsValidDrop(true); // Initial position is always valid
     document.body.style.cursor = 'grabbing';
     document.body.classList.add('overflow-hidden', 'touch-none');
   }, [game, gameState.pieces, isCompleted]);

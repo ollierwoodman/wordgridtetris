@@ -55,7 +55,7 @@ export interface GameState {
 }
 
 // UI types
-export interface TileContent {
+export interface TileState {
   letter: string;
   isSelected: boolean;
   pieceIndex: number;

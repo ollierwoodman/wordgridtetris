@@ -1,8 +1,9 @@
 import React from "react";
 import { cn } from "@sglara/cn";
-import { getPieceColor, getTileContent } from "../utils/game";
-import type { PlayingGridProps, TileContent } from "../types/game";
+import { getPieceColor, getTileState } from "../utils/game";
+import type { PlayingGridProps, TileState } from "../types/game";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { CircleIcon, XIcon } from "lucide-react";
 
 const PlayingGrid: React.FC<PlayingGridProps> = ({
   game,
@@ -25,21 +26,21 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
 
   const gridSize = game.getGridSize();
 
-  function getTileClasses(tileContent: TileContent) {
+  function getTileClasses(tileState: TileState) {
     return cn(
       "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
       {
-        "ring-4 ring-green-400": tileContent.isValid,
-        "ring-4 ring-red-400": tileContent.isValid === false,
-        "bg-gray-400/50 dark:bg-gray-600/50": !tileContent.isInSolutionGrid,
-        [`${getPieceColor(tileContent.pieceIndex)} cursor-pointer`]:
-          tileContent.pieceIndex >= 0,
-        "cursor-not-allowed": tileContent.isLocked
+        "bg-gray-400/50 dark:bg-gray-600/50": !tileState.isInSolutionGrid,
+        [`${getPieceColor(tileState.pieceIndex)} cursor-pointer`]:
+          tileState.pieceIndex >= 0 &&
+          (tileState.pieceIndex !== draggedPieceIndex || tileState.isGhost),
+        "cursor-not-allowed": tileState.isLocked
           ? gameState.isCompleted
           : false,
         "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75":
-          tileContent.isEmptyTile,
-        "z-20 opacity-50": tileContent.isGhost,
+          tileState.isEmptyTile,
+        "ring-3 ring-green-500 dark:ring-green-700": tileState.isValid,
+        "ring-3 ring-red-500 dark:ring-red-700": tileState.isValid === false,
       }
     );
   }
@@ -64,7 +65,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
       {Array.from({ length: gridSize * gridSize }).map((_, index) => {
         const x = index % gridSize;
         const y = Math.floor(index / gridSize);
-        const tileContent = getTileContent({
+        const tileState = getTileState({
           x,
           y,
           draggedPieceIndex,
@@ -81,29 +82,48 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
         return (
           <div
             key={index}
-            className={getTileClasses(tileContent)}
-            onClick={() => { handleTileClick(x, y); }}
+            className={getTileClasses(tileState)}
+            onClick={() => {
+              handleTileClick(x, y);
+            }}
             onPointerDown={
               canDrag
-                ? (e) => { handlePointerDown(pieceAtPosition.pieceIndex, x, y, e); }
+                ? (e) => {
+                    handlePointerDown(pieceAtPosition.pieceIndex, x, y, e);
+                  }
                 : undefined
             }
           >
-            {tileContent.isSelected && (
-              <div className="absolute top-1/8 left-1/8 bg-white rounded-full w-1/8 h-1/8 flex items-center justify-center">
-                <span className="sr-only">Selected</span>
+            {tileState.isValid === false && (
+              <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
+                <XIcon className="size-1/5" />
               </div>
             )}
-            {tileContent.isEmptyTile && (
-              <div className="absolute top-1/8 left-1/8 text-white">
-                <LockIcon />
+            {tileState.isValid === true && (
+              <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
+                <CircleIcon className="size-1/5" />
               </div>
             )}
-            {tileContent.letter && (
-              <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
-                {tileContent.letter}
-              </span>
-            )}
+            {tileState.pieceIndex >= 0 &&
+          (tileState.pieceIndex !== draggedPieceIndex || tileState.isGhost) && (
+            <>
+              {tileState.isSelected && tileState.isValid === undefined && (
+                <div className="absolute top-1/10 left-1/10 bg-white rounded-full w-1/5 h-1/5">
+                  <span className="sr-only">Selected</span>
+                </div>
+              )}
+              {tileState.letter && (
+                <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                  {tileState.letter}
+                </span>
+              )}
+              {tileState.isEmptyTile && (
+                <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
+                  <LockIcon className="size-1/5" />
+                </div>
+              )}
+            </>
+          )}
           </div>
         );
       })}

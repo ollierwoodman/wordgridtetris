@@ -1,5 +1,5 @@
 import type { Game } from "../game/logic";
-import type { Piece, TileContent, PuzzleData } from "../types/game";
+import type { Piece, TileState, PuzzleData } from "../types/game";
 
 export function formatDurationMs(ms: number): string {
   if (ms === 0) return "N/A";
@@ -67,7 +67,7 @@ export function getPieceRotationState(game: Game, pieceIndex: number): number {
   return game.getPieceRotationState(pieceIndex);
 }
 
-export function getTileContent({
+export function getTileState({
   x,
   y,
   draggedPieceIndex,
@@ -86,7 +86,7 @@ export function getTileContent({
     isCompleted?: boolean;
   };
   game: Game;
-}): TileContent {
+}): TileState {
   const solutionSize = game.getSolutionSize();
   const gridSize = game.getGridSize();
   const solutionOffset = (gridSize - solutionSize) / 2;
