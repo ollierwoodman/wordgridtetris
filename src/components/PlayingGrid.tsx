@@ -105,25 +105,31 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
               </div>
             )}
             {tileState.pieceIndex >= 0 &&
-          (tileState.pieceIndex !== draggedPieceIndex || tileState.isGhost) && (
-            <>
-              {tileState.isSelected && tileState.isValid === undefined && (
-                <div className="absolute top-1/10 left-1/10 bg-white rounded-full w-1/5 h-1/5">
-                  <span className="sr-only">Selected</span>
-                </div>
+              (tileState.pieceIndex !== draggedPieceIndex ||
+                tileState.isGhost) && (
+                <>
+                  {tileState.isSelected && tileState.isValid === undefined && (
+                    <div className="absolute top-1/10 left-1/10 bg-white rounded-full w-1/5 h-1/5">
+                      <span className="sr-only">Selected</span>
+                    </div>
+                  )}
+                  {tileState.letter && (
+                    <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                      {tileState.letter}
+                    </span>
+                  )}
+                </>
               )}
-              {tileState.letter && (
+            {tileState.isEmptyTile && (
+              <>
                 <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
                   {tileState.letter}
                 </span>
-              )}
-              {tileState.isEmptyTile && (
                 <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
                   <LockIcon className="size-1/5" />
                 </div>
-              )}
-            </>
-          )}
+              </>
+            )}
           </div>
         );
       })}
