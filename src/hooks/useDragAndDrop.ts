@@ -61,6 +61,63 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     document.body.classList.add('overflow-hidden', 'touch-none');
   }, [game, gameState.pieces, isCompleted]);
 
+  // Helper function to find closest valid position within grace region
+  const findClosestValidPosition = useCallback((event: PointerEvent, pieceIndex: number) => {
+    if (!gridRef.current || draggedBlockIndex === null) return null;
+    
+    const rect = gridRef.current.getBoundingClientRect();
+    const tileSize = rect.width / game.getGridSize();
+    const pointerX = event.clientX - rect.left;
+    const pointerY = event.clientY - rect.top;
+    const graceRadius = tileSize * 0.9;
+    
+    const piece = gameState.pieces[pieceIndex];
+    const draggedBlock = piece.blocks[draggedBlockIndex];
+    
+    let closestPosition = null;
+    let closestDistance = Infinity;
+    
+    // Search all positions within the grace region
+    const gridSize = game.getGridSize();
+    for (let x = 0; x < gridSize; x++) {
+      for (let y = 0; y < gridSize; y++) {
+        // First check if piece would be fully within bounds (fast check)
+        let inBounds = true;
+        for (const block of piece.blocks) {
+          const blockX = x + block.x;
+          const blockY = y + block.y;
+          if (blockX < 0 || blockX >= gridSize || blockY < 0 || blockY >= gridSize) {
+            inBounds = false;
+            break;
+          }
+        }
+        
+        // Only proceed if bounds are valid and move is valid
+        if (inBounds && game.isValidMove(pieceIndex, x, y)) {
+          // Calculate where the dragged block would be positioned
+          const draggedBlockX = x + draggedBlock.x;
+          const draggedBlockY = y + draggedBlock.y;
+          
+          // Calculate pixel distance to dragged block center
+          const draggedBlockCenterX = (draggedBlockX + 0.5) * tileSize;
+          const draggedBlockCenterY = (draggedBlockY + 0.5) * tileSize;
+          const distance = Math.sqrt(
+            Math.pow(pointerX - draggedBlockCenterX, 2) + 
+            Math.pow(pointerY - draggedBlockCenterY, 2)
+          );
+          
+          // Check if within grace region
+          if (distance <= graceRadius && distance < closestDistance) {
+            closestDistance = distance;
+            closestPosition = { x, y };
+          }
+        }
+      }
+    }
+    
+    return closestPosition;
+  }, [game, gameState.pieces, draggedBlockIndex]);
+
   const handlePointerMove = useCallback((event: PointerEvent) => {
     if (draggedPieceIndex === null || !gridRef.current || draggedBlockIndex === null) {
       return;
@@ -73,33 +130,43 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
 
     const piece = gameState.pieces[draggedPieceIndex];
     const block = piece.blocks[draggedBlockIndex];
-    const x = cursorTileX - block.x;
-    const y = cursorTileY - block.y;
+    const rawX = cursorTileX - block.x;
+    const rawY = cursorTileY - block.y;
 
-    if (dragPosition && (dragPosition.x !== x || dragPosition.y !== y)) {
-      playDragClick();
-    }
-    
-    // Check if the piece would be fully within bounds
+    // Check if the raw position would be fully within bounds
     let inBounds = true;
     for (const block of piece.blocks) {
-      const blockX = x + block.x;
-      const blockY = y + block.y;
+      const blockX = rawX + block.x;
+      const blockY = rawY + block.y;
       if (blockX < 0 || blockX >= game.getGridSize() || blockY < 0 || blockY >= game.getGridSize()) {
         inBounds = false;
         break;
       }
     }
 
-    setDragPosition({ x, y });
+    // Determine final position (exact or grace region)
+    let finalPosition = { x: rawX, y: rawY };
+    let isValid = inBounds && game.isValidMove(draggedPieceIndex, rawX, rawY);
     
-    // Check if valid drop (in bounds and no collision)
-    const isValid = inBounds && game.isValidMove(draggedPieceIndex, x, y);
-    setIsValidDrop(isValid);
-  }, [draggedPieceIndex, draggedBlockIndex, game, gameState.pieces, dragPosition, playDragClick]);
+    // If raw position is invalid, try grace region
+    if (!isValid) {
+      const gracePosition = findClosestValidPosition(event, draggedPieceIndex);
+      if (gracePosition) {
+        finalPosition = gracePosition;
+        isValid = true;
+      }
+    }
 
-  const handlePointerUp = useCallback(() => {
-    if (draggedPieceIndex !== null && dragPosition) {
+    if (dragPosition && (dragPosition.x !== finalPosition.x || dragPosition.y !== finalPosition.y)) {
+      playDragClick();
+    }
+
+    setDragPosition(finalPosition);
+    setIsValidDrop(isValid);
+  }, [draggedPieceIndex, draggedBlockIndex, game, gameState.pieces, dragPosition, playDragClick, findClosestValidPosition]);
+
+  const handlePointerUp = useCallback((event?: PointerEvent) => {
+    if (draggedPieceIndex !== null && dragPosition && gridRef.current) {
       // Always check collision and bounds on drop
       const piece = gameState.pieces[draggedPieceIndex];
       let inBounds = true;
@@ -114,9 +181,28 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       
       const isValidMove = game.isValidMove(draggedPieceIndex, dragPosition.x, dragPosition.y);
 
+      let finalPosition = null;
+      
       if (inBounds && isValidMove) {
-        playDropSuccess();
-        game.setPiecePosition(draggedPieceIndex, dragPosition.x, dragPosition.y);
+        finalPosition = dragPosition;
+      } else {
+        // Try grace region if we have pointer coordinates
+        if (event) {
+          finalPosition = findClosestValidPosition(event, draggedPieceIndex);
+        }
+      }
+      
+      if (finalPosition) {
+        // Check if piece is moving to a new position
+        const isNewPosition = !originalPosition || 
+          finalPosition.x !== originalPosition.x || 
+          finalPosition.y !== originalPosition.y;
+        
+        if (isNewPosition) {
+          playDropSuccess();
+        }
+        
+        game.setPiecePosition(draggedPieceIndex, finalPosition.x, finalPosition.y);
         updateGameState();
       } else if (originalPosition) {
         playDropFail();
@@ -132,7 +218,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     setDraggedBlockIndex(null);
     document.body.style.cursor = '';
     document.body.classList.remove('overflow-hidden', 'touch-none');
-  }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDropSuccess, playDropFail]);
+  }, [draggedPieceIndex, dragPosition, game, gameState.pieces, originalPosition, updateGameState, playDropSuccess, playDropFail, findClosestValidPosition]);
 
   // Attach global listeners for pointer move/up
   useEffect(() => {
@@ -143,7 +229,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       };
       const up = (e: PointerEvent) => {
         e.preventDefault();
-        handlePointerUp();
+        handlePointerUp(e);
       };
       
       window.addEventListener('pointermove', move);
