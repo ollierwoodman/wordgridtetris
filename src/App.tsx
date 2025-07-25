@@ -1,7 +1,7 @@
 import { useGame } from "./hooks/useGame";
 import { MenuButtonPanel } from "./components/MenuButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Modal } from "./components/ui/modal";
 import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
@@ -36,7 +36,7 @@ function App() {
   const { solutionSize, changeSolutionSize, isInitialized } =
     useSolutionSizeFromURL();
 
-  const { getPuzzleByDate, hasCompletedTodayWithSize } =
+  const { addPuzzle, hasCompletedTodayWithSize, getPuzzleByDateAndSize } =
     useCompletedPuzzlesManager();
   const alreadyCompletedThisPuzzleToday =
     hasCompletedTodayWithSize(solutionSize);
@@ -46,7 +46,6 @@ function App() {
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showSuccessButton, setShowSuccessButton] = useState<boolean>(false);
-  const hasCompletedRef = useRef<boolean>(false);
 
   const { playMenuClick, playPuzzleComplete, playThemeReveal } =
     useGameSounds();
@@ -64,50 +63,31 @@ function App() {
     revealTheme,
   } = useGame(isInitialized ? solutionSize : undefined);
 
-  const handleChangePuzzle = useCallback((size: number) => {
-    if (size === solutionSize) {
-      return;
-    }
-
-    if (!SOLUTION_SIZES.includes(size)) {
-      return;
-    }
-
-    setShowConfetti(false);
-    setIsModalOpen(false);
-    setShowSuccessButton(false);
-    changeSolutionSize(size);
-    // Reset completion flag when changing puzzle
-    hasCompletedRef.current = false;
-  }, [changeSolutionSize, hasCompletedRef, solutionSize]);
-
   // Check if puzzle was already completed when loading
   useEffect(() => {
-    if (!game || !isInitialized || !solutionSize) {
-      return;
-    }
+    if (loading) return;
 
-    const today = new Date().toISOString().split("T")[0];
+    setIsModalOpen(false);
+    setShowConfetti(false);
+    setShowSuccessButton(false);
+
     if (hasCompletedTodayWithSize(solutionSize)) {
-      const completedPuzzle = getPuzzleByDate(today);
+      const completedPuzzle = getPuzzleByDateAndSize(
+        new Date().toISOString().split("T")[0],
+        solutionSize
+      );
       if (completedPuzzle) {
         handleOpenModal(
           "Back again?",
           <AlreadyPlayed
             puzzle={completedPuzzle}
-            handleChangePuzzle={handleChangePuzzle}
+            handleChangePuzzle={changeSolutionSize}
           />
         );
       }
     }
-  }, [
-    game,
-    isInitialized,
-    solutionSize,
-    hasCompletedTodayWithSize,
-    getPuzzleByDate,
-    handleChangePuzzle,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [solutionSize, loading]);
 
   const handleThemeReveal = useCallback(() => {
     if (gameState?.isThemeRevealed) {
@@ -118,22 +98,17 @@ function App() {
     trackGoal(GOAL_IDS.REVEALED_THEME);
   }, [revealTheme, gameState, playThemeReveal, trackGoal]);
 
-  const { addPuzzle } = useCompletedPuzzlesManager();
-
-
   // Check for puzzle completion and trigger confetti and success modal
   useEffect(() => {
     if (!game) {
       return;
     }
 
-    if (gameState?.isCompleted && !hasCompletedRef.current) {
-      hasCompletedRef.current = true;
-
-      setShowConfetti(true);
-      playPuzzleComplete();
+    if (gameState?.isCompleted) {
       trackCompletedPuzzle(game.getSolutionSize());
+      setShowConfetti(true);
       setShowSuccessButton(true);
+      playPuzzleComplete();
 
       if (!alreadyCompletedThisPuzzleToday) {
         addPuzzle({
@@ -150,7 +125,7 @@ function App() {
         <Success
           game={game}
           isReplay={alreadyCompletedThisPuzzleToday}
-          handleChangePuzzle={handleChangePuzzle}
+          handleChangePuzzle={changeSolutionSize}
         />
       );
     }
@@ -161,7 +136,7 @@ function App() {
     addPuzzle,
     playPuzzleComplete,
     alreadyCompletedThisPuzzleToday,
-    handleChangePuzzle,
+    changeSolutionSize,
   ]);
 
   const handleOpenModal = (header: string, content: React.ReactNode) => {
@@ -253,7 +228,7 @@ function App() {
                   <Success
                     game={game}
                     isReplay={alreadyCompletedThisPuzzleToday}
-                    handleChangePuzzle={handleChangePuzzle}
+                    handleChangePuzzle={changeSolutionSize}
                   />
                 );
               }}
@@ -307,7 +282,7 @@ function App() {
           game={game}
           onOpenModal={handleOpenModal}
           onCloseModal={handleCloseModal}
-          handleChangePuzzle={handleChangePuzzle}
+          handleChangePuzzle={changeSolutionSize}
         />
       </div>
       <Modal

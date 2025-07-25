@@ -71,7 +71,7 @@ export function PerformanceShare({
                       }}
                       title={`Switch to ${strSize}x${strSize} puzzle`}
                       className={cn(
-                        "flex items-center justify-center rounded-full text-center bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:opacity-80 px-4 py-2 gap-2"
+                        "cursor-pointer flex items-center justify-center rounded-full text-center bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:opacity-80 px-4 py-2 gap-2"
                       )}
                     >
                       Play the {strSize}×{strSize}
