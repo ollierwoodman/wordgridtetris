@@ -25,6 +25,7 @@ const useShare = () => {
         // using title and text to cater to iOS as per https://adactio.com/journal/15972
         await navigator.share({
           title: text,
+          text: text,
           url: url,
         }).then(() => {
           trackGoal(GOAL_IDS.CLICKED_SHARE_BUTTON);
