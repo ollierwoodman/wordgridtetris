@@ -109,7 +109,7 @@ function App() {
       setShowConfetti(true);
       setShowSuccessButton(true);
       playPuzzleComplete();
-      
+
       if (!alreadyCompletedThisPuzzleToday) {
         addPuzzle({
           date: new Date().toISOString().split("T")[0],
@@ -119,19 +119,17 @@ function App() {
           timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
         });
       }
-      
+
       revealTheme();
 
-      setTimeout(() => {
-        handleOpenModal(
-          "Well done!",
-          <Success
-            game={game}
-            isReplay={alreadyCompletedThisPuzzleToday}
-            handleChangePuzzle={changeSolutionSize}
-          />
-        );
-      }, 500);
+      handleOpenModal(
+        "Well done!",
+        <Success
+          game={game}
+          isReplay={alreadyCompletedThisPuzzleToday}
+          handleChangePuzzle={changeSolutionSize}
+        />
+      );
     }
   }, [
     gameState,
