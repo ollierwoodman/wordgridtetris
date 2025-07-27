@@ -22,10 +22,10 @@ const useShare = () => {
   const share = async (text = "", url = "") => {
     if (canShare) {
       try {
-        // using title and text to cater to iOS as per https://adactio.com/journal/15972
+        // using text and url with space as per https://developer.apple.com/forums/thread/724641
         await navigator.share({
-          title: text,
-          url: url,
+          text: text,
+          url: `${url} `,
         }).then(() => {
           trackGoal(GOAL_IDS.CLICKED_SHARE_BUTTON);
         });
