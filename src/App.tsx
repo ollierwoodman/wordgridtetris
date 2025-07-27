@@ -87,7 +87,7 @@ function App() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [solutionSize, loading]);
+  }, [solutionSize]);
 
   const handleThemeReveal = useCallback(() => {
     if (gameState?.isThemeRevealed) {
@@ -109,7 +109,7 @@ function App() {
       setShowConfetti(true);
       setShowSuccessButton(true);
       playPuzzleComplete();
-
+      
       if (!alreadyCompletedThisPuzzleToday) {
         addPuzzle({
           date: new Date().toISOString().split("T")[0],
@@ -119,6 +119,8 @@ function App() {
           timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
         });
       }
+      
+      revealTheme();
 
       setTimeout(() => {
         handleOpenModal(
@@ -139,6 +141,7 @@ function App() {
     playPuzzleComplete,
     alreadyCompletedThisPuzzleToday,
     changeSolutionSize,
+    revealTheme,
   ]);
 
   const handleOpenModal = (header: string, content: React.ReactNode) => {
