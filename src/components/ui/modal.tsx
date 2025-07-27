@@ -47,8 +47,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children,
       
       {/* Modal */}
       <div className={cn(
-        "relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col p-4 m-4 transition-all duration-200 ease-out",
-        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95",
+        "relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col p-4 m-8 transition-all duration-200 ease-out",
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95 motion-reduce:scale-100",
         className
       )}>
         {/* Header */}
