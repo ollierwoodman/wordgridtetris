@@ -120,14 +120,16 @@ function App() {
         });
       }
 
-      handleOpenModal(
-        "Well done!",
-        <Success
-          game={game}
-          isReplay={alreadyCompletedThisPuzzleToday}
-          handleChangePuzzle={changeSolutionSize}
-        />
-      );
+      setTimeout(() => {
+        handleOpenModal(
+          "Well done!",
+          <Success
+            game={game}
+            isReplay={alreadyCompletedThisPuzzleToday}
+            handleChangePuzzle={changeSolutionSize}
+          />
+        );
+      }, 500);
     }
   }, [
     gameState,
