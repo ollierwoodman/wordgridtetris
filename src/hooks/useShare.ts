@@ -19,12 +19,12 @@ const useShare = () => {
     }
   };
 
-  // title is often ignored, url is by default the current page
   const share = async (text = "", url = "") => {
     if (canShare) {
       try {
+        // using title and text to cater to iOS as per https://adactio.com/journal/15972
         await navigator.share({
-          text: text,
+          title: text,
           url: url,
         }).then(() => {
           trackGoal(GOAL_IDS.CLICKED_SHARE_BUTTON);
