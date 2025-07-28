@@ -3,30 +3,36 @@ import { SOLUTION_SIZES } from "../game/logic";
 
 const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
 const MIN_SOLUTION_SIZE = Math.min(...SOLUTION_SIZES);
+const DEFAULT_SOLUTION_SIZE = 5; // Base path should go to 5x5
 
 export function useSolutionSizeFromURL() {
-  const [solutionSize, setSolutionSize] = useState<number>(MIN_SOLUTION_SIZE);
+  const [solutionSize, setSolutionSize] = useState<number>(DEFAULT_SOLUTION_SIZE);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const [shouldShow404, setShouldShow404] = useState<boolean>(false);
 
   // Function to parse solution size from URL
   const parseSolutionSizeFromURL = useCallback(() => {
     const path = window.location.pathname;
+    
+    // Handle base path - redirect to 5x5
+    if (path === '/') {
+      window.history.replaceState({}, '', '/5x5');
+      return DEFAULT_SOLUTION_SIZE;
+    }
+    
     const match = /^\/(\d+)x\d+$/.exec(path);
     
     if (match) {
       const size = parseInt(match[1]);
       // Validate that the size is within allowed range
-      if (size >= MIN_SOLUTION_SIZE && size <= MAX_SOLUTION_SIZE) {
+      if (size >= MIN_SOLUTION_SIZE && size <= MAX_SOLUTION_SIZE && SOLUTION_SIZES.includes(size)) {
         return size;
       }
     }
     
-    // If no valid URL pattern or invalid size, redirect to default
-    if (path !== `/${MIN_SOLUTION_SIZE.toString()}x${MIN_SOLUTION_SIZE.toString()}`) {
-      window.history.replaceState({}, '', `/${MIN_SOLUTION_SIZE.toString()}x${MIN_SOLUTION_SIZE.toString()}`);
-    }
-    
-    return MIN_SOLUTION_SIZE; // Default fallback
+    // Invalid path - should show 404
+    setShouldShow404(true);
+    return DEFAULT_SOLUTION_SIZE;
   }, []);
 
   // Initialize solution size from URL on mount
@@ -39,6 +45,7 @@ export function useSolutionSizeFromURL() {
   // Listen for browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
+      setShouldShow404(false); // Reset 404 state
       const size = parseSolutionSizeFromURL();
       setSolutionSize(size);
     };
@@ -51,7 +58,7 @@ export function useSolutionSizeFromURL() {
 
   // Update URL when solution size changes (only after initialization)
   useEffect(() => {
-    if (!isInitialized) return; // Skip during initialization
+    if (!isInitialized || shouldShow404) return; // Skip during initialization or 404 state
     
     const currentPath = window.location.pathname;
     const newPath = `/${solutionSize.toString()}x${solutionSize.toString()}`;
@@ -64,11 +71,12 @@ export function useSolutionSizeFromURL() {
         newPath
       );
     }
-  }, [solutionSize, isInitialized]);
+  }, [solutionSize, isInitialized, shouldShow404]);
 
   // Function to manually change solution size (for level up/down)
   const changeSolutionSize = useCallback((newSize: number) => {
-    if (newSize >= MIN_SOLUTION_SIZE && newSize <= MAX_SOLUTION_SIZE) {
+    if (newSize >= MIN_SOLUTION_SIZE && newSize <= MAX_SOLUTION_SIZE && SOLUTION_SIZES.includes(newSize)) {
+      setShouldShow404(false); // Reset 404 state when manually changing size
       setSolutionSize(newSize);
     }
   }, []);
@@ -77,7 +85,6 @@ export function useSolutionSizeFromURL() {
     solutionSize,
     isInitialized,
     changeSolutionSize,
-    canLevelUp: solutionSize < MAX_SOLUTION_SIZE,
-    canLevelDown: solutionSize > MIN_SOLUTION_SIZE,
+    shouldShow404,
   };
 } 
