@@ -120,8 +120,6 @@ function App() {
         });
       }
 
-      revealTheme();
-
       handleOpenModal(
         "Well done!",
         <Success
@@ -272,7 +270,7 @@ function App() {
                 </span>
               </>
             }
-            isFlipped={gameState.isThemeRevealed}
+            isFlipped={gameState.isThemeRevealed || gameState.isCompleted}
             onClick={handleThemeReveal}
           />
         </div>
