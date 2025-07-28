@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { Game } from "../game/logic";
 import type { Piece } from "../types/game";
-import { useGameSounds } from "./sounds";
+import { useGameSounds } from "./useSounds";
 
 export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }: {
   game: Game;

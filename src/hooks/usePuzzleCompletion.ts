@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
-import { useGameSounds } from "./sounds";
+import { useGameSounds } from "./useSounds";
 import { useCompletedPuzzlesManager } from "./useLocalStorage";
 import { useTrackCompletedPuzzle } from "./useTrackGoals";
 

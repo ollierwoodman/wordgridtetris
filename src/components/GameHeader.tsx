@@ -1,7 +1,7 @@
 import { cn } from "@sglara/cn";
 import { TrophyIcon } from "lucide-react";
 import { BigRoundButton } from "./ui/bigRoundButton";
-import { useGameSounds } from "../hooks/sounds";
+import { useGameSounds } from "../hooks/useSounds";
 import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 
 interface GameHeaderProps {

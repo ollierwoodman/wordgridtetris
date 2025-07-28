@@ -1,7 +1,7 @@
 import { LightbulbIcon } from "lucide-react";
 import FlippableCard from "./ui/flippableCard";
 import { useCallback } from "react";
-import { useGameSounds } from "../hooks/sounds";
+import { useGameSounds } from "../hooks/useSounds";
 import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 import type { GameState } from "../types/game";
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
 import { getCurrentDateSeed } from "../game/puzzle/random";
-import { useGameSounds } from "./sounds";
+import { useGameSounds } from "./useSounds";
 
 export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed()) {
   const [game, setGame] = useState<Game | null>(null);

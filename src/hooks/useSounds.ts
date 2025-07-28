@@ -16,7 +16,7 @@ const SOUND_PATHS = {
 // Sound configuration options
 const SOUND_OPTIONS = {
   volume: 0.5,
-  interrupt: true,
+  interrupt: false,
 } as const;
 
 // Sound context type
@@ -52,6 +52,8 @@ export function useGameSounds() {
 
   const [playDragClick] = useSound(SOUND_PATHS.DRAG_CLICK, {
     ...SOUND_OPTIONS,
+    volume: SOUND_OPTIONS.volume * 0.5,
+    playbackRate: 2,
     soundEnabled: !isMuted,
   });
 

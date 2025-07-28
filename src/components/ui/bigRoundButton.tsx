@@ -1,5 +1,5 @@
 import { cn } from "@sglara/cn";
-import { useGameSounds } from "../../hooks/sounds";
+import { useGameSounds } from "../../hooks/useSounds";
 
 export const BigRoundButton: React.FC<{
   title: string;

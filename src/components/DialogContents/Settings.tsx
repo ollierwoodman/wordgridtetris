@@ -7,7 +7,7 @@ import {
   VolumeOffIcon,
   XSquareIcon,
 } from "lucide-react";
-import { useGameSounds, useSoundContext } from "../../hooks/sounds";
+import { useGameSounds, useSoundContext } from "../../hooks/useSounds";
 import { useTheme } from "../../hooks/useTheme";
 import { useSolutionSizeFromURL } from "../../hooks/useSolutionSizeFromURL";
 import { SOLUTION_SIZES } from "../../game/logic";
@@ -29,7 +29,9 @@ const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
   };
 
   const handleSoundToggle = () => {
-    playMenuClick();
+    playMenuClick({
+      forceSoundEnabled: true,
+    });
     setIsMuted(!isMuted);
   };
 

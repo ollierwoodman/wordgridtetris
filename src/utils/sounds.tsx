@@ -1,5 +1,5 @@
 import { useIsMuted } from "../hooks/useLocalStorage";
-import { SoundContext } from "../hooks/sounds";
+import { SoundContext } from "../hooks/useSounds";
 
 // Sound provider component
 interface SoundProviderProps {
