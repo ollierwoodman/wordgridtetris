@@ -300,16 +300,6 @@
     ]
   },
   {
-    "theme": "in the desert",
-    "words": [
-      "oasis",
-      "sands",
-      "dusty",
-      "dunes",
-      "hilly"
-    ]
-  },
-  {
     "theme": "water in nature",
     "words": [
       "creek",
@@ -420,7 +410,7 @@
     ]
   },
   {
-    "theme": "objects in the bedroom",
+    "theme": "in the bedroom",
     "words": [
       "alarm",
       "couch",
@@ -467,6 +457,220 @@
       "swims",
       "walks",
       "jumps"
+    ]
+  },
+  {
+    "theme": "at the park",
+    "words": [
+      "bench",
+      "birch",
+      "trail",
+      "shrub",
+      "stump",
+      "plant",
+      "puppy",
+      "child"
+    ]
+  },
+  {
+    "theme": "in a museum",
+    "words": [
+      "mural",
+      "guide",
+      "image",
+      "photo",
+      "model",
+      "foyer",
+      "award",
+      "piece",
+      "stone"
+    ]
+  },
+  {
+    "theme": "in a castle",
+    "words": [
+      "tower",
+      "armor",
+      "crown",
+      "spire",
+      "sword",
+      "chest",
+      "queen",
+      "vault",
+      "cloak",
+      "chain"
+    ]
+  },
+  {
+    "theme": "in the library",
+    "words": [
+      "shelf",
+      "bible",
+      "album",
+      "novel",
+      "movie",
+      "staff",
+      "media"
+    ]
+  },
+  {
+    "theme": "in the city",
+    "words": [
+      "tower",
+      "mural",
+      "mayor",
+      "metro",
+      "condo",
+      "sedan",
+      "hotel",
+      "truck",
+      "train",
+      "alley"
+    ]
+  },
+  {
+    "theme": "around town",
+    "words": [
+      "mayor",
+      "house",
+      "diner",
+      "hotel",
+      "motel",
+      "baker",
+      "store"
+    ]
+  },
+  {
+    "theme": "buildings in a village",
+    "words": [
+      "manor",
+      "house",
+      "shack",
+      "motel",
+      "cabin",
+      "lodge",
+      "store"
+    ]
+  },
+  {
+    "theme": "in a forest",
+    "words": [
+      "plant",
+      "birch",
+      "beech",
+      "fauna",
+      "fruit",
+      "shrub",
+      "woody",
+      "aspen",
+      "creek",
+      "river",
+      "water",
+      "swamp",
+      "trail",
+      "fungi",
+      "skunk",
+      "stump",
+      "cedar",
+      "finch",
+      "trunk",
+      "eagle",
+      "earth"
+    ]
+  },
+  {
+    "theme": "in the desert",
+    "words": [
+      "snake",
+      "shrub",
+      "cacti",
+      "camel",
+      "oasis"
+    ]
+  },
+  {
+    "theme": "in a jungle",
+    "words": [
+      "snake",
+      "plant",
+      "tiger",
+      "shrub",
+      "water",
+      "fruit",
+      "river",
+      "swamp",
+      "earth",
+      "flood"
+    ]
+  },
+  {
+    "theme": "in a lab",
+    "words": [
+      "probe",
+      "label",
+      "flask",
+      "fluid",
+      "smear",
+      "laser",
+      "image",
+      "paper",
+      "meter",
+      "vitro",
+      "prism",
+      "metal",
+      "paint"
+    ]
+  },
+  {
+    "theme": "at school",
+    "words": [
+      "teach",
+      "tutor",
+      "board",
+      "grade",
+      "paper",
+      "chair",
+      "study",
+      "chalk",
+      "staff",
+      "lunch",
+      "essay",
+      "sheet",
+      "table",
+      "learn",
+      "pupil"
+    ]
+  },
+  {
+    "theme": "in a classroom",
+    "words": [
+      "chalk",
+      "tutor",
+      "paper",
+      "grade",
+      "teach",
+      "study",
+      "board",
+      "chair",
+      "shelf",
+      "pupil",
+      "sheet",
+      "table"
+    ]
+  },
+  {
+    "theme": "on a construction site",
+    "words": [
+      "crane",
+      "steel",
+      "build",
+      "tower",
+      "drill",
+      "brick",
+      "truck",
+      "metal",
+      "frame",
+      "scrap"
     ]
   }
 ]

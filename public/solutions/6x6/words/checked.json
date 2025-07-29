@@ -298,5 +298,220 @@
       "eating",
       "making"
     ]
+  },
+  {
+    "theme": "in a hospital",
+    "words": [
+      "doctor",
+      "clinic",
+      "saline",
+      "pillow",
+      "needle",
+      "tissue",
+      "bottle"
+    ]
+  },
+  {
+    "theme": "jail",
+    "words": [
+      "warden",
+      "prison",
+      "inmate",
+      "police",
+      "robber",
+      "secure",
+      "escape",
+      "patrol",
+      "lawyer"
+    ]
+  },
+  {
+    "theme": "at church",
+    "words": [
+      "shrine",
+      "clergy",
+      "priest",
+      "pulpit",
+      "chapel",
+      "pastor",
+      "parish",
+      "bishop",
+      "statue",
+      "sermon",
+      "prayer",
+      "ritual",
+      "anoint",
+      "gospel"
+    ]
+  },
+  {
+    "theme": "at the movies",
+    "words": [
+      "screen",
+      "cinema",
+      "ticket",
+      "viewer",
+      "action",
+      "credit"
+    ]
+  },
+  {
+    "theme": "at the beach",
+    "words": [
+      "surfer",
+      "paddle",
+      "sandal",
+      "bikini",
+      "marine",
+      "pebble",
+      "splash",
+      "oyster",
+      "harbor",
+      "marina",
+      "castle"
+    ]
+  },
+  {
+    "theme": "at the zoo",
+    "words": [
+      "animal",
+      "mammal",
+      "rabbit",
+      "ferret",
+      "parrot",
+      "monkey",
+      "donkey",
+      "jaguar",
+      "coyote",
+      "cougar",
+      "falcon",
+      "lizard",
+      "gibbon",
+      "weasel",
+      "spider",
+      "iguana",
+      "beaver",
+      "pigeon",
+      "turtle",
+      "keeper"
+    ]
+  },
+  {
+    "theme": "at the gym",
+    "words": [
+      "locker",
+      "muscle",
+      "cardio",
+      "karate",
+      "roller",
+      "physio",
+      "crunch",
+      "sweaty"
+    ]
+  },
+  {
+    "theme": "at the mall",
+    "words": [
+      "retail",
+      "basket",
+      "burger",
+      "eatery",
+      "toilet",
+      "liquor",
+      "luxury"
+    ]
+  },
+  {
+    "theme": "in a stadium",
+    "words": [
+      "hockey",
+      "soccer",
+      "ticket",
+      "trophy",
+      "tackle",
+      "anthem",
+      "record",
+      "player",
+      "injury",
+      "mascot",
+      "dugout",
+      "statue"
+    ]
+  },
+  {
+    "theme": "in a cafe",
+    "words": [
+      "coffee",
+      "pastry",
+      "toffee",
+      "teacup",
+      "waiter",
+      "muffin",
+      "recipe",
+      "teapot",
+      "pepper"
+    ]
+  },
+  {
+    "theme": "at an airport",
+    "words": [
+      "runway",
+      "flight",
+      "travel",
+      "ticket",
+      "pickup",
+      "toilet",
+      "tarmac"
+    ]
+  },
+  {
+    "theme": "in a restaurant",
+    "words": [
+      "waiter",
+      "buffet",
+      "dinner",
+      "napkin",
+      "supper",
+      "cheese",
+      "burger",
+      "hungry",
+      "shrimp",
+      "pantry",
+      "recipe",
+      "entree"
+    ]
+  },
+  {
+    "theme": "in a bar",
+    "words": [
+      "liquor",
+      "whisky",
+      "bottle",
+      "toilet",
+      "scotch",
+      "cellar",
+      "barrel",
+      "mojito",
+      "patron",
+      "lounge",
+      "brandy"
+    ]
+  },
+  {
+    "theme": "car stuff",
+    "words": [
+      "mirror",
+      "airbag",
+      "bumper",
+      "bonnet",
+      "fender",
+      "stereo",
+      "window",
+      "engine",
+      "garage",
+      "clutch",
+      "buckle",
+      "camera"
+    ]
   }
 ]

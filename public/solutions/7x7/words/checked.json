@@ -59,22 +59,6 @@
     ]
   },
   {
-    "theme": "winter",
-    "words": [
-      "sweater",
-      "freezer",
-      "frosted",
-      "coldest",
-      "holiday",
-      "snowcap",
-      "snowman",
-      "climate",
-      "glacier",
-      "chilled",
-      "weather"
-    ]
-  },
-  {
     "theme": "breakfast",
     "words": [
       "granola",
@@ -84,18 +68,6 @@
       "eggroll",
       "oatmeal",
       "pancake"
-    ]
-  },
-  {
-    "theme": "italian food",
-    "words": [
-      "tuscany",
-      "italian",
-      "bologna",
-      "risotto",
-      "paretta",
-      "ravioli",
-      "sausage"
     ]
   },
   {
@@ -148,55 +120,454 @@
       "terrain",
       "scenery"
     ]
-  },
-  {
-    "theme": "computers",
+  },{
+    "theme": "in a plane",
     "words": [
-      "printer",
-      "program",
-      "monitor",
-      "robotic",
-      "digital",
-      "desktop",
-      "network",
-      "scanner",
-      "science",
-      "machine"
+      "cockpit",
+      "steward",
+      "luggage",
+      "baggage",
+      "handbag",
+      "copilot",
+      "surface",
+      "storage",
+      "cushion",
+      "captain"
     ]
   },
   {
-    "theme": "space",
+    "theme": "trains",
     "words": [
-      "gravity",
-      "orbital",
-      "voyager",
-      "distant",
+      "railway",
+      "freight",
+      "trolley",
+      "station",
+      "conduct",
+      "railcar",
+      "caboose",
+      "commute"
+    ]
+  },
+  {
+    "theme": "bus",
+    "words": [
+      "vehicle",
+      "traffic",
       "shuttle",
-      "science",
-      "neptune",
+      "service",
+      "commute",
+      "station",
+      "shelter"
+    ]
+  },
+  {
+    "theme": "in the kitchen",
+    "words": [
+      "utensil",
+      "skillet",
+      "chicken",
+      "toaster",
+      "pancake",
+      "freezer",
+      "dessert",
+      "cabinet",
+      "grocery",
+      "steamer",
+      "platter",
+      "griddle",
+      "sausage",
+      "grinder"
+    ]
+  },
+  {
+    "theme": "in the bathroom",
+    "words": [
+      "hygiene",
+      "bathtub",
+      "shampoo",
+      "curtain",
+      "plumber",
+      "cologne",
+      "perfume",
+      "cabinet",
+      "plunger"
+    ]
+  },
+  {
+    "theme": "in the living room",
+    "words": [
+      "curtain",
+      "cushion",
+      "armoire",
+      "cabinet",
+      "blanket",
+      "ottoman",
+      "speaker"
+    ]
+  },
+  {
+    "theme": "in the garden",
+    "words": [
+      "planter",
+      "foliage",
+      "thistle",
+      "compost",
+      "walkway",
+      "nursery",
+      "cabbage",
+      "pumpkin"
+    ]
+  },
+  {
+    "theme": "in the office",
+    "words": [
+      "printer",
+      "desktop",
+      "machine",
+      "cubicle",
+      "monitor",
+      "stapler",
+      "manager",
+      "storage",
+      "scanner"
+    ]
+  },
+  {
+    "theme": "cold weather",
+    "words": [
+      "sweater",
+      "snowman",
+      "glacier",
+      "blanket",
+      "drizzle",
+      "defrost",
+      "iceberg",
+      "penguin"
+    ]
+  },
+  {
+    "theme": "computing",
+    "words": [
+      "machine",
+      "desktop",
+      "storage",
+      "upgrade",
+      "monitor",
+      "digital",
+      "install",
+      "silicon",
+      "battery",
+      "console",
+      "onboard",
+      "printer",
+      "charger",
+      "headset",
+      "browser",
+      "network",
+      "malware",
+      "website"
+    ]
+  },
+  {
+    "theme": "energy",
+    "words": [
+      "turbine",
+      "reactor",
+      "propane",
+      "current",
+      "thermal",
+      "radiate",
+      "nuclear",
+      "furnace",
+      "utility",
+      "breaker",
+      "battery",
+      "voltage",
+      "circuit"
+    ]
+  },
+  {
+    "theme": "coding",
+    "words": [
+      "compute",
+      "program",
+      "bracket",
+      "command",
+      "operate",
+      "recurse",
+      "iterate",
+      "algebra",
+      "pattern",
+      "inverse",
+      "formula",
+      "console",
+      "graphic",
+      "declare",
+      "segment",
+      "keyword",
+      "feature",
+      "convert",
+      "pointer",
+      "exploit",
+      "counter",
+      "compile",
+      "element",
+      "network"
+    ]
+  },
+  {
+    "theme": "out in space",
+    "words": [
       "jupiter",
+      "voyager",
+      "stellar",
+      "orbiter",
+      "martian",
+      "gravity",
+      "neptune",
+      "orbital",
+      "shuttle",
+      "mission",
+      "science",
+      "galileo",
+      "eclipse",
+      "sputnik",
       "mercury"
+    ]
+  },
+  {
+    "theme": "elemental",
+    "words": [
+      "element",
+      "mercury",
+      "uranium",
+      "arsenic",
+      "isotope",
+      "chemist",
+      "science",
+      "neutron",
+      "silicon",
+      "iridium",
+      "lithium",
+      "nitrate",
+      "carbide",
+      "sulfate"
     ]
   },
   {
     "theme": "chemistry",
     "words": [
-      "isotope",
-      "arsenic",
-      "uranium",
-      "polymer",
+      "chemist",
+      "acidity",
+      "science",
       "solvent",
+      "dioxide",
+      "benzene",
       "ammonia",
       "mineral",
+      "nuclear",
+      "uranium",
+      "organic",
+      "methane",
+      "crystal",
+      "reactor",
+      "acetone",
       "mixture",
-      "chemist",
+      "product",
+      "polymer",
+      "alcohol",
+      "element",
+      "sulfate",
+      "nitrate",
+      "isotope",
+      "protein",
+      "ethanol",
+      "neutron",
+      "silicon",
+      "potency",
       "thermal",
       "mercury",
-      "methane",
-      "neutron",
-      "acetate",
-      "acidity",
-      "science"
+      "arsenic",
+      "iridium"
+    ]
+  },
+  {
+    "theme": "physics",
+    "words": [
+      "gravity",
+      "science",
+      "kinetic",
+      "inertia",
+      "tension",
+      "impulse",
+      "elastic",
+      "current",
+      "nuclear",
+      "density",
+      "collide",
+      "attract",
+      "buoyant",
+      "reactor"
+    ]
+  },
+  {
+    "theme": "biology",
+    "words": [
+      "genetic",
+      "biotech",
+      "science",
+      "protein",
+      "sterile",
+      "disease",
+      "microbe",
+      "anatomy",
+      "progeny",
+      "mutagen",
+      "organic",
+      "zoology",
+      "medical",
+      "glucose"
+    ]
+  },
+  {
+    "theme": "medicine",
+    "words": [
+      "medical",
+      "patient",
+      "syringe",
+      "capsule",
+      "aspirin",
+      "vicodin",
+      "tylenol",
+      "ritalin",
+      "surgery",
+      "surgeon",
+      "bandage",
+      "anthrax",
+      "steroid",
+      "swollen",
+      "therapy",
+      "chemist",
+      "insulin",
+      "placebo"
+    ]
+  },
+  {
+    "theme": "math",
+    "words": [
+      "algebra",
+      "compute",
+      "formula",
+      "inverse",
+      "tangent",
+      "problem",
+      "diagram",
+      "epsilon",
+      "decimal",
+      "radical",
+      "bracket",
+      "complex",
+      "finance",
+      "pattern"
+    ]
+  },
+  {
+    "theme": "music",
+    "words": [
+      "musical",
+      "melodic",
+      "pianist",
+      "lyrical",
+      "trumpet",
+      "harmony",
+      "quartet",
+      "karaoke",
+      "recital",
+      "soloist",
+      "concert",
+      "cadence",
+      "speaker",
+      "drummer",
+      "lullaby",
+      "bagpipe",
+      "ovation",
+      "passion",
+      "compose",
+      "prelude"
+    ]
+  },
+  {
+    "theme": "musical instruments",
+    "words": [
+      "trumpet",
+      "bagpipe",
+      "piccolo",
+      "bassoon",
+      "ukulele",
+      "cowbell",
+      "handpan",
+      "kalimba",
+      "marimba",
+      "shekere",
+      "guzheng"
+    ]
+  },
+  {
+    "theme": "theater",
+    "words": [
+      "musical",
+      "curtain",
+      "costume",
+      "perform",
+      "program",
+      "tragedy",
+      "macbeth",
+      "gallery"
+    ]
+  },
+  {
+    "theme": "film genres",
+    "words": [
+      "fiction",
+      "tragedy",
+      "cartoon",
+      "comedic",
+      "musical",
+      "romance",
+      "mystery",
+      "fantasy"
+    ]
+  },
+  {
+    "theme": "photography",
+    "words": [
+      "shutter",
+      "footage",
+      "scenery",
+      "optical",
+      "gallery",
+      "picture",
+      "capture",
+      "hotshoe",
+      "digital",
+      "project",
+      "printer",
+      "develop"
+    ]
+  },
+  {
+    "theme": "related to pirates",
+    "words": [
+      "captain",
+      "sparrow",
+      "skipper",
+      "harbour",
+      "lookout",
+      "admiral",
+      "rowboat",
+      "smuggle",
+      "fortune",
+      "dubloon"
     ]
   }
 ]
