@@ -45,6 +45,17 @@ export function formatDateHowLongAgo(date: string): string {
   }
 }
 
+/**
+ * Gets the current date in YYYY-MM-DD format using local timezone
+ * This ensures "today" aligns with user's perception regardless of timezone
+ */
+export function getLocalDateString(date: Date = new Date()): string {
+  const year = String(date.getFullYear());
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function getPieceColor(pieceIndex: number) {
   const colors = [
     "z-10 bg-cyan-600 inset-shadow-sm inset-shadow-white/50 dark:bg-cyan-800 dark:inset-shadow-white/40",

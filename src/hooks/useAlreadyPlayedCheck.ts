@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCompletedPuzzlesManager, type CompletedPuzzle } from "./useLocalStorage";
+import { getLocalDateString } from "../utils/game";
 
 interface UseAlreadyPlayedCheckParams {
   isInitialized: boolean;
@@ -19,7 +20,7 @@ export const useAlreadyPlayedCheck = ({
   useEffect(() => {
     if (isInitialized && hasCompletedTodayWithSize(solutionSize)) {
       const puzzle = getPuzzleByDateAndSize(
-        new Date().toISOString().split("T")[0],
+        getLocalDateString(),
         solutionSize
       );
       if (puzzle) {

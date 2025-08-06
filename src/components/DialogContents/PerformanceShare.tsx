@@ -4,7 +4,7 @@ import {
   SquareCheckBigIcon,
   SquareIcon,
 } from "lucide-react";
-import { formatDurationMs } from "../../utils/game";
+import { formatDurationMs, getLocalDateString } from "../../utils/game";
 import useShare from "../../hooks/useShare";
 import { SOLUTION_SIZES } from "../../game/logic";
 import {
@@ -44,7 +44,7 @@ export function PerformanceShare({
               const strSize = size.toString();
               const puzzle = getPuzzleCompletionByDateAndSize(
                 completedPuzzles,
-                new Date().toISOString().split("T")[0],
+                getLocalDateString(),
                 size
               );
               const isCompleted = !!puzzle;
@@ -126,7 +126,7 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     const strSize = size.toString();
     const puzzle = getPuzzleCompletionByDateAndSize(
       completedPuzzles,
-      new Date().toISOString().split("T")[0],
+      getLocalDateString(),
       size
     );
     if (puzzle) {

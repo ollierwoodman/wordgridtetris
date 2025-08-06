@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SOLUTION_SIZES } from '../game/logic';
+import { getLocalDateString } from '../utils/game';
 
 // Storage keys for the application
 export const STORAGE_KEYS = {
@@ -153,12 +154,12 @@ export function getPuzzleCompletionByDateAndSize(
 }
 
 export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[]): boolean {
-  const today = new Date().toISOString().split("T")[0];
+  const today = getLocalDateString();
   return puzzles.some(puzzle => puzzle.date === today);
 }
 
 export function hasCompletedPuzzleTodayWithSize(puzzles: CompletedPuzzle[], solutionSize: number): boolean {
-  const today = new Date().toISOString().split("T")[0];
+  const today = getLocalDateString();
   return puzzles.some(puzzle => puzzle.date === today && puzzle.solutionSize === solutionSize);
 }
 
@@ -186,7 +187,7 @@ export function useCompletedPuzzlesManager() {
   }, [completedPuzzles]);
 
   const getTodaysPuzzles = useCallback(() => {
-    return SOLUTION_SIZES.map((size) => getPuzzleCompletionByDateAndSize(completedPuzzles, new Date().toISOString().split("T")[0], size));
+    return SOLUTION_SIZES.map((size) => getPuzzleCompletionByDateAndSize(completedPuzzles, getLocalDateString(), size));
   }, [completedPuzzles]);
 
   const hasCompletedToday = useCallback(() => {

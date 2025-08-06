@@ -4,6 +4,7 @@ import type { GameState } from "../types/game";
 import { useGameSounds } from "./useSounds";
 import { useCompletedPuzzlesManager } from "./useLocalStorage";
 import { useTrackCompletedPuzzle } from "./useTrackGoals";
+import { getLocalDateString } from "../utils/game";
 
 interface UsePuzzleCompletionParams {
   game: Game | null;
@@ -44,7 +45,7 @@ export const usePuzzleCompletion = ({
 
       if (!alreadyCompletedThisPuzzleToday) {
         addPuzzle({
-          date: new Date().toISOString().split("T")[0],
+          date: getLocalDateString(),
           solutionSize: game.getSolutionSize(),
           theme: game.getWordTheme(),
           isThemeRevealed: gameState.isThemeRevealed,
