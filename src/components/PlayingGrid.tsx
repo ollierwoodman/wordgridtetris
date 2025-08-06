@@ -54,8 +54,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
         {
           "gap-[6px]": gridSize === 10,
           "gap-[4px]": gridSize === 11,
-          "gap-[2px]": gridSize === 12,
-          "gap-[0px]": gridSize > 12,
+          "gap-[2px]": gridSize > 11,
         }
       )}
       style={{
@@ -114,7 +113,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
                     </div>
                   )}
                   {tileState.letter && (
-                    <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                    <span className="text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl leading-0">
                       {tileState.letter}
                     </span>
                   )}
@@ -122,7 +121,7 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
               )}
             {tileState.isEmptyTile && (
               <>
-                <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                <span className="text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl leading-0">
                   {tileState.letter}
                 </span>
                 <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
