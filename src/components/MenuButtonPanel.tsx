@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BarChart2Icon,
   GraduationCapIcon,
@@ -33,6 +33,13 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
   handleChangePuzzle,
 }) => {
   const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
+
+  useEffect(() => {
+    if (!hasSeenTutorial) {
+      onOpenModal("Tutorial", <Tutorial game={game} />);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasSeenTutorial]);
 
   const trackGoal = useTrackMatomoGoalById();
 
