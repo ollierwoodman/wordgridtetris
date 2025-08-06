@@ -1,9 +1,6 @@
 import { toast } from "sonner";
-import { GOAL_IDS, useTrackMatomoGoalById } from "./useTrackGoals";
 
 const useShare = () => {
-  const trackGoal = useTrackMatomoGoalById();
-
   const canShare = !!navigator.share as boolean;
 
   const copy = async (text: string) => {
@@ -26,8 +23,6 @@ const useShare = () => {
         await navigator.share({
           text: text,
           url: `${url} `,
-        }).then(() => {
-          trackGoal(GOAL_IDS.CLICKED_SHARE_BUTTON);
         });
       } catch (error) {
         console.error("Error sharing:", error);
@@ -35,9 +30,7 @@ const useShare = () => {
       }
     } else {
       console.error("Web Share API not supported");
-      void copy(url).then(() => {
-        trackGoal(GOAL_IDS.CLICKED_COPY_BUTTON);
-      });
+      void copy(url);
     }
   };
 

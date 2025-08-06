@@ -13,6 +13,7 @@ import {
   type CompletedPuzzle,
 } from "../../hooks/useLocalStorage";
 import { cn } from "@sglara/cn";
+import { GOAL_IDS, useTrackMatomoGoalById } from "../../hooks/useTrackGoals";
 
 const URL = "https://blockle.au";
 
@@ -24,6 +25,7 @@ export function PerformanceShare({
   handleChangePuzzle,
 }: PerformanceShareProps) {
   const { copy, share, canShare } = useShare();
+  const trackGoal = useTrackMatomoGoalById();
 
   const { completedPuzzles } = useCompletedPuzzlesManager();
 
@@ -86,6 +88,7 @@ export function PerformanceShare({
           <button
             type="button"
             onClick={() => {
+              trackGoal(GOAL_IDS.CLICKED_COPY_BUTTON);
               void copy(copyText);
             }}
             className={cn(
@@ -102,6 +105,7 @@ export function PerformanceShare({
             <button
               type="button"
               onClick={() => {
+                trackGoal(GOAL_IDS.CLICKED_SHARE_BUTTON);
                 void share(shareText, URL);
               }}
               className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:opacity-80"
