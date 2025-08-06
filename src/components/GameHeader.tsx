@@ -51,7 +51,7 @@ export const GameHeader = ({
         {showSuccessButton && (
           <BigRoundButton
             title="Open share"
-            className="bg-yellow-600 dark:bg-yellow-800"
+            className="bg-yellow-600 dark:bg-yellow-800 animate-bounce reduce-motion:animate-none"
             onClick={handleSuccessClick}
           >
             <TrophyIcon className="size-8 md:size-10 xl:size-12" />
