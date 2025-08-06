@@ -72,7 +72,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
     const tileSize = rect.width / game.getGridSize();
     const pointerX = event.clientX - rect.left;
     const pointerY = event.clientY - rect.top;
-    const graceRadius = tileSize * 0.9;
+    const graceRadius = tileSize * 1.5;
     
     const piece = gameState.pieces[pieceIndex];
     const draggedBlock = piece.blocks[draggedBlockIndex];
