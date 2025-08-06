@@ -1,4 +1,3 @@
-import { LightbulbIcon } from "lucide-react";
 import FlippableCard from "./ui/flippableCard";
 import { useCallback } from "react";
 import { useGameSounds } from "../hooks/useSounds";
@@ -34,7 +33,6 @@ export const ThemeReveal = ({ theme, gameState, onThemeReveal }: ThemeRevealProp
         className="w-full"
         frontContent={
           <>
-            <LightbulbIcon className="size-10" />
             <span className="font-bold uppercase ml-2">
               Tap to reveal theme
             </span>
