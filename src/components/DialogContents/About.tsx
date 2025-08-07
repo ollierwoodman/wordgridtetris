@@ -43,6 +43,9 @@ export const About = () => {
           </svg>
         </a>
       </div>
+      <p className="text-center text-balance text-gray-500 dark:text-gray-400">
+        Version {__APP_VERSION__}
+      </p>
     </div>
   );
 };
