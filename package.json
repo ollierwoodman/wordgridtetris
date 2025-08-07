@@ -1,7 +1,15 @@
 {
   "name": "blockle",
-  "version": "0.9.1",
+  "version": "1.0.0",
   "type": "module",
+  "private": false,
+  "homepage": "https://blockle.au",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blockle/blockle.au"
+  },
+  "author": "Ollie Woodman",
+  "license": "BSD-3-Clause",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
