@@ -20,6 +20,8 @@ describe('Word Lists Validation', () => {
       const fullPath = path.join(process.cwd(), checkedPath);
       const wordLists = readJsonFile(checkedPath);
 
+      console.log(`Found ${(wordLists.length).toString()} word lists for ${strSolutionSize}x${strSolutionSize}`);
+
       test(`checked.json should exist for ${strSolutionSize}x${strSolutionSize}`, () => {
         expect(fs.existsSync(fullPath), 
           `Missing checked.json file for ${strSolutionSize}x${strSolutionSize} grid`)

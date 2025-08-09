@@ -672,5 +672,163 @@
       "frame",
       "scrap"
     ]
+  },
+  {
+    "theme": "in a prison",
+    "words": [
+      "guard",
+      "thief",
+      "latch",
+      "alarm",
+      "knife",
+      "shank",
+      "fence",
+      "grill",
+      "rehab",
+      "felon"
+    ]
+  },
+  {
+    "theme": "in a church",
+    "words": [
+      "altar",
+      "organ",
+      "stone",
+      "choir",
+      "grave",
+      "abbey",
+      "bible",
+      "papal"
+    ]
+  },
+  {
+    "theme": "at the cinema",
+    "words": [
+      "movie",
+      "scene",
+      "frame",
+      "video",
+      "image",
+      "drink",
+      "sound",
+      "chair",
+      "couch",
+      "foyer"
+    ]
+  },
+  {
+    "theme": "at the circus",
+    "words": [
+      "clown",
+      "stunt",
+      "arena",
+      "dance",
+      "magic"
+    ]
+  },
+  {
+    "theme": "at the beach",
+    "words": [
+      "ocean",
+      "shore",
+      "shell",
+      "coast",
+      "water",
+      "sandy",
+      "float",
+      "board",
+      "wharf",
+      "shark",
+      "scuba",
+      "towel",
+      "kayak"
+    ]
+  },
+  {
+    "theme": "at the zoo",
+    "words": [
+      "snake",
+      "tiger",
+      "camel",
+      "hyena",
+      "rhino",
+      "zebra",
+      "cobra",
+      "lemur",
+      "gecko",
+      "sloth",
+      "fence",
+      "bison",
+      "panda",
+      "squid",
+      "koala",
+      "moose",
+      "gator"
+    ]
+  },
+  {
+    "theme": "at the gym",
+    "words": [
+      "squat",
+      "wrist",
+      "dance",
+      "bench",
+      "strap",
+      "stair",
+      "exert",
+      "floor",
+      "train",
+      "towel",
+      "waist",
+      "shirt",
+      "chest",
+      "sauna",
+      "thigh",
+      "bicep",
+      "sweat"
+    ]
+  },
+  {
+    "theme": "in a stadium",
+    "words": [
+      "field",
+      "score",
+      "sport",
+      "arena",
+      "board",
+      "match",
+      "bench",
+      "pitch",
+      "mound",
+      "event",
+      "track",
+      "crowd",
+      "chant",
+      "squad",
+      "cheer",
+      "stage"
+    ]
+  },
+  {
+    "theme": "in a coffee shop",
+    "words": [
+      "latte",
+      "pizza",
+      "stool",
+      "stove",
+      "dough",
+      "grind",
+      "decaf",
+      "snack",
+      "grill",
+      "bread",
+      "flour",
+      "roast",
+      "spoon",
+      "spill",
+      "bagel",
+      "drink",
+      "cocoa"
+    ]
   }
 ]

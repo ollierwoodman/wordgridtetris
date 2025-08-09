@@ -569,5 +569,236 @@
       "fortune",
       "dubloon"
     ]
+  },
+  {
+    "theme": "breakfast",
+    "words": [
+      "pancake",
+      "toaster",
+      "cupcake",
+      "biscuit",
+      "oatmeal",
+      "yoghurt",
+      "granola",
+      "sausage",
+      "burrito"
+    ]
+  },
+  {
+    "theme": "olympics",
+    "words": [
+      "archery",
+      "athlete",
+      "gymnast",
+      "swimmer",
+      "javelin",
+      "trainer",
+      "wrestle",
+      "compete",
+      "cycling"
+    ]
+  },
+  {
+    "theme": "video games",
+    "words": [
+      "console",
+      "fallout",
+      "immerse",
+      "virtual",
+      "pokemon",
+      "shooter",
+      "control",
+      "fantasy",
+      "animate",
+      "fighter",
+      "mission"
+    ]
+  },
+  {
+    "theme": "car racing",
+    "words": [
+      "vehicle",
+      "racecar",
+      "pitstop",
+      "ferrari",
+      "mclaren",
+      "raceway",
+      "daytona"
+    ]
+  },
+  {
+    "theme": "on a car",
+    "words": [
+      "exhaust",
+      "trailer",
+      "gearbox",
+      "shifter",
+      "muffler",
+      "leather",
+      "sunroof"
+    ]
+  },
+  {
+    "theme": "on the road",
+    "words": [
+      "roadway",
+      "highway",
+      "traffic",
+      "freeway",
+      "signage",
+      "vehicle",
+      "bicycle",
+      "asphalt",
+      "cyclist",
+      "barrier",
+      "caravan",
+      "taxicab"
+    ]
+  },
+  {
+    "theme": "in the office",
+    "words": [
+      "stapler",
+      "printer",
+      "cubicle",
+      "storage",
+      "notepad",
+      "pointer",
+      "cabinet",
+      "lanyard",
+      "invoice",
+      "scanner"
+    ]
+  },
+  {
+    "theme": "cleaning",
+    "words": [
+      "hygiene",
+      "laundry",
+      "shampoo",
+      "vinegar",
+      "steamer",
+      "janitor",
+      "plunger",
+      "dustpan"
+    ]
+  },
+  {
+    "theme": "kitchen tools",
+    "words": [
+      "blender",
+      "toaster",
+      "grinder",
+      "freezer",
+      "utensil",
+      "cutlery",
+      "skillet"
+    ]
+  },
+  {
+    "theme": "clothing",
+    "words": [
+      "apparel",
+      "garment",
+      "fashion",
+      "sweater",
+      "costume",
+      "textile",
+      "laundry",
+      "uniform",
+      "flannel",
+      "leather",
+      "sneaker",
+      "spandex"
+    ]
+  },
+  {
+    "theme": "accessories",
+    "words": [
+      "jewelry",
+      "pendant",
+      "lanyard",
+      "bandana",
+      "handbag",
+      "necktie",
+      "hairpin",
+      "glasses"
+    ]
+  },
+  {
+    "theme": "exercise",
+    "words": [
+      "workout",
+      "routine",
+      "bicycle",
+      "trainer",
+      "cyclist",
+      "athlete",
+      "massage",
+      "stretch",
+      "incline",
+      "healthy"
+    ]
+  },
+  {
+    "theme": "body parts",
+    "words": [
+      "forearm",
+      "eyeball",
+      "stomach",
+      "eyebrow",
+      "abdomen",
+      "sternum",
+      "kneecap"
+    ]
+  },
+  {
+    "theme": "camping",
+    "words": [
+      "lantern",
+      "shelter",
+      "blanket",
+      "canteen",
+      "bonfire",
+      "hatchet",
+      "lighter",
+      "battery",
+      "propane",
+      "hammock"
+    ]
+  },
+  {
+    "theme": "fishing",
+    "words": [
+      "catfish",
+      "fishnet",
+      "seafood",
+      "trawler",
+      "skipper",
+      "harpoon",
+      "dolphin",
+      "lobster"
+    ]
+  },
+  {
+    "theme": "social media",
+    "words": [
+      "hashtag",
+      "twitter",
+      "myspace",
+      "content",
+      "comment",
+      "picture",
+      "account",
+      "product",
+      "blogger",
+      "website",
+      "promote",
+      "youtube",
+      "keyword",
+      "popular",
+      "profile",
+      "discord"
+    ]
   }
 ]
