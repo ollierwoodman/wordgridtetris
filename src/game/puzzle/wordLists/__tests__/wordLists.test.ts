@@ -18,6 +18,7 @@ describe('Word Lists Validation', () => {
     describe(`${strSolutionSize}x${strSolutionSize} Solution`, () => {
       const checkedPath = `public/solutions/${strSolutionSize}x${strSolutionSize}/words/checked.json`;
       const fullPath = path.join(process.cwd(), checkedPath);
+      const wordLists = readJsonFile(checkedPath);
 
       test(`checked.json should exist for ${strSolutionSize}x${strSolutionSize}`, () => {
         expect(fs.existsSync(fullPath), 
@@ -27,16 +28,13 @@ describe('Word Lists Validation', () => {
 
       const minThemesNeeded = 30;
       test(`checked.json should have at least ${minThemesNeeded.toString()} themes for ${strSolutionSize}x${strSolutionSize}`, () => {
-        const checkedWords = readJsonFile(checkedPath);
-        expect(checkedWords.length,
+        expect(wordLists.length,
           `checked.json should have at least ${minThemesNeeded.toString()} themes for ${strSolutionSize}x${strSolutionSize} grid`)
           .toBeGreaterThanOrEqual(minThemesNeeded);
       });
 
       test(`checked.json words should have length of ${strSolutionSize}`, () => {
-        const checkedWords = readJsonFile(checkedPath);
-        
-        checkedWords.forEach((theme: { theme: string; words: string[] }) => {
+        wordLists.forEach((theme: { theme: string; words: string[] }) => {
           theme.words.forEach(word => {
             expect(word.length, 
               `Word "${word}" in theme "${theme.theme}" should be ${strSolutionSize} characters long`)
@@ -45,11 +43,18 @@ describe('Word Lists Validation', () => {
         });
       });
 
+      const maxThemeStringLength = 20;
+      test(`each theme should have a maximum length of ${maxThemeStringLength.toString()} characters`, () => {
+        wordLists.forEach((theme: { theme: string; words: string[] }) => {
+          expect(theme.theme.length,
+            `Theme "${theme.theme}" in checked.json should have a maximum length of ${maxThemeStringLength.toString()} characters`)
+            .toBeLessThanOrEqual(maxThemeStringLength);
+        });
+      });
+
       test(`each theme should have enough words for a ${strSolutionSize}x${strSolutionSize} puzzle`, () => {
         const minWordsNeeded = solutionSize; // Minimum words needed equals grid size
-        const checkedWords = readJsonFile(checkedPath);
-        
-        checkedWords.forEach((theme: { theme: string; words: string[] }) => {
+        wordLists.forEach((theme: { theme: string; words: string[] }) => {
           expect(theme.words.length,
             `Theme "${theme.theme}" in checked.json should have at least ${minWordsNeeded.toString()} words`)
             .toBeGreaterThanOrEqual(minWordsNeeded);

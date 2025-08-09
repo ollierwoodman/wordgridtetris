@@ -1,12 +1,12 @@
 import { useGame } from "./hooks/useGame";
-import { MenuButtonPanel } from "./components/MenuButtonPanel";
+import { ButtonPanel } from "./components/ButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
 import { useEffect, useCallback } from "react";
 import { Modal } from "./components/ui/modal";
 import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
 import { useCompletedPuzzlesManager } from "./hooks/useLocalStorage";
-import { useSolutionSizeFromURL } from "./hooks/useSolutionSizeFromURL";
+import { usePuzzleFromURL } from "./hooks/usePuzzleFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
 import { AlreadyPlayed } from "./components/DialogContents/AlreadyPlayed";
@@ -17,13 +17,16 @@ import { useAlreadyPlayedCheck } from "./hooks/useAlreadyPlayedCheck";
 import { GameHeader } from "./components/GameHeader";
 import { ThemeReveal } from "./components/ThemeReveal";
 import { GameConfetti } from "./components/GameConfetti";
+import { HeartIcon } from "lucide-react";
+import { useGameSounds } from "./hooks/useSounds";
 
 function App() {
   // Initialize theme
   useTheme();
+  const { playMenuClick } = useGameSounds();
 
   const { solutionSize, changeSolutionSize, isInitialized, shouldShow404 } =
-    useSolutionSizeFromURL();
+    usePuzzleFromURL();
 
   const { hasCompletedTodayWithSize } = useCompletedPuzzlesManager();
 
@@ -54,12 +57,18 @@ function App() {
   });
 
   const handleChangePuzzle = useCallback(
-    (newSize: number) => {
-      changeSolutionSize(newSize);
+    (newSize?: number) => {
+      if (newSize) {
+        changeSolutionSize(newSize);
+      }
       handleCloseModal();
       resetCompletionState();
     },
-    [changeSolutionSize, handleCloseModal, resetCompletionState]
+    [
+      changeSolutionSize,
+      handleCloseModal,
+      resetCompletionState,
+    ]
   );
 
   // Handle already played modal
@@ -75,7 +84,13 @@ function App() {
     } else if (!shouldShowAlreadyPlayed) {
       handleCloseModal();
     }
-  }, [shouldShowAlreadyPlayed, completedPuzzle, handleOpenModal, handleCloseModal, handleChangePuzzle]);
+  }, [
+    shouldShowAlreadyPlayed,
+    completedPuzzle,
+    handleOpenModal,
+    handleCloseModal,
+    handleChangePuzzle,
+  ]);
 
   // Handle puzzle completion modal
   useEffect(() => {
@@ -95,7 +110,13 @@ function App() {
         handleChangePuzzle={handleChangePuzzle}
       />
     );
-  }, [gameState?.isCompleted, game, hasCompletedTodayWithSize, handleOpenModal, handleChangePuzzle]);
+  }, [
+    gameState?.isCompleted,
+    game,
+    hasCompletedTodayWithSize,
+    handleOpenModal,
+    handleChangePuzzle,
+  ]);
 
   const handleAboutClick = () => {
     handleOpenModal("About Blockle", <About />);
@@ -103,7 +124,7 @@ function App() {
 
   const handleSuccessClick = () => {
     if (!game) return;
-    
+
     const alreadyCompletedThisPuzzleToday = hasCompletedTodayWithSize(
       game.getSolutionSize()
     );
@@ -120,7 +141,11 @@ function App() {
 
   // Show 404 page for invalid URLs
   if (shouldShow404) {
-    return <NotFound />;
+    return (
+      <NotFound
+        setSolutionSize={changeSolutionSize}
+      />
+    );
   }
 
   if (!isInitialized || game === null || gameState === null || loading) {
@@ -142,9 +167,9 @@ function App() {
   );
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 p-4">
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 py-4 px-8">
       <GameConfetti show={showConfetti} solutionSize={solutionSize} />
-      
+
       <GameHeader
         showSuccessButton={showSuccessButton}
         onAboutClick={handleAboutClick}
@@ -172,15 +197,27 @@ function App() {
 
       <div className="flex flex-row justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
         {/* Button Panel */}
-        <MenuButtonPanel
+        <ButtonPanel
           updateGameState={updateGameState}
           solvePuzzle={solvePuzzle}
+          handleChangePuzzle={handleChangePuzzle}
           game={game}
           onOpenModal={handleOpenModal}
           onCloseModal={handleCloseModal}
-          handleChangePuzzle={handleChangePuzzle}
         />
       </div>
+      <button
+        type="button"
+        onClick={() => {
+          playMenuClick();
+          handleOpenModal("About Blockle", <About />);
+        }}
+        className="cursor-pointer hover:opacity-80 transition-opacity text-gray-600 dark:text-gray-300 text-sm md:text-base text-center text-balance mt-4"
+      >
+        Made with{" "}
+        <HeartIcon className="size-5 inline-block fill-gray-600 dark:fill-gray-300 -mt-1" />{" "}
+        by Ollie
+      </button>
 
       <Modal
         isOpen={isModalOpen}

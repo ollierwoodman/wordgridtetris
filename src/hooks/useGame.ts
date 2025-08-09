@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
-import { getCurrentDateSeed } from "../game/puzzle/random";
+import { getSeedFromDate } from "../game/puzzle/random";
 import { useGameSounds } from "./useSounds";
 
-export function useGame(solutionSize?: number, seed: string = getCurrentDateSeed()) {
+export function useGame(solutionSize?: number, seed: string = getSeedFromDate()) {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);

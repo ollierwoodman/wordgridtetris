@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CheckSquareIcon,
   MonitorIcon,
@@ -9,16 +10,9 @@ import {
 } from "lucide-react";
 import { useGameSounds, useSoundContext } from "../../hooks/useSounds";
 import { useTheme } from "../../hooks/useTheme";
-import { useSolutionSizeFromURL } from "../../hooks/useSolutionSizeFromURL";
-import { SOLUTION_SIZES } from "../../game/logic";
 import { useMatomoOptOut } from "../../hooks/useTrackingOptOut";
 
-interface SettingsProps {
-  handleChangePuzzle: (size: number) => void;
-}
-
-const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
-  const { solutionSize, isInitialized } = useSolutionSizeFromURL();
+const Settings: React.FC = () => {
   const { theme, cycleTheme, getNextTheme } = useTheme();
   const { isMuted, setIsMuted } = useSoundContext();
   const { playMenuClick } = useGameSounds();
@@ -43,57 +37,12 @@ const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Puzzle size select section */}
-      <div className="flex flex-col items-center gap-4">
-        <div className="flex items-center dark:text-gray-200 w-full gap-4">
-          <div className="flex flex-col">
-            <h3 className="text-lg font-bold">Puzzle</h3>
-            <p className="text-gray-800 dark:text-gray-300">
-              Choose the puzzle size you want to play
-            </p>
-          </div>
-          {isInitialized && (
-            <span className="text-2xl tracking-tighter font-mono ml-auto">
-              {solutionSize}×{solutionSize}
-            </span>
-          )}
-        </div>
-        <div
-          className="grid gap-2 w-full"
-          style={{
-            gridTemplateColumns: `repeat(${(
-              SOLUTION_SIZES.length - 1
-            ).toString()}, minmax(0, 1fr))`,
-          }}
-        >
-          {SOLUTION_SIZES.map((size: number) => {
-            if (size === solutionSize) return null;
-
-            const strSize = size.toString();
-            return (
-              <button
-                type="button"
-                onClick={() => {
-                  handleChangePuzzle(size);
-                }}
-                key={size}
-                title={`Switch to ${strSize}x${strSize} puzzle`}
-                className="cursor-pointer rounded-full w-full text-center bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
-              >
-                Play {strSize}×{strSize}
-              </button>
-            );
-          })}
-        </div>
-      </div>
       {/* Theme Section */}
       <div className="flex flex-col items-center gap-4">
         <div className="flex items-center dark:text-gray-200 w-full gap-4">
           <div className="flex flex-col">
             <h3 className="text-lg font-bold">Theme</h3>
-            <p className="text-gray-800 dark:text-gray-300">
-              Set theme to light, dark, or system
-            </p>
+            <p className="text-gray-800 dark:text-gray-300">Change theme</p>
           </div>
           {theme === "light" && <SunIcon className="size-8 ml-auto" />}
           {theme === "dark" && <MoonIcon className="size-8 ml-auto" />}
@@ -116,7 +65,7 @@ const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
           <div className="flex flex-col">
             <h3 className="text-lg font-bold">Sound</h3>
             <p className="text-gray-800 dark:text-gray-300">
-              Toggle sound effects on or off
+              Turn sound on/off
             </p>
           </div>
           {isMuted ? (
@@ -140,7 +89,7 @@ const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
           <div className="flex flex-col">
             <h3 className="text-lg font-bold">Tracking</h3>
             <p className="text-gray-800 dark:text-gray-300">
-              Allow us to track your usage of the game
+              Allow us track gameplay
             </p>
           </div>
           {isOptedOut ? (
@@ -151,7 +100,7 @@ const Settings: React.FC<SettingsProps> = ({ handleChangePuzzle }) => {
         </div>
         <button
           type="button"
-          title="Toggle sound"
+          title="Toggle tracking"
           onClick={handleTrackingToggle}
           className="cursor-pointer rounded-full w-full bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
         >

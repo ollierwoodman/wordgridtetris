@@ -22,7 +22,7 @@ const FlippableCard: React.FC<FlippableCardProps> = ({
 }) => {
   return (
     <div
-      className={cn("relative w-full h-16 [perspective:1000px] select-none", className)}
+      className={cn("relative w-full p-2 md:p-4 [perspective:1000px] select-none", className)}
       onClick={onClick}
     >
       <div

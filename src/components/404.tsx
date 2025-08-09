@@ -2,7 +2,11 @@ import React from 'react';
 import { cn } from "@sglara/cn";
 import { getPieceColor } from '../utils/game';
 
-const NotFound: React.FC = () => {
+interface NotFoundProps {
+  setSolutionSize: (size: number) => void;
+}
+
+const NotFound: React.FC<NotFoundProps> = ({ setSolutionSize }) => {
   const tileClasses = "aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] flex items-center justify-center w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28";
 
   return (
@@ -25,8 +29,7 @@ const NotFound: React.FC = () => {
         <button
           className="rounded-full bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white text-xl flex items-center justify-center px-4 py-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
           onClick={() => {
-            window.history.replaceState({}, "", "/5x5");
-            window.location.reload();
+            setSolutionSize(5);
           }}
         >
           Go to 5×5 Blockle

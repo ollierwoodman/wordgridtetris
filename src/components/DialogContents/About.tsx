@@ -17,7 +17,7 @@ export const About = () => {
           href="https://www.buymeacoffee.com/ooodman"
           className="flex items-center justify-center bg-purple-500 text-lg text-white font-bold px-4 py-2 gap-4 rounded-full shadow-lg hover:opacity-80"
         >
-          Buy me a boba tea{" "}
+          Buy me a boba{" "}
           <span className="text-2xl bg-white rounded-full rotate-12 p-1">
             🧋
           </span>

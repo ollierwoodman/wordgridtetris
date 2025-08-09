@@ -5,7 +5,7 @@ const MAX_SOLUTION_SIZE = Math.max(...SOLUTION_SIZES);
 const MIN_SOLUTION_SIZE = Math.min(...SOLUTION_SIZES);
 const DEFAULT_SOLUTION_SIZE = 5; // Base path should go to 5x5
 
-export function useSolutionSizeFromURL() {
+export function usePuzzleFromURL() {
   const [solutionSize, setSolutionSize] = useState<number>(DEFAULT_SOLUTION_SIZE);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [shouldShow404, setShouldShow404] = useState<boolean>(false);

@@ -14,8 +14,7 @@ const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
   7: TOTAL_NUM_SOLUTIONS_7x7,
 };
 
-export function getCurrentDateSeed() {
-  const date = new Date();
+export function getSeedFromDate(date: Date = new Date()): string {
   const strYear = date.getFullYear().toString();
   const strMonth = (date.getMonth() + 1).toString();
   const strDay = date.getDate().toString();

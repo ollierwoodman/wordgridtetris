@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import {
-  BarChart2Icon,
-  GraduationCapIcon,
+  BookOpenIcon,
   Grid2X2CheckIcon,
-  InfoIcon,
+  MenuIcon,
   SettingsIcon,
   ShuffleIcon,
 } from "lucide-react";
@@ -11,26 +10,25 @@ import Tutorial from "./DialogContents/Tutorial";
 import Settings from "./DialogContents/Settings";
 import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
-import { About } from "./DialogContents/About";
-import { Stats } from "./DialogContents/Stats";
 import { useHasSeenTutorial } from "../hooks/useLocalStorage";
 import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
+import Menu from "./DialogContents/Menu";
 
-interface MenuButtonPanelProps {
+interface ButtonPanelProps {
   updateGameState: () => void;
   solvePuzzle: () => void;
+  handleChangePuzzle: (size: number) => void;
   game: Game;
   onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
-  handleChangePuzzle: (size: number) => void;
 }
 
-export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
+export const ButtonPanel: React.FC<ButtonPanelProps> = ({
   solvePuzzle,
+  handleChangePuzzle,
   game,
   onOpenModal,
   updateGameState,
-  handleChangePuzzle,
 }) => {
   const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
 
@@ -54,7 +52,7 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         }}
         hasBadge={!hasSeenTutorial}
       >
-        <GraduationCapIcon className="size-8 md:size-10 xl:size-12" />
+        <BookOpenIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
         title="Shuffle pieces"
@@ -71,28 +69,19 @@ export const MenuButtonPanel: React.FC<MenuButtonPanelProps> = ({
         title="Settings"
         onClick={() => {
           trackGoal(GOAL_IDS.OPENED_SETTINGS);
-          onOpenModal("Settings", <Settings handleChangePuzzle={handleChangePuzzle} />);
+          onOpenModal("Settings", <Settings />);
         }}
       >
         <SettingsIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
-        title="My stats"
-        onClick={() => {
-          trackGoal(GOAL_IDS.OPENED_STATS);
-          onOpenModal("My stats", <Stats />);
-        }}
-      >
-        <BarChart2Icon className="size-8 md:size-10 xl:size-12" />
-      </BigRoundButton>
-      <BigRoundButton
-        title="About Blockle"
+        title="Open menu"
         onClick={() => {
           trackGoal(GOAL_IDS.OPENED_ABOUT);
-          onOpenModal("About Blockle", <About />);
+          onOpenModal("Menu", <Menu handleChangePuzzle={handleChangePuzzle} />);
         }}
       >
-        <InfoIcon className="size-8 md:size-10 xl:size-12" />
+        <MenuIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       {import.meta.env.DEV && (
         <BigRoundButton

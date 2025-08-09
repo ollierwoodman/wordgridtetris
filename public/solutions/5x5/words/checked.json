@@ -170,7 +170,7 @@
     ]
   },
   {
-    "theme": "geographical features",
+    "theme": "land features",
     "words": [
       "basin",
       "beach",
@@ -541,7 +541,7 @@
     ]
   },
   {
-    "theme": "buildings in a village",
+    "theme": "village buildings",
     "words": [
       "manor",
       "house",
@@ -659,7 +659,7 @@
     ]
   },
   {
-    "theme": "on a construction site",
+    "theme": "on a build site",
     "words": [
       "crane",
       "steel",
