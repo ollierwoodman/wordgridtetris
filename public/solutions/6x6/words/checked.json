@@ -978,5 +978,174 @@
       "portal",
       "skyrim"
     ]
+  },
+  {
+    "theme": "car racing",
+    "words": [
+      "driver",
+      "nascar",
+      "engine",
+      "finish",
+      "bumper",
+      "boxcar",
+      "fender",
+      "petrol"
+    ]
+  },
+  {
+    "theme": "boating",
+    "words": [
+      "paddle",
+      "vessel",
+      "galley",
+      "harbor",
+      "tanker",
+      "rudder",
+      "voyage",
+      "marine",
+      "dinghy",
+      "sailor",
+      "island",
+      "marina",
+      "embark"
+    ]
+  },
+  {
+    "theme": "boat parts",
+    "words": [
+      "rudder",
+      "paddle",
+      "anchor",
+      "galley",
+      "engine",
+      "bridge",
+      "ladder"
+    ]
+  },
+  {
+    "theme": "cycling gear",
+    "words": [
+      "saddle",
+      "peddle",
+      "helmet",
+      "rubber",
+      "grease",
+      "jersey"
+    ]
+  },
+  {
+    "theme": "car parts",
+    "words": [
+      "bumper",
+      "engine",
+      "piston",
+      "rubber",
+      "clutch",
+      "fender",
+      "bonnet",
+      "livery",
+      "airbag"
+    ]
+  },
+  {
+    "theme": "on the road",
+    "words": [
+      "street",
+      "avenue",
+      "corner",
+      "bridge",
+      "scenic",
+      "signal",
+      "puddle",
+      "shadow"
+    ]
+  },
+  {
+    "theme": "studying",
+    "words": [
+      "review",
+      "revise",
+      "reader",
+      "design",
+      "survey",
+      "report",
+      "memory",
+      "school",
+      "attend",
+      "pencil",
+      "taught"
+    ]
+  },
+  {
+    "theme": "office supplies",
+    "words": [
+      "staple",
+      "pencil",
+      "copier",
+      "folder",
+      "drawer",
+      "tissue",
+      "mailer",
+      "eraser",
+      "letter",
+      "tablet",
+      "binder",
+      "marker"
+    ]
+  },
+  {
+    "theme": "corporate terms",
+    "words": [
+      "merger",
+      "market",
+      "profit",
+      "vendor",
+      "trader",
+      "mutual",
+      "sector",
+      "lawyer",
+      "agency",
+      "manage",
+      "equity",
+      "broker",
+      "client",
+      "credit",
+      "escrow",
+      "liaise",
+      "banker",
+      "invest",
+      "branch",
+      "retail",
+      "buyout",
+      "policy",
+      "office"
+    ]
+  },
+  {
+    "theme": "furniture",
+    "words": [
+      "wooden",
+      "drawer",
+      "carpet",
+      "rustic",
+      "lounge",
+      "pillow",
+      "fabric",
+      "ornate"
+    ]
+  },
+  {
+    "theme": "garage tools",
+    "words": [
+      "shovel",
+      "hammer",
+      "wrench",
+      "jigsaw",
+      "sledge",
+      "pencil",
+      "trowel",
+      "chisel",
+      "plough"
+    ]
   }
 ]

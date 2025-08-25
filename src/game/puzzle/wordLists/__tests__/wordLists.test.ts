@@ -28,7 +28,7 @@ describe('Word Lists Validation', () => {
           .toBe(true);
       });
 
-      const minThemesNeeded = 30;
+      const minThemesNeeded = 50;
       test(`checked.json should have at least ${minThemesNeeded.toString()} themes for ${strSolutionSize}x${strSolutionSize}`, () => {
         expect(wordLists.length,
           `checked.json should have at least ${minThemesNeeded.toString()} themes for ${strSolutionSize}x${strSolutionSize} grid`)

@@ -830,5 +830,98 @@
       "drink",
       "cocoa"
     ]
+  },
+  {
+    "theme": "in an airport",
+    "words": [
+      "cargo",
+      "plane",
+      "purse",
+      "pilot",
+      "snack",
+      "store",
+      "check"
+    ]
+  },
+  {
+    "theme": "in a restaurant",
+    "words": [
+      "plate",
+      "diner",
+      "table",
+      "grill",
+      "pizza",
+      "steak",
+      "lunch",
+      "salad",
+      "chair",
+      "staff",
+      "spoon",
+      "stove",
+      "fryer",
+      "pasta",
+      "knife",
+      "stool",
+      "bread",
+      "order",
+      "chili",
+      "apron"
+    ]
+  },
+  {
+    "theme": "in a bar",
+    "words": [
+      "booze",
+      "drink",
+      "stool",
+      "vodka",
+      "water",
+      "stout",
+      "tonic",
+      "cider",
+      "lager",
+      "smoke",
+      "juice",
+      "shelf",
+      "cigar",
+      "music"
+    ]
+  },
+  {
+    "theme": "in a hotel room",
+    "words": [
+      "chair",
+      "phone",
+      "futon",
+      "guest",
+      "alarm",
+      "clock",
+      "sheet",
+      "table"
+    ]
+  },
+  {
+    "theme": "car parts",
+    "words": [
+      "wheel",
+      "motor",
+      "brake",
+      "chair",
+      "pedal",
+      "visor",
+      "lever",
+      "panel"
+    ]
+  },
+  {
+    "theme": "in a plane",
+    "words": [
+      "pilot",
+      "cabin",
+      "cargo",
+      "table",
+      "berth",
+      "aisle"
+    ]
   }
 ]
