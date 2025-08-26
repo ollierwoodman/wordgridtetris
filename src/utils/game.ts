@@ -99,7 +99,6 @@ export function getTileState({
   game: Game;
 }): TileState {
   const solutionSize = game.getSolutionSize();
-  const gridSize = game.getGridSize();
   const solutionOffset = game.getSolutionOffset();
   
   let isInSolutionGrid: boolean;
