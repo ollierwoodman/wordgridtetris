@@ -1,8 +1,10 @@
 import { useGame } from "./hooks/useGame";
 import { ButtonPanel } from "./components/ButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
+import ChengyuGrid from "./components/ChengyuGrid";
 import { useEffect, useCallback } from "react";
 import { Modal } from "./components/ui/modal";
+import type { GameMode } from "./types/gameMode";
 import { About } from "./components/DialogContents/About";
 import { Success } from "./components/DialogContents/Success";
 import { useCompletedPuzzlesManager } from "./hooks/useLocalStorage";
@@ -25,7 +27,7 @@ function App() {
   useTheme();
   const { playMenuClick } = useGameSounds();
 
-  const { solutionSize, changeSolutionSize, isInitialized, shouldShow404 } =
+  const { solutionSize, changeGameMode, isInitialized, shouldShow404 } =
     usePuzzleFromURL();
 
   const { hasCompletedTodayWithSize } = useCompletedPuzzlesManager();
@@ -57,15 +59,15 @@ function App() {
   });
 
   const handleChangePuzzle = useCallback(
-    (newSize?: number) => {
-      if (newSize) {
-        changeSolutionSize(newSize);
+    (newMode?: GameMode) => {
+      if (newMode) {
+        changeGameMode(newMode);
       }
       handleCloseModal();
       resetCompletionState();
     },
     [
-      changeSolutionSize,
+      changeGameMode,
       handleCloseModal,
       resetCompletionState,
     ]
@@ -143,7 +145,7 @@ function App() {
   if (shouldShow404) {
     return (
       <NotFound
-        setSolutionSize={changeSolutionSize}
+        setGameMode={changeGameMode}
       />
     );
   }
@@ -157,7 +159,14 @@ function App() {
     );
   }
 
-  const playingGrid = (
+  const playingGrid = solutionSize === 8 ? (
+    <ChengyuGrid
+      game={game}
+      gameState={gameState}
+      updateGameState={updateGameState}
+      handleTileClick={handleTileClick}
+    />
+  ) : (
     <PlayingGrid
       game={game}
       gameState={gameState}

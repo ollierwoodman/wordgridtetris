@@ -11,7 +11,7 @@ import {
 } from "./puzzle/random";
 import { SeededRandom } from "../utils/random";
 
-export const SOLUTION_SIZES = [5, 6, 7];
+export const SOLUTION_SIZES = [5, 6, 7, 8];
 
 const NUMBER_BLOCK_PER_PIECE = 4;
 
@@ -38,8 +38,14 @@ export class Game {
   constructor(solutionSize: number, seed: string) {
     this.seed = seed;
     this.solutionSize = solutionSize;
-    this.gridSize = solutionSize + 4;
-    this.solutionOffset = (this.gridSize - this.solutionSize) / 2;
+    // For chengyu mode (8x8), use special grid sizing with middle column
+    if (solutionSize === 8) {
+      this.gridSize = 13;
+      this.solutionOffset = 2;
+    } else {
+      this.gridSize = solutionSize + 4;
+      this.solutionOffset = (this.gridSize - this.solutionSize) / 2;
+    }
     this.numEmptyTiles = (this.solutionSize * this.solutionSize) % NUMBER_BLOCK_PER_PIECE;
     this.numPieces = (this.solutionSize * this.solutionSize - this.numEmptyTiles) / NUMBER_BLOCK_PER_PIECE;
 
@@ -65,22 +71,28 @@ export class Game {
         this.emptyTilePositions = this.pieceSolution
           .filter((pieceInSolution) => pieceInSolution.pieceIndex === -1)
           .map((pieceInSolution) => ({
-            x: pieceInSolution.x + this.solutionOffset,
-            y: pieceInSolution.y + this.solutionOffset,
+            // For chengyu mode, coordinates are already in final grid positions
+            x: this.solutionSize === 8 ? pieceInSolution.x : pieceInSolution.x + this.solutionOffset,
+            y: this.solutionSize === 8 ? pieceInSolution.y : pieceInSolution.y + this.solutionOffset,
           }));
 
         this.emptyTileLetters = this.emptyTilePositions.map(
           (emptyTilePosition) => {
-            // Convert back to solution coordinates (without offset)
-            const solutionY = emptyTilePosition.y - this.solutionOffset;
-            const solutionX = emptyTilePosition.x - this.solutionOffset;
-            
-            // Check bounds before accessing
-            if (solutionY >= 0 && solutionY < this.wordSolution.words.length &&
-                solutionX >= 0 && solutionX < this.wordSolution.words[solutionY].length) {
-              return this.wordSolution.words[solutionY].charAt(solutionX);
+            if (this.solutionSize === 8) {
+              // For chengyu mode, use the same mapping as getChengyuLetterAtPosition
+              return this.getChengyuLetterAtPosition(emptyTilePosition.x, emptyTilePosition.y);
+            } else {
+              // Regular mode: convert back to solution coordinates (without offset)
+              const solutionY = emptyTilePosition.y - this.solutionOffset;
+              const solutionX = emptyTilePosition.x - this.solutionOffset;
+              
+              // Check bounds before accessing
+              if (solutionY >= 0 && solutionY < this.wordSolution.words.length &&
+                  solutionX >= 0 && solutionX < this.wordSolution.words[solutionY].length) {
+                return this.wordSolution.words[solutionY].charAt(solutionX);
+              }
+              return ""; // Return empty string if out of bounds
             }
-            return ""; // Return empty string if out of bounds
           }
         );
       })
@@ -124,8 +136,16 @@ export class Game {
         // pieceIndex in the solution refers to the piece type (0-6), not array index
         const blocks = TETRIS_PIECE_SHAPES[pieceIndex][rotation].map(
           (block) => {
-            const letter =
-              this.wordSolution.words[y + block.y]?.[x + block.x] || "";
+            let letter = "";
+            
+            if (this.solutionSize === 8) {
+              // For chengyu mode, convert grid coordinates to solution coordinates
+              letter = this.getChengyuLetterAtPosition(x + block.x, y + block.y);
+            } else {
+              // Regular mode: treat words as rows
+              letter = this.wordSolution.words[y + block.y]?.[x + block.x] || "";
+            }
+            
             return {
               ...block,
               letter,
@@ -142,8 +162,70 @@ export class Game {
       });
   }
 
+  // Helper: get the letter at a grid position for chengyu mode
+  private getChengyuLetterAtPosition(gridX: number, gridY: number): string {
+    // Map grid coordinates to quadrant and local coordinates
+    let quadrant: number;
+    let localX: number, localY: number;
+    
+    // Determine which quadrant based on grid position
+    if (gridX >= 2 && gridX < 6 && gridY >= 2 && gridY < 6) {
+      // Top-left quadrant
+      quadrant = 0;
+      localX = gridX - 2; // 2-5 -> 0-3
+      localY = gridY - 2; // 2-5 -> 0-3
+    } else if (gridX >= 7 && gridX < 11 && gridY >= 2 && gridY < 6) {
+      // Top-right quadrant
+      quadrant = 1;
+      localX = gridX - 7; // 7-10 -> 0-3
+      localY = gridY - 2; // 2-5 -> 0-3
+    } else if (gridX >= 2 && gridX < 6 && gridY >= 7 && gridY < 11) {
+      // Bottom-left quadrant
+      quadrant = 2;
+      localX = gridX - 2; // 2-5 -> 0-3
+      localY = gridY - 7; // 7-10 -> 0-3
+    } else if (gridX >= 7 && gridX < 11 && gridY >= 7 && gridY < 11) {
+      // Bottom-right quadrant
+      quadrant = 3;
+      localX = gridX - 7; // 7-10 -> 0-3
+      localY = gridY - 7; // 7-10 -> 0-3
+    } else {
+      // Outside valid quadrants
+      return "";
+    }
+    
+    // Each quadrant has 4 words (rows), get the word for this row
+    const wordIndex = quadrant * 4 + localY;
+    if (wordIndex >= this.wordSolution.words.length) {
+      return "";
+    }
+    
+    const word = this.wordSolution.words[wordIndex];
+    if (localX >= word.length) {
+      return "";
+    }
+    
+    return word.charAt(localX);
+  }
+
   // Helper: check if a block is inside the solution grid
   private isInSolutionGrid(x: number, y: number): boolean {
+    // Special handling for chengyu mode (8x8)
+    if (this.solutionSize === 8) {
+      // Check if in valid x range, excluding middle spacing column (x=5)
+      const isInLeftHalf = x >= 1 && x < 5;  // columns 1-4
+      const isInRightHalf = x >= 6 && x < 10; // columns 6-9
+      const isInValidXRange = isInLeftHalf || isInRightHalf;
+      
+      // Check if in valid y range, excluding middle spacing row (y=5)
+      const isInTopHalf = y >= 1 && y < 5;   // rows 1-4
+      const isInBottomHalf = y >= 6 && y < 10; // rows 6-9
+      const isInValidYRange = isInTopHalf || isInBottomHalf;
+      
+      return isInValidXRange && isInValidYRange;
+    }
+    
+    // Regular mode logic
     return (
       x >= this.solutionOffset &&
       x < this.solutionOffset + this.solutionSize &&
@@ -434,7 +516,12 @@ export class Game {
       for (let i = 0; i < validPieces.length; i++) {
         const entry = validPieces[i];
         const { rotation, x, y } = entry;
-        this.setPiecePosition(i, x + this.solutionOffset, y + this.solutionOffset);
+        // For chengyu mode, coordinates are already in final grid positions
+        if (this.solutionSize === 8) {
+          this.setPiecePosition(i, x, y);
+        } else {
+          this.setPiecePosition(i, x + this.solutionOffset, y + this.solutionOffset);
+        }
         this.pieceRotationStates[i] = rotation || 0;
       }
     }
@@ -498,6 +585,11 @@ export class Game {
 
   // Check if the puzzle is completed by verifying all solution words are present in any order
   public isPuzzleCompleted(): boolean {
+    // Special handling for Chengyu mode (size 8)
+    if (this.solutionSize === 8) {
+      return this.isChengyuPuzzleCompleted();
+    }
+    
     const actualWordsSet = new Set<string>();
     const emptyTileX = this.emptyTilePositions[0]?.x || null;
     const emptyTileLetter = this.emptyTileLetters[0] || null;
@@ -519,6 +611,38 @@ export class Game {
     }
 
     // Check if sets match
+    return this.wordSolution.words.every((word) => actualWordsSet.has(word));
+  }
+
+  // Check if the Chengyu puzzle is completed (4 separate 4x4 grids)
+  private isChengyuPuzzleCompleted(): boolean {
+    const actualWordsSet = new Set<string>();
+    
+    // Define the 4 quadrants with new layout: [startX, startY]
+    // With middle spacing column and row, layout creates 4 separate 4x4 quadrants
+    const quadrants = [
+      [2, 2], // top-left (columns 2-5, rows 2-5)
+      [7, 2], // top-right (columns 7-10, rows 2-5)
+      [2, 7], // bottom-left (columns 2-5, rows 7-10)
+      [7, 7], // bottom-right (columns 7-10, rows 7-10)
+    ];
+    
+    // Check each quadrant (4x4 grid)
+    for (const [startX, startY] of quadrants) {
+      // Extract 4 words from this quadrant (4 rows)
+      for (let row = 0; row < 4; row++) {
+        let word = "";
+        for (let col = 0; col < 4; col++) {
+          const letter = this.getLetterAtPosition(startX + col, startY + row);
+          word += letter;
+        }
+        if (word.length === 4) {
+          actualWordsSet.add(word);
+        }
+      }
+    }
+
+    // Check if all expected chengyus are present
     return this.wordSolution.words.every((word) => actualWordsSet.has(word));
   }
 

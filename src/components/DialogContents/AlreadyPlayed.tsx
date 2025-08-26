@@ -1,10 +1,11 @@
 import { Grid2X2CheckIcon } from "lucide-react";
 import { type CompletedPuzzle } from "../../hooks/useLocalStorage";
 import { PerformanceShare } from "./PerformanceShare";
+import type { GameMode } from "../../types/gameMode";
 
 interface AlreadyPlayedProps {
   puzzle: CompletedPuzzle;
-  handleChangePuzzle: (size: number) => void;
+  handleChangePuzzle: (mode: GameMode) => void;
 }
 
 export function AlreadyPlayed({ puzzle, handleChangePuzzle }: AlreadyPlayedProps) {
