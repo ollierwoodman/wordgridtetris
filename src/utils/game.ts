@@ -99,13 +99,30 @@ export function getTileState({
   game: Game;
 }): TileState {
   const solutionSize = game.getSolutionSize();
-  const gridSize = game.getGridSize();
-  const solutionOffset = (gridSize - solutionSize) / 2;
-  const isInSolutionGrid =
-    x >= solutionOffset &&
-    x <= solutionSize + solutionOffset - 1 &&
-    y >= solutionOffset &&
-    y <= solutionSize + solutionOffset - 1;
+  const solutionOffset = game.getSolutionOffset();
+  
+  let isInSolutionGrid: boolean;
+  // Special handling for chengyu mode (8x8)
+  if (solutionSize === 8) {
+    // Check if in valid x range, excluding middle spacing column (x=6)
+    const isInLeftHalf = x >= 2 && x < 6;  // columns 2-5
+    const isInRightHalf = x >= 7 && x < 11; // columns 7-10
+    const isInValidXRange = isInLeftHalf || isInRightHalf;
+    
+    // Check if in valid y range, excluding middle spacing row (y=6)
+    const isInTopHalf = y >= 2 && y < 6;   // rows 2-5
+    const isInBottomHalf = y >= 7 && y < 11; // rows 7-10
+    const isInValidYRange = isInTopHalf || isInBottomHalf;
+    
+    isInSolutionGrid = isInValidXRange && isInValidYRange;
+  } else {
+    // Regular mode logic
+    isInSolutionGrid =
+      x >= solutionOffset &&
+      x <= solutionSize + solutionOffset - 1 &&
+      y >= solutionOffset &&
+      y <= solutionSize + solutionOffset - 1;
+  }
 
   if (draggedPieceIndex !== null && dragPosition) {
     const piece = gameState.pieces[draggedPieceIndex];

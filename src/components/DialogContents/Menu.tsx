@@ -7,10 +7,10 @@ import { About } from "./About";
 import { useGameSounds } from "../../hooks/useSounds";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
-import { SOLUTION_SIZES } from "../../game/logic";
+import { GAME_MODE_LIST, getGameModeConfig, type GameMode } from "../../types/gameMode";
 
 interface MenuProps {
-  handleChangePuzzle: (size: number) => void;
+  handleChangePuzzle: (mode: GameMode) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({ handleChangePuzzle }) => {
@@ -42,33 +42,28 @@ const Menu: React.FC<MenuProps> = ({ handleChangePuzzle }) => {
       <div className="flex flex-col items-center gap-4">
         <div className="flex items-center dark:text-gray-200 w-full gap-4">
           <div className="flex flex-col">
-            <h3 className="text-lg font-bold">Puzzle Difficulty</h3>
+            <h3 className="text-lg font-bold">Puzzle Modes</h3>
             <p className="text-gray-800 dark:text-gray-300">
-              Change the size of the puzzle
+              Choose your puzzle type
             </p>
           </div>
         </div>
         <div
-          className="grid gap-2 w-full"
-          style={{
-            gridTemplateColumns: `repeat(${(
-              SOLUTION_SIZES.length
-            ).toString()}, minmax(0, 1fr))`,
-          }}
+          className="grid gap-2 w-full grid-cols-2 md:grid-cols-4"
         >
-          {SOLUTION_SIZES.map((size: number) => {
-            const strSize = size.toString();
+          {GAME_MODE_LIST.map((mode: GameMode) => {
+            const config = getGameModeConfig(mode);
             return (
               <button
                 type="button"
                 onClick={() => {
-                  handleChangePuzzle(size);
+                  handleChangePuzzle(mode);
                 }}
-                key={size}
-                title={`Switch to ${strSize}x${strSize} puzzle`}
-                className="cursor-pointer rounded-full w-full text-center bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2"
+                key={mode}
+                title={`Switch to ${config.description}`}
+                className="cursor-pointer rounded-full w-full text-center bg-gray-200 text-gray-800 hover:opacity-80 px-4 py-2 text-sm"
               >
-                {strSize}×{strSize}
+                {config.displayName}
               </button>
             );
           })}

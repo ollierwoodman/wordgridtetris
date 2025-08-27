@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { formatDurationMs, getLocalDateString } from "../../utils/game";
 import useShare from "../../hooks/useShare";
-import { SOLUTION_SIZES } from "../../game/logic";
+import { GAME_MODE_LIST, getGameModeConfig, type GameMode } from "../../types/gameMode";
 import {
   useCompletedPuzzlesManager,
   getPuzzleCompletionByDateAndSize,
@@ -18,7 +18,7 @@ import { GOAL_IDS, useTrackMatomoGoalById } from "../../hooks/useTrackGoals";
 const URL = "https://blockle.au";
 
 interface PerformanceShareProps {
-  handleChangePuzzle: (size: number) => void;
+  handleChangePuzzle: (mode: GameMode) => void;
 };
 
 export function PerformanceShare({
@@ -39,22 +39,40 @@ export function PerformanceShare({
           <p className="font-bold text-xl text-center text-balance mb-2">
             Your Results ({new Date().toLocaleDateString()})
           </p>
-          <div className="grid grid-rows-3 gap-2">
-            {SOLUTION_SIZES.map((size: number) => {
-              const strSize = size.toString();
+          <div className="grid gap-2" style={{ gridTemplateRows: `repeat(${GAME_MODE_LIST.filter(mode => {
+            const config = getGameModeConfig(mode);
+            const puzzle = getPuzzleCompletionByDateAndSize(
+              completedPuzzles,
+              getLocalDateString(),
+              config.solutionSize
+            );
+            // Show Chengyu mode only if completed, show others always
+            return mode !== 'chengyu' || !!puzzle;
+          }).length.toString()}, minmax(0, 1fr))` }}>
+            {GAME_MODE_LIST.filter(mode => {
+              const config = getGameModeConfig(mode);
               const puzzle = getPuzzleCompletionByDateAndSize(
                 completedPuzzles,
                 getLocalDateString(),
-                size
+                config.solutionSize
+              );
+              // Show Chengyu mode only if completed, show others always
+              return mode !== 'chengyu' || !!puzzle;
+            }).map((mode: GameMode) => {
+              const config = getGameModeConfig(mode);
+              const puzzle = getPuzzleCompletionByDateAndSize(
+                completedPuzzles,
+                getLocalDateString(),
+                config.solutionSize
               );
               const isCompleted = !!puzzle;
               return (
                 <div
                   className="flex items-center justify-between gap-2"
-                  key={size}
+                  key={mode}
                 >
                   <p className="flex items-center font-bold text-lg">
-                    {strSize}×{strSize}
+                    {config.displayName}
                     {isCompleted ? (
                       <SquareCheckBigIcon className="size-5 ml-2" />
                     ) : (
@@ -69,14 +87,14 @@ export function PerformanceShare({
                     <button
                       type="button"
                       onClick={() => {
-                        handleChangePuzzle(size);
+                        handleChangePuzzle(mode);
                       }}
-                      title={`Switch to ${strSize}x${strSize} puzzle`}
+                      title={`Switch to ${config.description}`}
                       className={cn(
                         "cursor-pointer flex items-center justify-center rounded-full text-center bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:opacity-80 px-4 py-2 gap-2"
                       )}
                     >
-                      Play the {strSize}×{strSize}
+                      Play {config.displayName}
                     </button>
                   )}
                 </div>
@@ -122,15 +140,24 @@ export function PerformanceShare({
 
 function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
   let out = `My Blockle Results (${new Date().toLocaleDateString()}):`;
-  SOLUTION_SIZES.map((size: number) => {
-    const strSize = size.toString();
+  GAME_MODE_LIST.filter(mode => {
+    const config = getGameModeConfig(mode);
     const puzzle = getPuzzleCompletionByDateAndSize(
       completedPuzzles,
       getLocalDateString(),
-      size
+      config.solutionSize
+    );
+    // Show Chengyu mode only if completed, show others always
+    return mode !== 'chengyu' || !!puzzle;
+  }).map((mode: GameMode) => {
+    const config = getGameModeConfig(mode);
+    const puzzle = getPuzzleCompletionByDateAndSize(
+      completedPuzzles,
+      getLocalDateString(),
+      config.solutionSize
     );
     if (puzzle) {
-      out += `\n${strSize}x${strSize} - ${formatDurationMs(
+      out += `\n${config.displayName} - ${formatDurationMs(
         puzzle.timeToCompleteMs
       )} ${puzzle.isThemeRevealed ? "(theme revealed)" : ""}`;
     }

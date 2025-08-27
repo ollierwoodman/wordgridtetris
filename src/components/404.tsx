@@ -1,12 +1,13 @@
 import React from 'react';
 import { cn } from "@sglara/cn";
 import { getPieceColor } from '../utils/game';
+import type { GameMode } from '../types/gameMode';
 
 interface NotFoundProps {
-  setSolutionSize: (size: number) => void;
+  setGameMode: (mode: GameMode) => void;
 }
 
-const NotFound: React.FC<NotFoundProps> = ({ setSolutionSize }) => {
+const NotFound: React.FC<NotFoundProps> = ({ setGameMode }) => {
   const tileClasses = "aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] flex items-center justify-center w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28";
 
   return (
@@ -29,7 +30,7 @@ const NotFound: React.FC<NotFoundProps> = ({ setSolutionSize }) => {
         <button
           className="rounded-full bg-gray-600 dark:bg-gray-800 shadow-xl/20 dark:shadow-xl/40 text-white text-xl flex items-center justify-center px-4 py-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
           onClick={() => {
-            setSolutionSize(5);
+            setGameMode('5x5');
           }}
         >
           Go to 5×5 Blockle

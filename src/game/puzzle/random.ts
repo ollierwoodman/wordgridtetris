@@ -5,6 +5,7 @@ import { TOTAL_NUM_SOLUTIONS_4x4 } from "./numPieceSolutions/4x4";
 import { TOTAL_NUM_SOLUTIONS_6x6 } from "./numPieceSolutions/6x6";
 import { TOTAL_NUM_SOLUTIONS_5x5 } from "./numPieceSolutions/5x5";
 import { TOTAL_NUM_SOLUTIONS_7x7 } from "./numPieceSolutions/7x7";
+import { TOTAL_NUM_SOLUTIONS_8x8 } from "./numPieceSolutions/8x8";
 import { getDateSlug, SPECIAL_DATE_WORD_LISTS } from "./wordLists/specialDates";
 
 const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
@@ -12,6 +13,7 @@ const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
   5: TOTAL_NUM_SOLUTIONS_5x5,
   6: TOTAL_NUM_SOLUTIONS_6x6,
   7: TOTAL_NUM_SOLUTIONS_7x7,
+  8: TOTAL_NUM_SOLUTIONS_8x8,
 };
 
 export function getSeedFromDate(date: Date = new Date()): string {
@@ -48,6 +50,24 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
 
   let solution = getRandomSpecialDateWordList(solutionSize, randomHelper);
 
+  // Special case for Chengyu mode (size 8): fetch from chengyu.json
+  if (solution === null && solutionSize === 8) {
+    const res = await fetch(createUrl(`solutions/8x8/words/chengyu.json`));
+    const allChengyus = (await res.json()) as string[];
+    
+    // Randomly select 16 chengyus from the entire pool
+    const selectedChengyus = randomHelper.shuffle(allChengyus).slice(0, 16);
+    
+    // Create a solution with random chengyus and no theme
+    solution = {
+      theme: "", // No theme for chengyu mode
+      words: selectedChengyus,
+      greeting: undefined
+    };
+    
+    return solution;
+  }
+
   // If no special date word list is found, fetch a random word solution from the checked.json file
   if (solution === null) {
     const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/words/checked.json`));
@@ -79,12 +99,13 @@ export async function fetchRandomPieceSolution(solutionSize: number, seed: strin
 async function fetchCombined4x4Solutions(randomHelper: SeededRandom): Promise<PieceSolutionEntry[]> {
   const combinedSolution: PieceSolutionEntry[] = [];
   
-  // Define quadrant offsets: [x_offset, y_offset]
+  // Define quadrant offsets with new layout: [x_offset, y_offset]
+  // New layout with both middle column and row spacing (2-wide perimeter)
   const quadrantOffsets = [
-    [0, 0], // top-left
-    [4, 0], // top-right
-    [0, 4], // bottom-left
-    [4, 4], // bottom-right
+    [2, 2], // top-left: solution coords 0-3 -> grid positions 2-5, 2-5
+    [7, 2], // top-right: solution coords 0-3 -> grid positions 7-10, 2-5  
+    [2, 7], // bottom-left: solution coords 0-3 -> grid positions 2-5, 7-10
+    [7, 7], // bottom-right: solution coords 0-3 -> grid positions 7-10, 7-10
   ];
   
   // Fetch 4 random 4x4 solutions

@@ -24,6 +24,7 @@ export const GOAL_IDS = {
   OPENED_LEVEL_SELECT: 16,
   SHUFFLED_PIECES: 13,
   REVEALED_THEME: 14,
+  COMPLETED_PUZZLE_CHENGYU: 17,
 } as const;
 
 function trackGoal(goalId: typeof GOAL_IDS[keyof typeof GOAL_IDS]): void {
@@ -49,6 +50,9 @@ export const useTrackCompletedPuzzle = (): ((solutionSize: number) => void) => {
         break;
       case 7:
         trackGoal(GOAL_IDS.COMPLETED_PUZZLE_7X7);
+        break;
+      case 8:
+        trackGoal(GOAL_IDS.COMPLETED_PUZZLE_CHENGYU);
         break;
       default:
         throw new Error(`Invalid solution size: ${solutionSize.toString()}`);

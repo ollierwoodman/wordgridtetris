@@ -13,11 +13,12 @@ import { BigRoundButton } from "./ui/bigRoundButton";
 import { useHasSeenTutorial } from "../hooks/useLocalStorage";
 import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 import Menu from "./DialogContents/Menu";
+import type { GameMode } from "../types/gameMode";
 
 interface ButtonPanelProps {
   updateGameState: () => void;
   solvePuzzle: () => void;
-  handleChangePuzzle: (size: number) => void;
+  handleChangePuzzle: (mode: GameMode) => void;
   game: Game;
   onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
