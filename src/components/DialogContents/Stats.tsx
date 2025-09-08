@@ -24,19 +24,22 @@ export function Stats() {
     clearCompletedPuzzles,
   } = useCompletedPuzzlesManager();
 
+  // Filter out puzzles where player gave up
+  const completedPuzzlesNoGiveUp = completedPuzzles.filter(puzzle => !puzzle.gaveUp);
+
   // Calculate statistics
-  const totalPuzzles = completedPuzzles.length;
+  const totalPuzzles = completedPuzzlesNoGiveUp.length;
   const completedToday = hasCompletedToday();
 
-  // Group puzzles by size
+  // Group puzzles by size (excluding give ups)
   const puzzlesBySize = {
-    5: getPuzzlesBySize(5).length,
-    6: getPuzzlesBySize(6).length,
-    7: getPuzzlesBySize(7).length,
+    5: getPuzzlesBySize(5).filter(p => !p.gaveUp).length,
+    6: getPuzzlesBySize(6).filter(p => !p.gaveUp).length,
+    7: getPuzzlesBySize(7).filter(p => !p.gaveUp).length,
   };
 
-  // Calculate average completion time (excluding 0 values)
-  const puzzlesWithTime = completedPuzzles.filter(
+  // Calculate average completion time (excluding 0 values and give ups)
+  const puzzlesWithTime = completedPuzzlesNoGiveUp.filter(
     (p) => p.timeToCompleteMs > 0
   );
   // Get best time for each puzzle size
@@ -53,9 +56,9 @@ export function Stats() {
 
   // Calculate completion streak (consecutive days)
   const calcCurrentStreak = () => {
-    if (completedPuzzles.length === 0) return 0;
+    if (completedPuzzlesNoGiveUp.length === 0) return 0;
 
-    const sortedPuzzles = [...completedPuzzles].sort(
+    const sortedPuzzles = [...completedPuzzlesNoGiveUp].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
@@ -79,10 +82,10 @@ export function Stats() {
   };
 
   const calcBestStreak = () => {
-    if (completedPuzzles.length === 0) return 0;
+    if (completedPuzzlesNoGiveUp.length === 0) return 0;
 
     // Sort puzzles by date (oldest first)
-    const sortedPuzzles = [...completedPuzzles].sort(
+    const sortedPuzzles = [...completedPuzzlesNoGiveUp].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 

@@ -19,6 +19,8 @@ export interface CompletedPuzzle {
   isThemeRevealed: boolean;
   completedAt: string; // ISO timestamp
   timeToCompleteMs: number; // in milliseconds
+  seed: string; // Puzzle seed
+  gaveUp: boolean; // Whether the player gave up on the puzzle
 }
 
 export interface LocalStorageData {
@@ -142,7 +144,7 @@ export function getPuzzleCompletionByDate(
   puzzles: CompletedPuzzle[],
   date: string
 ): CompletedPuzzle | undefined {
-  return puzzles.find(puzzle => puzzle.date === date);
+  return puzzles.find(puzzle => puzzle.date === date && !puzzle.gaveUp);
 }
 
 export function getPuzzleCompletionByDateAndSize(
@@ -150,24 +152,24 @@ export function getPuzzleCompletionByDateAndSize(
   date: string,
   solutionSize: number
 ): CompletedPuzzle | undefined {
-  return puzzles.find(puzzle => puzzle.date === date && puzzle.solutionSize === solutionSize);
+  return puzzles.find(puzzle => puzzle.date === date && puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
 }
 
 export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[]): boolean {
   const today = getLocalDateString();
-  return puzzles.some(puzzle => puzzle.date === today);
+  return puzzles.some(puzzle => puzzle.date === today && !puzzle.gaveUp);
 }
 
 export function hasCompletedPuzzleTodayWithSize(puzzles: CompletedPuzzle[], solutionSize: number): boolean {
   const today = getLocalDateString();
-  return puzzles.some(puzzle => puzzle.date === today && puzzle.solutionSize === solutionSize);
+  return puzzles.some(puzzle => puzzle.date === today && puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
 }
 
 export function getCompletedPuzzlesBySize(
   puzzles: CompletedPuzzle[],
   solutionSize: number
 ): CompletedPuzzle[] {
-  return puzzles.filter(puzzle => puzzle.solutionSize === solutionSize);
+return puzzles.filter(puzzle => puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
 }
 
 // Hook for managing completed puzzles with utility functions

@@ -50,6 +50,8 @@ export const usePuzzleCompletion = ({
           theme: game.getWordTheme(),
           isThemeRevealed: gameState.isThemeRevealed,
           timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
+          seed: game.getSeed(),
+          gaveUp: false,
         });
       }
     }
