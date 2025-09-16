@@ -431,7 +431,6 @@ export class Game {
     if (this.isValidMove(this.selectedPieceIndex, newX, newY)) {
       piece.x = newX;
       piece.y = newY;
-      this.incrementNumMoves();
       return true;
     }
     return false;

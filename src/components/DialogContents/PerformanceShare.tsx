@@ -197,7 +197,7 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     if (puzzle.gaveUp) {
       out += `\n${config.displayName} - Gave up`;
     } else {
-      out += `\n${config.displayName} - ${formatDurationMs(puzzle.timeToCompleteMs)}, ${puzzle.numMoves.toString()} moves, ${numHintsUsed > 0 ? `${numHintsUsed.toString()} hints used` : ""}`;
+      out += `\n${config.displayName} - ${formatDurationMs(puzzle.timeToCompleteMs)}, ${puzzle.numMoves.toString()} moves, ${numHintsUsed.toString()} hints`;
     }
   });
   return out;

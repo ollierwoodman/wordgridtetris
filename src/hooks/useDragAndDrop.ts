@@ -209,6 +209,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
         
         if (isNewPosition) {
           playDropSuccess();
+          game.incrementNumMoves();
         }
         
         game.setPiecePosition(draggedPieceIndex, finalPosition.x, finalPosition.y);

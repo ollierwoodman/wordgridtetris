@@ -81,21 +81,25 @@ export function useGame(mode?: GameMode, seed: string = getSeedFromDate()) {
       case 'ArrowLeft':
         if (game.movePiece(-1, 0)) {
           playDragClick();
+          game.incrementNumMoves()
         }
         break;
       case 'ArrowRight':
         if (game.movePiece(1, 0)) {
           playDragClick();
+          game.incrementNumMoves()
         }
         break;
       case 'ArrowUp':
         if (game.movePiece(0, -1)) {
           playDragClick();
+          game.incrementNumMoves()
         }
         break;
       case 'ArrowDown':
         if (game.movePiece(0, 1)) {
           playDragClick();
+          game.incrementNumMoves()
         }
         break;
       case ' ': // Space bar
