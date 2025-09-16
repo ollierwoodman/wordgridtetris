@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Clock12Icon, ClockIcon, MoveIcon, TimerIcon } from "lucide-react";
+import { Clock12Icon, MoveIcon } from "lucide-react";
 import type { Game } from "../game/logic";
 import { formatDurationMs } from "../utils/game";
 import { cn } from "@sglara/cn";
