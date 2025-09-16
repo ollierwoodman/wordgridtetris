@@ -776,6 +776,11 @@ export class Game {
     return this.gameEndTime;
   }
 
+  public getElapsedMs(): number {
+    const endTime = this.gameEndTime ? this.gameEndTime.getTime() : Date.now();
+    return Math.max(0, endTime - this.gameStartTime.getTime());
+  }
+
   // Check if the puzzle is completed by verifying all solution words are present in any order
   public isPuzzleCompleted(): boolean {
     // Special handling for Chengyu mode (size 8)

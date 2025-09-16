@@ -16,6 +16,7 @@ import { GameConfetti } from "./components/GameConfetti";
 import { HeartIcon } from "lucide-react";
 import { useGameSounds } from "./hooks/useSounds";
 import { useCallback } from "react";
+import CurrentGameStats from "./components/CurrentGameStats";
 
 function App() {
   // Initialize theme
@@ -110,9 +111,12 @@ function App() {
       )}
 
       {/* Playing grid */}
-      <div className="w-full max-w-[60vh] flex flex-col justify-center my-8">
+      <div className="w-full max-w-[60vh] flex flex-col justify-center my-4">
         {playingGrid}
       </div>
+      
+      {/* Current game stats */}
+      <CurrentGameStats game={game} />
 
       <div className="flex flex-row flex-wrap justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
         {/* Button Panel */}
