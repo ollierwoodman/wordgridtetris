@@ -687,20 +687,19 @@ export class Game {
     // move any pieces that would collide with the first piece outside the board
     const collidingPieces = [];
     for (const block of this.pieces[0].blocks) {
-      collidingPieces.push(
-        this.getPieceAtPosition(targetPieceX + block.x, targetPieceY + block.y)
-      );
+      const pieceAtPosition = this.getPieceAtPosition(targetPieceX + block.x, targetPieceY + block.y);
+      if (pieceAtPosition && pieceAtPosition.pieceIndex !== 0) {
+        collidingPieces.push(pieceAtPosition);
+      }
     }
 
     for (const collidingPiece of collidingPieces) {
-      if (collidingPiece == null) continue;
       this.setPiecePosition(collidingPiece.pieceIndex, -10 - 10 * collidingPiece.pieceIndex, -10 - 10 * collidingPiece.pieceIndex);
     }
 
     this.setPiecePosition(0, targetPieceX, targetPieceY);
 
     for (const collidingPiece of collidingPieces) {
-      if (collidingPiece == null) continue;
       const safePosition = this.findSafePosition(collidingPiece.pieceIndex);
       if (safePosition) {
         this.setPiecePosition(collidingPiece.pieceIndex, safePosition.x, safePosition.y);
