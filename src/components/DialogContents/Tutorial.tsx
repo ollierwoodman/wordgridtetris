@@ -52,16 +52,11 @@ const Tutorial: React.FC<TutorialProps> = ({ game }) => {
         The pieces are already in the correct orientation, so you don't need to
         rotate them
       </p>
-      {game.getEmptyTilePositions().length > 0 && (
+      {game.getNumEmptyTiles() > 0 && (
         <p className="text-gray-800 dark:text-gray-300">
-          There is {game.getEmptyTilePositions().length} empty tile
-          {game.getEmptyTilePositions().length > 1 ? "s" : ""} on the grid. The
+          There is {game.getNumEmptyTiles()} empty tile
+          {game.getNumEmptyTiles() > 1 ? "s" : ""} on the grid. The
           tile's letter is revealed when the puzzle is solved
-        </p>
-      )}
-      {game.getSolutionSize() === 8 && (
-        <p className="text-gray-800 dark:text-gray-300">
-          The 8×8 grid is made up of four 4×4 grids
         </p>
       )}
     </div>

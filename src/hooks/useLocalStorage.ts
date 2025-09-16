@@ -1,26 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
-import { SOLUTION_SIZES } from '../game/logic';
+import { Game } from '../game/logic';
 import { getLocalDateString } from '../utils/game';
+import type { GameMode } from '../types/gameMode';
+import { GAME_MODE_LIST } from '../types/gameMode';
+import type { HintState } from '../types/game';
 
 // Storage keys for the application
 export const STORAGE_KEYS = {
   IS_MUTED: 'isMuted',
   THEME: 'theme',
   HAS_SEEN_TUTORIAL: 'hasSeenTutorial',
-  COMPLETED_PUZZLES: 'completedPuzzles',
+  COMPLETED_PUZZLES: 'completedPuzzlesVersion2',
   TRACKING_OPT_OUT: 'trackingOptOut',
 } as const;
 
 // Types for the data we store
 export interface CompletedPuzzle {
   date: string; // ISO date string
-  solutionSize: number;
   theme: string;
-  isThemeRevealed: boolean;
+  hintState: HintState;
   completedAt: string; // ISO timestamp
   timeToCompleteMs: number; // in milliseconds
-  seed: string; // Puzzle seed
-  gaveUp: boolean; // Whether the player gave up on the puzzle
+  seed: string; // puzzle seed
+  mode: GameMode; // puzzle mode
+  gaveUp: boolean; // whether the player gave up (default: false)
+  numMoves: number; // number of moves to complete the puzzle
 }
 
 export interface LocalStorageData {
@@ -129,79 +133,134 @@ export function useTrackingOptOut() {
 // Utility functions for completed puzzles
 export function addCompletedPuzzle(
   puzzles: CompletedPuzzle[],
-  puzzle: Omit<CompletedPuzzle, 'completedAt'>
+  newPuzzle: CompletedPuzzle
 ): CompletedPuzzle[] {
-  const newPuzzle: CompletedPuzzle = {
-    ...puzzle,
-    completedAt: new Date().toISOString(),
-  };
-  
-  // Add to the beginning of the array (most recent first)
   return [newPuzzle, ...puzzles];
 }
 
 export function getPuzzleCompletionByDate(
   puzzles: CompletedPuzzle[],
-  date: string
+  date: string,
+  includeGaveUp = false
 ): CompletedPuzzle | undefined {
-  return puzzles.find(puzzle => puzzle.date === date && !puzzle.gaveUp);
+  return puzzles.find(puzzle => puzzle.date === date && (includeGaveUp || !puzzle.gaveUp));
 }
 
-export function getPuzzleCompletionByDateAndSize(
+export function getPuzzleCompletionByDateAndMode(
   puzzles: CompletedPuzzle[],
   date: string,
-  solutionSize: number
+  mode: GameMode,
+  includeGaveUp = false
 ): CompletedPuzzle | undefined {
-  return puzzles.find(puzzle => puzzle.date === date && puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
+  return puzzles.find(puzzle => 
+    puzzle.date === date && 
+    puzzle.mode === mode &&
+    (includeGaveUp || !puzzle.gaveUp)
+  );
 }
 
-export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[]): boolean {
+export function hasCompletedPuzzleToday(puzzles: CompletedPuzzle[], includeGaveUp = false): boolean {
   const today = getLocalDateString();
-  return puzzles.some(puzzle => puzzle.date === today && !puzzle.gaveUp);
+  return puzzles.some(puzzle => puzzle.date === today && (includeGaveUp || !puzzle.gaveUp));
 }
 
-export function hasCompletedPuzzleTodayWithSize(puzzles: CompletedPuzzle[], solutionSize: number): boolean {
+export function hasCompletedPuzzleTodayWithMode(puzzles: CompletedPuzzle[], mode: GameMode, includeGaveUp = false): boolean {
   const today = getLocalDateString();
-  return puzzles.some(puzzle => puzzle.date === today && puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
+  return puzzles.some(puzzle => 
+    puzzle.date === today && 
+    puzzle.mode === mode && 
+    (includeGaveUp || !puzzle.gaveUp)
+  );
 }
 
-export function getCompletedPuzzlesBySize(
+export function getCompletedPuzzlesByMode(
   puzzles: CompletedPuzzle[],
-  solutionSize: number
+  mode: GameMode,
+  includeGaveUp = false
 ): CompletedPuzzle[] {
-return puzzles.filter(puzzle => puzzle.solutionSize === solutionSize && !puzzle.gaveUp);
+  return puzzles.filter(puzzle => 
+    puzzle.mode === mode && 
+    (includeGaveUp || !puzzle.gaveUp)
+  );
+}
+
+export function getPuzzleBySeed(
+  puzzles: CompletedPuzzle[],
+  seed: string,
+  includeGaveUp = false
+): CompletedPuzzle | undefined {
+  return puzzles.find(puzzle => 
+    puzzle.seed === seed && 
+    (includeGaveUp || !puzzle.gaveUp)
+  );
+}
+
+export function hasAttemptedPuzzleBySeed(
+  puzzles: CompletedPuzzle[],
+  seed: string
+): boolean {
+  return puzzles.some(puzzle => puzzle.seed === seed);
+}
+
+export function hasCompletedPuzzleBySeed(
+  puzzles: CompletedPuzzle[],
+  seed: string
+): boolean {
+  return puzzles.some(puzzle => puzzle.seed === seed && !puzzle.gaveUp);
 }
 
 // Hook for managing completed puzzles with utility functions
 export function useCompletedPuzzlesManager() {
   const [completedPuzzles, setCompletedPuzzles] = useCompletedPuzzles();
 
-  const addPuzzle = useCallback((puzzle: Omit<CompletedPuzzle, 'completedAt'>) => {
-    setCompletedPuzzles(addCompletedPuzzle(completedPuzzles, puzzle));
+  const addPuzzle = useCallback((game: Game) => {
+    setCompletedPuzzles(addCompletedPuzzle(completedPuzzles, {
+      date: getLocalDateString(),
+      theme: game.getWordTheme(),
+      hintState: game.getHintState(),
+      timeToCompleteMs: game.getCompletionDurationMs() ?? -1,
+      completedAt: new Date().toISOString(),
+      seed: game.getSeed(),
+      mode: game.getMode(),
+      gaveUp: game.getGaveUp(),
+      numMoves: game.getNumMoves(),
+    }));
   }, [completedPuzzles, setCompletedPuzzles]);
 
-  const getPuzzleByDate = useCallback((date: string) => {
-    return getPuzzleCompletionByDate(completedPuzzles, date);
+  const getPuzzleByDate = useCallback((date: string, includeGaveUp = false) => {
+    return getPuzzleCompletionByDate(completedPuzzles, date, includeGaveUp);
   }, [completedPuzzles]);
 
-  const getPuzzleByDateAndSize = useCallback((date: string, solutionSize: number) => {
-    return getPuzzleCompletionByDateAndSize(completedPuzzles, date, solutionSize);
+  const getPuzzleByDateAndMode = useCallback((date: string, mode: GameMode, includeGaveUp = false) => {
+    return getPuzzleCompletionByDateAndMode(completedPuzzles, date, mode, includeGaveUp);
   }, [completedPuzzles]);
 
-  const getTodaysPuzzles = useCallback(() => {
-    return SOLUTION_SIZES.map((size) => getPuzzleCompletionByDateAndSize(completedPuzzles, getLocalDateString(), size));
+  const getTodaysPuzzles = useCallback((includeGaveUp = false) => {
+    return GAME_MODE_LIST.map((mode) => getPuzzleCompletionByDateAndMode(completedPuzzles, getLocalDateString(), mode, includeGaveUp));
   }, [completedPuzzles]);
 
-  const hasCompletedToday = useCallback(() => {
-    return hasCompletedPuzzleToday(completedPuzzles);
+  const hasCompletedToday = useCallback((includeGaveUp = false) => {
+    return hasCompletedPuzzleToday(completedPuzzles, includeGaveUp);
   }, [completedPuzzles]);
 
-  const hasCompletedTodayWithSize = useCallback((solutionSize: number) => {
-    return hasCompletedPuzzleTodayWithSize(completedPuzzles, solutionSize);
+  const hasCompletedTodayWithMode = useCallback((mode: GameMode, includeGaveUp = false) => {
+    return hasCompletedPuzzleTodayWithMode(completedPuzzles, mode, includeGaveUp);
   }, [completedPuzzles]);
 
-  const getPuzzlesBySize = useCallback((solutionSize: number) => {
-    return getCompletedPuzzlesBySize(completedPuzzles, solutionSize);
+  const getPuzzlesByMode = useCallback((mode: GameMode, includeGaveUp = false) => {
+    return getCompletedPuzzlesByMode(completedPuzzles, mode, includeGaveUp);
+  }, [completedPuzzles]);
+
+  const getPuzzleBySeedCallback = useCallback((seed: string, includeGaveUp = false) => {
+    return getPuzzleBySeed(completedPuzzles, seed, includeGaveUp);
+  }, [completedPuzzles]);
+
+  const hasAttemptedPuzzleBySeedCallback = useCallback((seed: string) => {
+    return hasAttemptedPuzzleBySeed(completedPuzzles, seed);
+  }, [completedPuzzles]);
+
+  const hasCompletedPuzzleBySeedCallback = useCallback((seed: string) => {
+    return hasCompletedPuzzleBySeed(completedPuzzles, seed);
   }, [completedPuzzles]);
 
   const clearCompletedPuzzles = useCallback(() => {
@@ -212,11 +271,14 @@ export function useCompletedPuzzlesManager() {
     completedPuzzles,
     addPuzzle,
     getPuzzleByDate,
-    getPuzzleByDateAndSize,
+    getPuzzleByDateAndMode,
     hasCompletedToday,
-    hasCompletedTodayWithSize,
+    hasCompletedTodayWithMode,
     getTodaysPuzzles,
-    getPuzzlesBySize,
+    getPuzzlesByMode,
+    getPuzzleBySeed: getPuzzleBySeedCallback,
+    hasAttemptedPuzzleBySeed: hasAttemptedPuzzleBySeedCallback,
+    hasCompletedPuzzleBySeed: hasCompletedPuzzleBySeedCallback,
     clearCompletedPuzzles,
   };
 } 

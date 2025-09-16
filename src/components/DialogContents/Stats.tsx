@@ -7,58 +7,69 @@ import {
   CheckCheckIcon,
   XIcon,
   BlocksIcon,
-  HistoryIcon,
   GaugeCircleIcon,
+  MoveIcon,
 } from "lucide-react";
 import { useCompletedPuzzlesManager } from "../../hooks/useLocalStorage";
 import { ConfirmModal } from "../ui/ConfirmModal";
-import { formatDateHowLongAgo, formatDurationMs } from "../../utils/game";
+import { formatDurationMs } from "../../utils/game";
+import { GAME_MODES, type GameMode } from "../../types/gameMode";
+
+// All completed puzzles now include a definitive mode; no legacy size fallback needed.
 
 export function Stats() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const {
     completedPuzzles,
-    getPuzzlesBySize,
+    getPuzzlesByMode,
     hasCompletedToday,
     clearCompletedPuzzles,
   } = useCompletedPuzzlesManager();
 
-  // Filter out puzzles where player gave up
-  const completedPuzzlesNoGiveUp = completedPuzzles.filter(puzzle => !puzzle.gaveUp);
+  // Calculate statistics (excluding given up puzzles)
+  const totalPuzzles = completedPuzzles.filter(p => !p.gaveUp).length;
+  const completedToday = hasCompletedToday(false); // exclude gave up
 
-  // Calculate statistics
-  const totalPuzzles = completedPuzzlesNoGiveUp.length;
-  const completedToday = hasCompletedToday();
+  // Group puzzles by size (excluding gave up)
+  const puzzlesByMode = {
+    "5x5": getPuzzlesByMode("5x5", false).length,
+    "6x6": getPuzzlesByMode("6x6", false).length,
+    "7x7": getPuzzlesByMode("7x7", false).length,
+    "chengyu": getPuzzlesByMode("chengyu", false).length,
+  } as Record<GameMode, number>;
 
-  // Group puzzles by size (excluding give ups)
-  const puzzlesBySize = {
-    5: getPuzzlesBySize(5).filter(p => !p.gaveUp).length,
-    6: getPuzzlesBySize(6).filter(p => !p.gaveUp).length,
-    7: getPuzzlesBySize(7).filter(p => !p.gaveUp).length,
-  };
-
-  // Calculate average completion time (excluding 0 values and give ups)
-  const puzzlesWithTime = completedPuzzlesNoGiveUp.filter(
-    (p) => p.timeToCompleteMs > 0
+  // Calculate average completion time (excluding 0 values and gave up puzzles)
+  const puzzlesWithTime = completedPuzzles.filter(
+    (p) => p.timeToCompleteMs > 0 && !p.gaveUp
   );
   // Get best time for each puzzle size
-  const bestTimes = puzzlesWithTime.reduce<Record<number, number>>(
-    (acc, puzzle) => {
-      const size = puzzle.solutionSize;
-      if (!acc[size] || puzzle.timeToCompleteMs < acc[size]) {
-        acc[size] = puzzle.timeToCompleteMs;
-      }
-      return acc;
-    },
-    {}
+  const bestTimes = puzzlesWithTime.reduce<Record<GameMode, number>>((acc, puzzle) => {
+    const mode = puzzle.mode;
+    if (!acc[mode] || puzzle.timeToCompleteMs < acc[mode]) {
+      acc[mode] = puzzle.timeToCompleteMs;
+    }
+    return acc;
+  }, {} as Record<GameMode, number>);
+
+  // Get best moves (fewest moves) for each puzzle size
+  const puzzlesWithMoves = completedPuzzles.filter(
+    (p) => p.numMoves > 0 && !p.gaveUp
   );
+  const bestMoves = puzzlesWithMoves.reduce<Record<GameMode, number>>((acc, puzzle) => {
+    const mode = puzzle.mode;
+    if (!acc[mode] || puzzle.numMoves < acc[mode]) {
+      acc[mode] = puzzle.numMoves;
+    }
+    return acc;
+  }, {} as Record<GameMode, number>);
 
-  // Calculate completion streak (consecutive days)
+  // Calculate completion streak (consecutive days, excluding gave up)
   const calcCurrentStreak = () => {
-    if (completedPuzzlesNoGiveUp.length === 0) return 0;
+    const completedOnly = completedPuzzles.filter(p => !p.gaveUp);
+    if (completedOnly.length === 0) return 0;
 
-    const sortedPuzzles = [...completedPuzzlesNoGiveUp].sort(
+    const sortedPuzzles = [...completedOnly].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
@@ -82,10 +93,11 @@ export function Stats() {
   };
 
   const calcBestStreak = () => {
-    if (completedPuzzlesNoGiveUp.length === 0) return 0;
+    const completedOnly = completedPuzzles.filter(p => !p.gaveUp);
+    if (completedOnly.length === 0) return 0;
 
     // Sort puzzles by date (oldest first)
-    const sortedPuzzles = [...completedPuzzlesNoGiveUp].sort(
+    const sortedPuzzles = [...completedOnly].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
@@ -214,10 +226,12 @@ export function Stats() {
           Fastest Times
         </h3>
         {Object.entries(bestTimes).length > 0 ? (
-          Object.entries(bestTimes).map(([size, time]) => (
-            <div key={size} className="grid grid-cols-4 gap-4 items-center">
+          Object.entries(bestTimes).map(([mode, time]) => {
+            const gameModeConfig = GAME_MODES[mode as GameMode];
+            return (
+            <div key={mode} className="grid grid-cols-4 gap-4 items-center">
               <div className="text-gray-600 dark:text-gray-400">
-                {size}×{size}
+                {gameModeConfig.displayName}
               </div>
               <div className="col-span-2">
                 <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -236,25 +250,66 @@ export function Stats() {
                 {formatDurationMs(time)}
               </div>
             </div>
-          ))
+            );
+          })
         ) : (
           <p className="text-gray-600 dark:text-gray-400">No times yet.</p>
         )}
       </div>
 
-      {/* Puzzle Size Breakdown */}
+      {/* Fewest Moves Breakdown */}
+      <div>
+        <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+          <MoveIcon className="size-5" />
+          Fewest Moves
+        </h3>
+        {Object.entries(bestMoves).length > 0 ? (
+          Object.entries(bestMoves).map(([mode, moves]) => {
+            const gameModeConfig = GAME_MODES[mode as GameMode];
+            return (
+            <div key={mode} className="grid grid-cols-4 gap-4 items-center">
+              <div className="text-gray-600 dark:text-gray-400">
+                {gameModeConfig.displayName}
+              </div>
+              <div className="col-span-2">
+                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${(Object.values(bestMoves).length > 0
+                        ? (moves / Math.max(...Object.values(bestMoves))) * 100
+                        : 0
+                      ).toString()}%`,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="text-right text-sm text-gray-800 dark:text-gray-200">
+                {moves} move{moves === 1 ? '' : 's'}
+              </div>
+            </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-600 dark:text-gray-400">No moves recorded yet.</p>
+        )}
+      </div>
+
+      {/* Puzzle Mode Breakdown */}
       <div>
         <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
           <BarChartHorizontalIcon className="size-5" />
-          Puzzles by Size
+          Puzzles by Mode
         </h3>
-        {Object.entries(puzzlesBySize).map(([size, count]) => {
+        {Object.entries(puzzlesByMode).map(([mode, count]) => {
+          if (count <= 0) return null;
+          const gameModeConfig = GAME_MODES[mode as GameMode];
           const countProportion =
             totalPuzzles > 0 ? (count / totalPuzzles) * 100 : 0;
           return (
-            <div key={size} className="grid grid-cols-4 gap-4 items-center">
+            <div key={mode} className="grid grid-cols-4 gap-4 items-center">
               <div className="text-gray-600 dark:text-gray-400">
-                {size}×{size}
+                {gameModeConfig.displayName}
               </div>
               <div className="col-span-2">
                 <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -274,33 +329,8 @@ export function Stats() {
         })}
       </div>
 
-      {/* Recent Activity */}
-      {completedPuzzles.length > 0 && (
-        <div>
-          <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
-            <HistoryIcon className="size-5" />
-            Recent Activity
-          </h3>
-          <div className="flex flex-col gap-2">
-            {completedPuzzles.slice(0, 5).map((puzzle, index) => (
-              <div
-                className="flex items-center justify-between gap-2"
-                key={index}
-              >
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Completed a {puzzle.solutionSize}×{puzzle.solutionSize}{" "}
-                </span>
-                <span className="text-right text-sm text-gray-800 dark:text-gray-200">
-                  {formatDateHowLongAgo(puzzle.completedAt)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Clear Data Button */}
-      {completedPuzzles.length > 0 && (
+      {completedPuzzles.filter(p => !p.gaveUp).length > 0 && (
         <div className="text-center">
           <button
             type="button"
@@ -329,7 +359,7 @@ export function Stats() {
       )}
 
       {/* Empty State */}
-      {completedPuzzles.length === 0 && (
+      {completedPuzzles.filter(p => !p.gaveUp).length === 0 && (
         <div className="text-center py-8">
           <TrophyIcon className="size-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
           <h3 className="font-bold text-gray-600 dark:text-gray-400 mb-2">

@@ -2,35 +2,28 @@ import { useGame } from "./hooks/useGame";
 import { ButtonPanel } from "./components/ButtonPanel";
 import PlayingGrid from "./components/PlayingGrid";
 import ChengyuGrid from "./components/ChengyuGrid";
-import { useEffect, useCallback } from "react";
 import { Modal } from "./components/ui/modal";
 import type { GameMode } from "./types/gameMode";
 import { About } from "./components/DialogContents/About";
-import { Success } from "./components/DialogContents/Success";
-import { useCompletedPuzzlesManager } from "./hooks/useLocalStorage";
 import { usePuzzleFromURL } from "./hooks/usePuzzleFromURL";
 import { AnimatedEndlessRunner } from "./utils/svg";
 import { useTheme } from "./hooks/useTheme";
-import { AlreadyPlayed } from "./components/DialogContents/AlreadyPlayed";
 import NotFound from "./components/404";
 import { useModal } from "./hooks/useModal";
 import { usePuzzleCompletion } from "./hooks/usePuzzleCompletion";
-import { useAlreadyPlayedCheck } from "./hooks/useAlreadyPlayedCheck";
 import { GameHeader } from "./components/GameHeader";
-import { ThemeReveal } from "./components/ThemeReveal";
 import { GameConfetti } from "./components/GameConfetti";
 import { HeartIcon } from "lucide-react";
 import { useGameSounds } from "./hooks/useSounds";
+import { useCallback } from "react";
 
 function App() {
   // Initialize theme
   useTheme();
   const { playMenuClick } = useGameSounds();
 
-  const { solutionSize, changeGameMode, isInitialized, shouldShow404 } =
+  const { gameMode, changeGameMode, isInitialized, shouldShow404 } =
     usePuzzleFromURL();
-
-  const { hasCompletedTodayWithSize } = useCompletedPuzzlesManager();
 
   const {
     isModalOpen,
@@ -47,16 +40,14 @@ function App() {
     handleTileClick,
     loading,
     solvePuzzle,
-    revealTheme,
-  } = useGame(isInitialized ? solutionSize : undefined);
+  } = useGame(gameMode);
 
-  const { showConfetti, showSuccessButton, resetCompletionState } =
-    usePuzzleCompletion({ game, gameState });
-
-  const { shouldShowAlreadyPlayed, completedPuzzle } = useAlreadyPlayedCheck({
-    isInitialized,
-    solutionSize,
-  });
+  const { showConfetti, resetCompletionState, handleGiveUp } =
+    usePuzzleCompletion({
+      game,
+      gameState,
+      solvePuzzle,
+    });
 
   const handleChangePuzzle = useCallback(
     (newMode?: GameMode) => {
@@ -66,88 +57,12 @@ function App() {
       handleCloseModal();
       resetCompletionState();
     },
-    [
-      changeGameMode,
-      handleCloseModal,
-      resetCompletionState,
-    ]
+    [changeGameMode, handleCloseModal, resetCompletionState]
   );
-
-  // Handle already played modal
-  useEffect(() => {
-    if (shouldShowAlreadyPlayed && completedPuzzle) {
-      handleOpenModal(
-        "Back again?",
-        <AlreadyPlayed
-          puzzle={completedPuzzle}
-          handleChangePuzzle={handleChangePuzzle}
-        />
-      );
-    } else if (!shouldShowAlreadyPlayed) {
-      handleCloseModal();
-    }
-  }, [
-    shouldShowAlreadyPlayed,
-    completedPuzzle,
-    handleOpenModal,
-    handleCloseModal,
-    handleChangePuzzle,
-  ]);
-
-  // Handle puzzle completion modal
-  useEffect(() => {
-    if (!game || !gameState?.isCompleted) {
-      return;
-    }
-
-    const alreadyCompletedThisPuzzleToday = hasCompletedTodayWithSize(
-      game.getSolutionSize()
-    );
-
-    handleOpenModal(
-      "Well done!",
-      <Success
-        game={game}
-        isReplay={alreadyCompletedThisPuzzleToday}
-        handleChangePuzzle={handleChangePuzzle}
-      />
-    );
-  }, [
-    gameState?.isCompleted,
-    game,
-    hasCompletedTodayWithSize,
-    handleOpenModal,
-    handleChangePuzzle,
-  ]);
-
-  const handleAboutClick = () => {
-    handleOpenModal("About Blockle", <About />);
-  };
-
-  const handleSuccessClick = () => {
-    if (!game) return;
-
-    const alreadyCompletedThisPuzzleToday = hasCompletedTodayWithSize(
-      game.getSolutionSize()
-    );
-
-    handleOpenModal(
-      "Well done!",
-      <Success
-        game={game}
-        isReplay={alreadyCompletedThisPuzzleToday}
-        handleChangePuzzle={handleChangePuzzle}
-      />
-    );
-  };
 
   // Show 404 page for invalid URLs
   if (shouldShow404) {
-    return (
-      <NotFound
-        setGameMode={changeGameMode}
-      />
-    );
+    return <NotFound setGameMode={changeGameMode} />;
   }
 
   if (!isInitialized || game === null || gameState === null || loading) {
@@ -159,30 +74,32 @@ function App() {
     );
   }
 
-  const playingGrid = solutionSize === 8 ? (
-    <ChengyuGrid
-      game={game}
-      gameState={gameState}
-      updateGameState={updateGameState}
-      handleTileClick={handleTileClick}
-    />
-  ) : (
-    <PlayingGrid
-      game={game}
-      gameState={gameState}
-      updateGameState={updateGameState}
-      handleTileClick={handleTileClick}
-    />
-  );
+  const playingGrid =
+    gameMode === "chengyu" ? (
+      <ChengyuGrid
+        game={game}
+        gameState={gameState}
+        updateGameState={updateGameState}
+        handleTileClick={handleTileClick}
+      />
+    ) : (
+      <PlayingGrid
+        game={game}
+        gameState={gameState}
+        updateGameState={updateGameState}
+        handleTileClick={handleTileClick}
+      />
+    );
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 py-4 px-8">
-      <GameConfetti show={showConfetti} solutionSize={solutionSize} />
+      {/* Confetti */}
+      <GameConfetti show={showConfetti} />
 
       <GameHeader
-        showSuccessButton={showSuccessButton}
-        onAboutClick={handleAboutClick}
-        onSuccessClick={handleSuccessClick}
+        game={game}
+        onOpenModal={handleOpenModal}
+        handleChangePuzzle={handleChangePuzzle}
       />
 
       {/* Greeting */}
@@ -193,18 +110,11 @@ function App() {
       )}
 
       {/* Playing grid */}
-      <div className="w-full max-w-[60vh] flex flex-col justify-center">
+      <div className="w-full max-w-[60vh] flex flex-col justify-center my-8">
         {playingGrid}
       </div>
 
-      {/* Theme */}
-      <ThemeReveal
-        theme={game.getWordTheme()}
-        gameState={gameState}
-        onThemeReveal={revealTheme}
-      />
-
-      <div className="flex flex-row justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
+      <div className="flex flex-row flex-wrap justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
         {/* Button Panel */}
         <ButtonPanel
           updateGameState={updateGameState}
@@ -213,6 +123,7 @@ function App() {
           game={game}
           onOpenModal={handleOpenModal}
           onCloseModal={handleCloseModal}
+          onGiveUp={handleGiveUp}
         />
       </div>
       <button

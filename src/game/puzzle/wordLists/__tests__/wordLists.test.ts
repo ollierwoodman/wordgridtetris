@@ -20,7 +20,10 @@ describe('Word Lists Validation', () => {
       const fullPath = path.join(process.cwd(), checkedPath);
       const wordLists = readJsonFile(checkedPath);
 
-      console.log(`Found ${(wordLists.length).toString()} word lists for ${strSolutionSize}x${strSolutionSize}`);
+      const numUniqueWordListsNoDupes = wordLists.reduce((acc, theme) => {
+        return acc + Math.floor(theme.words.length / solutionSize);
+      }, 0);
+      console.log(`Found ${(wordLists.length).toString()} word lists for ${strSolutionSize}x${strSolutionSize} (${numUniqueWordListsNoDupes.toString()} number unique word lists)`);
 
       test(`checked.json should exist for ${strSolutionSize}x${strSolutionSize}`, () => {
         expect(fs.existsSync(fullPath), 

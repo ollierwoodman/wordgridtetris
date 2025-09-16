@@ -56,7 +56,7 @@ export function getLocalDateString(date: Date = new Date()): string {
   return `${year}-${month}-${day}`;
 }
 
-export function getPieceColor(pieceIndex: number) {
+export function getPieceColor(pieceType: number) {
   const colors = [
     "z-10 bg-cyan-600 inset-shadow-sm inset-shadow-white/50 dark:bg-cyan-800 dark:inset-shadow-white/40",
     "z-10 bg-yellow-600 inset-shadow-sm inset-shadow-white/50 dark:bg-yellow-800 dark:inset-shadow-white/40",
@@ -71,7 +71,7 @@ export function getPieceColor(pieceIndex: number) {
     "z-10 bg-indigo-600 inset-shadow-sm inset-shadow-white/50 dark:bg-indigo-800 dark:inset-shadow-white/40",
     "z-10 bg-rose-600 inset-shadow-sm inset-shadow-white/50 dark:bg-rose-800 dark:inset-shadow-white/40",
   ];
-  return colors[pieceIndex % colors.length];
+  return colors[pieceType % colors.length];
 }
 
 export function getPieceRotationState(game: Game, pieceIndex: number): number {
@@ -147,16 +147,28 @@ export function getTileState({
   if (pieceAtPosition) {
     const piece = gameState.pieces[pieceAtPosition.pieceIndex];
     const block = piece.blocks[pieceAtPosition.blockIndex];
+    const isFirstPieceLocked = game.getHintState().firstPieceLocation && pieceAtPosition.pieceIndex === 0;
+    // When first piece is locked due to hint, render like an empty tile: no selection, no letter, locked
+    if (isFirstPieceLocked) {
+      return {
+        letter: block.letter,
+        isSelected: false,
+        pieceIndex: pieceAtPosition.pieceIndex,
+        isLocked: true,
+        isEmptyTile: true,
+        isInSolutionGrid,
+      };
+    }
     return {
       letter: block.letter,
       isSelected: piece.isSelected,
       pieceIndex: pieceAtPosition.pieceIndex,
+      isLocked: false,
       isInSolutionGrid,
     };
   }
 
-  const isGameCompleted = gameState.isCompleted ?? game.isPuzzleCompleted();
-  if (isGameCompleted) {
+  if (gameState.isCompleted || game.getHintState().emptyTilePosition) {
     const emptyPositions = game.getEmptyTilePositions();
     const emptyPositionIndex = emptyPositions.findIndex(
       (emptyPosition) => x === emptyPosition.x && y === emptyPosition.y
@@ -164,7 +176,7 @@ export function getTileState({
     if (emptyPositionIndex !== -1) {
       const emptyLetter = game.getEmptyTileLetters()[emptyPositionIndex];
       return {
-        letter: emptyLetter,
+        letter: game.getHintState().emptyTileLetter ? emptyLetter : "",
         isSelected: false,
         pieceIndex: -1,
         isInSolutionGrid,

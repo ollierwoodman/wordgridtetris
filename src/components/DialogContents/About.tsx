@@ -44,7 +44,14 @@ export const About = () => {
         </a>
       </div>
       <p className="text-center text-balance text-gray-500 dark:text-gray-400">
-        Version {__APP_VERSION__}
+        <a
+          href="https://github.com/ollierwoodman/wordgridtetris/"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="hover:opacity-80"
+        >
+          Version{" "}{__APP_VERSION__}
+        </a>
       </p>
     </div>
   );

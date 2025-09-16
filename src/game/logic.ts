@@ -4,18 +4,21 @@ import type {
   Piece,
   PieceSolutionEntry,
   WordSolution,
+  HintState,
 } from "../types/game";
 import {
   fetchRandomPieceSolution,
   fetchRandomWordSolution,
 } from "./puzzle/random";
 import { SeededRandom } from "../utils/random";
+import { GAME_MODES, type GameMode } from "../types/gameMode";
 
 export const SOLUTION_SIZES = [5, 6, 7, 8];
 
 const NUMBER_BLOCK_PER_PIECE = 4;
 
 export class Game {
+  private mode: GameMode;
   private seed: string;
   private solutionSize: number;
   private gridSize: number;
@@ -30,33 +33,35 @@ export class Game {
   private pieceRotationStates: number[]; // Track current rotation state for each piece
   private emptyTilePositions: { x: number; y: number }[] = [];
   private emptyTileLetters: string[] = [];
-  private isThemeRevealed = false;
+  private hintState: HintState = {
+    firstPieceLocation: false,
+    firstWord: false,
+  };
+  private numMoves = 0;
+  private gaveUp = false;
   private gameStartTime: Date = new Date();
   private gameEndTime: Date | null = null;
   private initializationPromise: Promise<void>;
 
-  constructor(solutionSize: number, seed: string) {
+  constructor(mode: GameMode, seed: string) {
+    this.mode = mode;
     this.seed = seed;
-    this.solutionSize = solutionSize;
+    this.solutionSize = GAME_MODES[mode].solutionSize;
     // For chengyu mode (8x8), use special grid sizing with middle column
-    if (solutionSize === 8) {
+    if (mode === GAME_MODES.chengyu.mode) {
       this.gridSize = 13;
       this.solutionOffset = 2;
     } else {
-      this.gridSize = solutionSize + 4;
+      this.gridSize = this.solutionSize + 4;
       this.solutionOffset = (this.gridSize - this.solutionSize) / 2;
     }
     this.numEmptyTiles = (this.solutionSize * this.solutionSize) % NUMBER_BLOCK_PER_PIECE;
     this.numPieces = (this.solutionSize * this.solutionSize - this.numEmptyTiles) / NUMBER_BLOCK_PER_PIECE;
 
-    if (!SOLUTION_SIZES.includes(solutionSize)) {
-      throw new Error(`Grid size ${solutionSize.toString()} not supported`);
-    }
-
     this.pieceRotationStates = new Array(this.numPieces).fill(0) as number[];
 
     // Initialize async data - this should be handled by the caller
-    this.initializationPromise = this.initializeAsyncData(solutionSize, seed)
+    this.initializationPromise = this.initializeAsyncData(mode, seed)
       .then(([wordSolution, pieceSolution]) => {
         this.wordSolution = wordSolution;
         this.pieceSolution = pieceSolution;
@@ -78,7 +83,7 @@ export class Game {
 
         this.emptyTileLetters = this.emptyTilePositions.map(
           (emptyTilePosition) => {
-            if (this.solutionSize === 8) {
+            if (mode === GAME_MODES.chengyu.mode) {
               // For chengyu mode, use the same mapping as getChengyuLetterAtPosition
               return this.getChengyuLetterAtPosition(emptyTilePosition.x, emptyTilePosition.y);
             } else {
@@ -95,6 +100,13 @@ export class Game {
             }
           }
         );
+
+        // set hint state
+        this.hintState.theme = this.wordSolution.theme !== "" ? false : undefined; // available if there is a theme
+        this.hintState.emptyTilePosition = this.numEmptyTiles > 0 ? false : undefined; // available if there are empty tiles
+        this.hintState.emptyTileLetter = this.numEmptyTiles > 0 ? false : undefined; // available if there are empty tiles
+        this.hintState.firstPieceLocation = false; // always available
+        this.hintState.firstWord = false; // always available
       })
       .catch((error: unknown) => {
         console.error(error);
@@ -103,12 +115,12 @@ export class Game {
   }
 
   private async initializeAsyncData(
-    solutionSize: number,
+    mode: GameMode,
     seed: string
   ): Promise<[WordSolution, PieceSolutionEntry[]]> {
     return await Promise.all([
-      fetchRandomWordSolution(solutionSize, seed),
-      fetchRandomPieceSolution(solutionSize, seed),
+      fetchRandomWordSolution(mode, seed),
+      fetchRandomPieceSolution(mode, seed),
     ]);
   }
 
@@ -250,15 +262,21 @@ export class Game {
   }
 
   private placePieces(shuffle = false): void {
-    // Move all pieces to temporary positions outside the grid to avoid initial collisions
+    // If the first-piece location hint is revealed, keep the first piece fixed
+    const isFirstPieceLocked = this.hintState.firstPieceLocation;
+
+    // Move all pieces (except locked first piece) to temporary positions outside the grid to avoid initial collisions
     for (let i = 0; i < this.pieces.length; i++) {
+      if (isFirstPieceLocked && i === 0) continue;
       this.setPiecePosition(i, -10, -10);
     }
 
     const randomHelper = new SeededRandom(new Date().getMilliseconds())
-    const placePieceOrder = Array.from({length: this.pieces.length}, (_, i) => i);
+    // Build placement order, excluding the first piece when it is locked
+    const placePieceOrder = Array.from({length: this.pieces.length}, (_, i) => i)
+      .filter((i) => !(isFirstPieceLocked && i === 0));
     if (shuffle) {
-      // Shuffle the pieces
+      // Shuffle the pieces (excluding locked first piece)
       randomHelper.shuffle(placePieceOrder);
     }
 
@@ -372,6 +390,10 @@ export class Game {
 
   // Select a piece
   selectPiece(pieceIndex: number): boolean {
+    // If first-piece hint is revealed, the first piece is locked and cannot be selected
+    if (this.hintState.firstPieceLocation && pieceIndex === 0) {
+      return false;
+    }
     if (pieceIndex >= 0 && pieceIndex < this.pieces.length) {
       // Deselect previously selected piece
       if (this.selectedPieceIndex !== null) {
@@ -396,6 +418,10 @@ export class Game {
   // Move selected piece
   movePiece(dx: number, dy: number): boolean {
     if (this.selectedPieceIndex === null) return false;
+    // If first-piece hint is revealed, the first piece is locked and cannot be moved
+    if (this.hintState.firstPieceLocation && this.selectedPieceIndex === 0) {
+      return false;
+    }
 
     const piece = this.pieces[this.selectedPieceIndex];
     const newX = piece.x + dx;
@@ -405,6 +431,7 @@ export class Game {
     if (this.isValidMove(this.selectedPieceIndex, newX, newY)) {
       piece.x = newX;
       piece.y = newY;
+      this.incrementNumMoves();
       return true;
     }
     return false;
@@ -420,6 +447,10 @@ export class Game {
     newX: number,
     newY: number
   ): boolean {
+    // Lock the first piece in place once its location hint is revealed
+    if (this.hintState.firstPieceLocation && pieceIndex === 0) {
+      return false;
+    }
     const currentRotationState = this.pieceRotationStates[pieceIndex];
     const pieceType = this.pieces[pieceIndex].type;
     const pieceTemplate = TETRIS_PIECE_SHAPES[pieceType][currentRotationState];
@@ -433,6 +464,15 @@ export class Game {
         blockY >= this.gridSize
       ) {
         return false;
+      }
+      // Disallow overlapping with revealed empty tile positions
+      if (this.hintState.emptyTilePosition) {
+        const overlapsEmptyTile = this.emptyTilePositions.some(
+          (pos) => pos.x === blockX && pos.y === blockY
+        );
+        if (overlapsEmptyTile) {
+          return false;
+        }
       }
       if (this.wouldCollideWithPiece(blockX, blockY, pieceIndex)) {
         return false;
@@ -496,6 +536,10 @@ export class Game {
     return null;
   }
 
+  public getPieceByIndex(pieceIndex: number): Piece | null {
+    return this.pieces[pieceIndex] || null;
+  }
+
   public getPieceRotationState(pieceIndex: number): number {
     return this.pieceRotationStates[pieceIndex];
   }
@@ -527,11 +571,18 @@ export class Game {
     }
   }
 
+  public getMode(): GameMode {
+    return this.mode;
+  }
+
   public getSeed(): string {
     return this.seed;
   }
 
-  // Empty tile methods
+  public getNumEmptyTiles(): number {
+    return this.numEmptyTiles;
+  }
+
   public getEmptyTilePositions(): { x: number; y: number }[] {
     return this.emptyTilePositions;
   }
@@ -564,12 +615,150 @@ export class Game {
     return this.numPieces;
   }
 
-  public getIsThemeRevealed(): boolean {
-    return this.isThemeRevealed;
+  public getHintState(): HintState {
+    return this.hintState;
   }
 
-  public revealTheme(): void {
-    this.isThemeRevealed = true;
+  public getNumHintsAvailable(): number {
+    return Object.values(this.hintState).filter((value) => value !== undefined).length;
+  }
+
+  public getNumHintsUsed(): number {
+    return Object.values(this.hintState).filter((value) => value === true).length;
+  }
+  
+  public revealHintTheme(): string | null {
+    if (this.hintState.theme == undefined) {
+      return null;
+    }
+    
+    this.hintState.theme = true;
+    return this.wordSolution.theme;
+  }
+
+  public getHintTheme(): string | null {
+    if (this.hintState.theme) {
+      return this.wordSolution.theme;
+    }
+    return null;
+  }
+
+  public revealHintEmptyTilePosition(): { x: number; y: number } | null {
+    if (this.hintState.emptyTilePosition == undefined) {
+      return null;
+    }
+    
+    this.hintState.emptyTilePosition = true;
+    return this.emptyTilePositions[0];
+  }
+
+  public getHintEmptyTilePosition(): { x: number; y: number } | null {
+    if (this.hintState.emptyTilePosition) {
+      return this.emptyTilePositions[0];
+    }
+    return null;
+  }
+
+  public revealHintEmptyTileLetter(): string | null {
+    if (this.hintState.emptyTileLetter == undefined) {
+      return null;
+    }
+    
+    this.hintState.emptyTileLetter = true;
+    return this.emptyTileLetters[0];
+  }
+
+  public getHintEmptyTileLetter(): string | null {
+    if (this.hintState.emptyTileLetter) {
+      return this.emptyTileLetters[0];
+    }
+    return null;
+  }
+  
+  public revealHintFirstPieceLocation(): { x: number; y: number } {
+    const pieceSolution = this.pieceSolution[0];
+
+    const isChengyuMode = this.mode === GAME_MODES.chengyu.mode;
+    // In chengyu mode, pieceSolution coordinates are already in final grid
+    // coordinates (including the visual spacing). Do not add solutionOffset.
+    const targetPieceX = pieceSolution.x + (isChengyuMode ? 0 : this.solutionOffset);
+    const targetPieceY = pieceSolution.y + (isChengyuMode ? 0 : this.solutionOffset);
+
+    // move any pieces that would collide with the first piece outside the board
+    const collidingPieces = [];
+    for (const block of this.pieces[0].blocks) {
+      collidingPieces.push(
+        this.getPieceAtPosition(targetPieceX + block.x, targetPieceY + block.y)
+      );
+    }
+
+    for (const collidingPiece of collidingPieces) {
+      if (collidingPiece == null) continue;
+      this.setPiecePosition(collidingPiece.pieceIndex, -10 - 10 * collidingPiece.pieceIndex, -10 - 10 * collidingPiece.pieceIndex);
+    }
+
+    this.setPiecePosition(0, targetPieceX, targetPieceY);
+
+    for (const collidingPiece of collidingPieces) {
+      if (collidingPiece == null) continue;
+      const safePosition = this.findSafePosition(collidingPiece.pieceIndex);
+      if (safePosition) {
+        this.setPiecePosition(collidingPiece.pieceIndex, safePosition.x, safePosition.y);
+      } else {
+        throw Error("No safe position found for colliding piece");
+      }
+    }
+
+    this.hintState.firstPieceLocation = true;
+
+    // For chengyu mode, coordinates are already in final grid positions
+    if (isChengyuMode) {
+      return { x: pieceSolution.x, y: pieceSolution.y };
+    } else {
+      return { x: pieceSolution.x + this.solutionOffset, y: pieceSolution.y + this.solutionOffset };
+    }
+  }
+
+  public getHintFirstPieceLocation(): { x: number; y: number } | null {
+    if (this.hintState.firstPieceLocation) {
+      const pieceSolution = this.pieceSolution[0];
+      // For chengyu mode, coordinates are already in final grid positions
+      if (this.mode === GAME_MODES.chengyu.mode) {
+        return { x: pieceSolution.x, y: pieceSolution.y };
+      } else {
+        return { x: pieceSolution.x + this.solutionOffset, y: pieceSolution.y + this.solutionOffset };
+      }
+    }
+    return null;
+  }
+  
+  public revealHintFirstWord(): string | null {
+    this.hintState.firstWord = true;
+    return this.wordSolution.words[0];
+  }
+  
+  public getHintFirstWord(): string | null {
+    if (this.hintState.firstWord) {
+      return this.wordSolution.words[0];
+    }
+    return null;
+  }
+
+  public getNumMoves(): number {
+    return this.numMoves;
+  }
+
+  public incrementNumMoves(): void {
+    this.numMoves++;
+  }
+
+  public getGaveUp(): boolean {
+    return this.gaveUp;
+  }
+
+  public setGaveUp(): void {
+    this.gaveUp = true;
+    this.setGameEndTime();
   }
 
   public getCompletionDurationMs(): number | null {
@@ -579,8 +768,12 @@ export class Game {
     return null;
   }
 
-  public setGameCompleted(): void {
+  public setGameEndTime(): void {
     this.gameEndTime = new Date();
+  }
+
+  public getGameEndTime(): Date | null {
+    return this.gameEndTime;
   }
 
   // Check if the puzzle is completed by verifying all solution words are present in any order

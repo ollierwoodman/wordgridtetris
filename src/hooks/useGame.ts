@@ -3,8 +3,9 @@ import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
 import { getSeedFromDate } from "../game/puzzle/random";
 import { useGameSounds } from "./useSounds";
+import type { GameMode } from "../types/gameMode";
 
-export function useGame(solutionSize?: number, seed: string = getSeedFromDate()) {
+export function useGame(mode?: GameMode, seed: string = getSeedFromDate()) {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -12,8 +13,8 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
   const { playDragClick } = useGameSounds();
 
   const initializeGame = useCallback(async () => {
-    // Don't initialize if solutionSize is not provided
-    if (solutionSize === undefined) {
+    // Don't initialize if mode is not provided
+    if (mode === undefined) {
       setLoading(true);
       setGame(null);
       setGameState(null);
@@ -24,7 +25,7 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
     
-    const newGame = new Game(solutionSize, seed);
+    const newGame = new Game(mode, seed);
     setGame(newGame);
     
     // Wait for the game to be fully initialized
@@ -35,10 +36,10 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
       pieces: newGame.getPieces(),
       selectedPieceIndex: newGame.getSelectedPieceIndex(),
       isCompleted: newGame.isPuzzleCompleted(),
-      isThemeRevealed: false
+      hintState: newGame.getHintState()
     });
     setLoading(false);
-  }, [solutionSize, seed]);
+  }, [mode, seed]);
 
   useEffect(() => {
     void initializeGame();
@@ -50,7 +51,7 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
     
     // If the puzzle is newly completed
     if (isCompleted) {
-      game.setGameCompleted();
+      game.setGameEndTime();
     }
 
     setGameState({
@@ -58,7 +59,7 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
       pieces: game.getPieces(),
       selectedPieceIndex: game.getSelectedPieceIndex(),
       isCompleted,
-      isThemeRevealed: game.getIsThemeRevealed()
+      hintState: game.getHintState()
     });
   }, [game]);
 
@@ -125,13 +126,6 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
     }
   }, [game, updateGameState]);
 
-  const revealTheme = useCallback(() => {
-    if (game) {
-      game.revealTheme();
-      updateGameState();
-    }
-  }, [game, updateGameState]);
-
   return {
     game,
     gameState,
@@ -140,6 +134,5 @@ export function useGame(solutionSize?: number, seed: string = getSeedFromDate())
     handleKeyDown,
     loading,
     solvePuzzle,
-    revealTheme,
   };
 } 
