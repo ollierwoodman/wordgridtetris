@@ -1,7 +1,7 @@
 import { cn } from "@sglara/cn";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { useState } from "react";
-import { getSeedFromDate } from "../../game/puzzle/random";
+import { buildSeed } from "../../game/puzzle/random";
 
 const areDatesSameDay = (dates: Date[]) => {
   return dates.every((date) => date.toDateString() === dates[0].toDateString());
@@ -139,7 +139,7 @@ export const LevelSelect: React.FC<LevelSelectProps> = ({ onSelectSeed }) => {
                 <button
                   type="button"
                   onClick={() => {
-                    onSelectSeed(getSeedFromDate(new Date(scrollMonthYear.getFullYear(), scrollMonthYear.getMonth(), i + 1)));
+                    onSelectSeed(buildSeed("", new Date(scrollMonthYear.getFullYear(), scrollMonthYear.getMonth(), i + 1)));
                   }}
                   key={i}
                   title={`Switch to ${strSize}x${strSize} puzzle`}
@@ -166,7 +166,7 @@ export const LevelSelect: React.FC<LevelSelectProps> = ({ onSelectSeed }) => {
         <button
           type="button"
           onClick={() => {
-            onSelectSeed(getSeedFromDate(new Date()));
+            onSelectSeed(buildSeed("", new Date()));
           }}
           title={`Play today's puzzle`}
           className={cn(

@@ -7,7 +7,11 @@ import {
 } from "lucide-react";
 import { formatDurationMs, getLocalDateString } from "../../utils/game";
 import useShare from "../../hooks/useShare";
-import { GAME_MODE_LIST, getGameModeConfig, type GameMode } from "../../types/gameMode";
+import {
+  GAME_MODE_LIST,
+  getGameModeConfig,
+  type GameMode,
+} from "../../types/gameMode";
 import {
   useCompletedPuzzlesManager,
   getPuzzleCompletionByDateAndMode,
@@ -19,21 +23,38 @@ import type { HintState } from "../../types/game";
 
 const baseUrl = "https://blockle.au";
 
+const getVisibleGameModes = (completedPuzzles: CompletedPuzzle[]): GameMode[] => {
+  return GAME_MODE_LIST.filter((mode) => {
+    const puzzle = getPuzzleCompletionByDateAndMode(
+      completedPuzzles,
+      getLocalDateString(),
+      mode,
+      false // exclude gave up puzzles
+    );
+    // Show English modes always, show other modes only if completed
+    return ["5x5", "6x6", "7x7"].includes(mode) || !!puzzle;
+  });
+};
+
 const getUrlToShare = (completedPuzzles: CompletedPuzzle[]): string => {
-  if (completedPuzzles.some(puzzle => ["5x5", "6x6", "7x7"].includes(puzzle.mode))) {
+  if (
+    completedPuzzles.some((puzzle) =>
+      ["5x5", "6x6", "7x7"].includes(puzzle.mode)
+    )
+  ) {
     return baseUrl;
   }
-  
-  if (completedPuzzles.every(puzzle => puzzle.mode === "chengyu")) {
+
+  if (completedPuzzles.every((puzzle) => puzzle.mode === "chengyu")) {
     return baseUrl + "/chengyu";
   }
 
   return baseUrl;
-}
+};
 
 interface PerformanceShareProps {
   handleChangePuzzle: (mode: GameMode) => void;
-};
+}
 
 export function PerformanceShare({
   handleChangePuzzle,
@@ -53,26 +74,13 @@ export function PerformanceShare({
           <p className="font-bold text-xl text-center text-balance mb-2">
             Your Results ({new Date().toLocaleDateString()})
           </p>
-          <div className="grid gap-2" style={{ gridTemplateRows: `repeat(${GAME_MODE_LIST.filter(mode => {
-            const puzzle = getPuzzleCompletionByDateAndMode(
-              completedPuzzles,
-              getLocalDateString(),
-              mode,
-              false // exclude gave up puzzles
-            );
-            // Show Chengyu mode only if completed, show others always
-            return mode !== 'chengyu' || !!puzzle;
-          }).length.toString()}, minmax(0, 1fr))` }}>
-            {GAME_MODE_LIST.filter(mode => {
-              const puzzle = getPuzzleCompletionByDateAndMode(
-                completedPuzzles,
-                getLocalDateString(),
-                mode,
-                false // exclude gave up puzzles
-              );
-              // Show Chengyu mode only if completed, show others always
-              return mode !== 'chengyu' || !!puzzle;
-            }).map((mode: GameMode) => {
+          <div
+            className="grid gap-2"
+            style={{
+              gridTemplateRows: `repeat(${getVisibleGameModes(completedPuzzles).length.toString()}, minmax(0, 1fr))`,
+            }}
+          >
+            {getVisibleGameModes(completedPuzzles).map((mode: GameMode) => {
               const config = getGameModeConfig(mode);
               const puzzle = getPuzzleCompletionByDateAndMode(
                 completedPuzzles,
@@ -108,9 +116,7 @@ export function PerformanceShare({
                       Completed in {formatDurationMs(puzzle.timeToCompleteMs)}
                     </p>
                   ) : isGaveUp ? (
-                    <p className="text-right">
-                      Gave up
-                    </p>
+                    <p className="text-right">Gave up</p>
                   ) : (
                     <button
                       type="button"
@@ -169,31 +175,24 @@ export function PerformanceShare({
 function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
   const countHintsUsed = (hintState: HintState): number => {
     return Object.values(hintState).filter((hint) => hint === true).length;
-  }
+  };
 
   const countHintsAvailable = (hintState: HintState): number => {
     return Object.values(hintState).filter((hint) => hint !== undefined).length;
-  }
+  };
 
   const hintsString = (hintState: HintState): string => {
-    return `${countHintsUsed(hintState).toString()}/${countHintsAvailable(hintState).toString()} hints`;
-  }
+    return `${countHintsUsed(hintState).toString()}/${countHintsAvailable(
+      hintState
+    ).toString()} hints`;
+  };
 
   const numMovesString = (numMoves: number): string => {
     return numMoves === 0 ? "0 moves" : `${numMoves.toString()} moves`;
-  }
+  };
 
   let out = `My Blockle Results (${new Date().toLocaleDateString()}):`;
-  GAME_MODE_LIST.filter(mode => {
-    const puzzle = getPuzzleCompletionByDateAndMode(
-      completedPuzzles,
-      getLocalDateString(),
-      mode,
-      false // exclude gave up puzzles
-    );
-    // Show Chengyu mode only if completed, show others always
-    return mode !== 'chengyu' || !!puzzle;
-  }).map((mode: GameMode) => {
+  getVisibleGameModes(completedPuzzles).map((mode: GameMode) => {
     const config = getGameModeConfig(mode);
     const puzzle = getPuzzleCompletionByDateAndMode(
       completedPuzzles,
@@ -207,7 +206,9 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     if (puzzle.gaveUp) {
       out += `\n${config.displayName} - Gave up`;
     } else {
-      out += `\n${config.displayName} - ${formatDurationMs(puzzle.timeToCompleteMs)}, ${numMovesString(puzzle.numMoves)}, ${hintsString(puzzle.hintState)}`;
+      out += `\n${config.displayName} - ${formatDurationMs(
+        puzzle.timeToCompleteMs
+      )}, ${numMovesString(puzzle.numMoves)}, ${hintsString(puzzle.hintState)}`;
     }
   });
   return out;

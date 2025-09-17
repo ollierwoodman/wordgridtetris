@@ -55,7 +55,7 @@ export const GameHeader = ({
         <h1 className="text-gray-600 dark:text-white text-5xl lg:text-7xl font-bold select-none">
           Blockle
         </h1>
-        <p className="text-gray-600 dark:text-white text-base md:text-lg font-bold font-mono select-none">
+        <p className="text-gray-600 dark:text-white text-sm md:text-base font-bold font-mono select-none">
           {GAME_MODES[game.getMode()].displayName} #{game.getSeed()}
         </p>
       </button>

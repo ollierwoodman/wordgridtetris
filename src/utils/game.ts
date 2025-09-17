@@ -176,7 +176,7 @@ export function getTileState({
     if (emptyPositionIndex !== -1) {
       const emptyLetter = game.getEmptyTileLetters()[emptyPositionIndex];
       return {
-        letter: game.getHintState().emptyTileLetter ? emptyLetter : "",
+        letter: gameState.isCompleted || game.getHintState().emptyTileLetter ? emptyLetter : "",
         isSelected: false,
         pieceIndex: -1,
         isInSolutionGrid,
