@@ -145,13 +145,13 @@ export function getTileState({
   // Normal rendering
   const pieceAtPosition = game.getPieceAtPosition(x, y);
   if (pieceAtPosition) {
-    const piece = gameState.pieces[pieceAtPosition.pieceIndex];
-    const block = piece.blocks[pieceAtPosition.blockIndex];
+    const piece = game.getPieceByIndex(pieceAtPosition.pieceIndex);
+    const block = piece?.blocks[pieceAtPosition.blockIndex];
     const isFirstPieceLocked = game.getHintState().firstPieceLocation && pieceAtPosition.pieceIndex === 0;
     // When first piece is locked due to hint, render like an empty tile: no selection, no letter, locked
     if (isFirstPieceLocked) {
       return {
-        letter: block.letter,
+        letter: block?.letter ?? "",
         isSelected: false,
         pieceIndex: pieceAtPosition.pieceIndex,
         isLocked: true,
@@ -160,8 +160,8 @@ export function getTileState({
       };
     }
     return {
-      letter: block.letter,
-      isSelected: piece.isSelected,
+      letter: block?.letter ?? "",
+      isSelected: piece?.isSelected ?? false,
       pieceIndex: pieceAtPosition.pieceIndex,
       isLocked: false,
       isInSolutionGrid,
