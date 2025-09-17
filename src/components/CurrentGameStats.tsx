@@ -42,7 +42,7 @@ export const CurrentGameStats: React.FC<CurrentGameStatsProps> = ({ game }) => {
       <p className="inline-flex items-center gap-2">
         <Clock12Icon
           className={cn(
-            "size-5 md:size-8 animate-spin disabled:animate-none",
+            "size-5 md:size-8 animate-spin",
             game.isPuzzleCompleted() && "animate-none"
           )}
         />
