@@ -26,6 +26,12 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
       event.stopPropagation();
       return;
     }
+    // Prevent dragging the first piece if its hint location is revealed (locked)
+    if (game.getHintState().firstPieceLocation && pieceIndex === 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
 
     // Prevent default behavior and set pointer capture
     event.preventDefault();
@@ -203,6 +209,7 @@ export function useDragAndDrop({ game, gameState, updateGameState, isCompleted }
         
         if (isNewPosition) {
           playDropSuccess();
+          game.incrementNumMoves();
         }
         
         game.setPiecePosition(draggedPieceIndex, finalPosition.x, finalPosition.y);

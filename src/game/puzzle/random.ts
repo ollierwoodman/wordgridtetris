@@ -7,6 +7,7 @@ import { TOTAL_NUM_SOLUTIONS_5x5 } from "./numPieceSolutions/5x5";
 import { TOTAL_NUM_SOLUTIONS_7x7 } from "./numPieceSolutions/7x7";
 import { TOTAL_NUM_SOLUTIONS_8x8 } from "./numPieceSolutions/8x8";
 import { getDateSlug, SPECIAL_DATE_WORD_LISTS } from "./wordLists/specialDates";
+import { GAME_MODES, type GameMode } from "../../types/gameMode";
 
 const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
   4: TOTAL_NUM_SOLUTIONS_4x4,
@@ -23,7 +24,7 @@ export function getSeedFromDate(date: Date = new Date()): string {
   return `${strYear}${strMonth}${strDay}`;
 }
 
-function getRandomSpecialDateWordList(solutionSize: number, randomHelper: SeededRandom): WordSolution | null {
+function getRandomSpecialDateWordList(mode: GameMode, randomHelper: SeededRandom): WordSolution | null {
   const dateSlug = getDateSlug(new Date());
   const currentDateEntries = SPECIAL_DATE_WORD_LISTS[dateSlug];
   
@@ -34,7 +35,7 @@ function getRandomSpecialDateWordList(solutionSize: number, randomHelper: Seeded
   const currentDateEntryIndex = randomHelper.randInt(0, currentDateEntries.length - 1);
   const currentDateEntry = currentDateEntries[currentDateEntryIndex];
   
-  const solutionWords = currentDateEntry.wordSolutions[solutionSize];
+  const solutionWords = currentDateEntry.wordSolutions[GAME_MODES[mode].solutionSize];
   if (!Array.isArray(solutionWords) || solutionWords.length === 0) {
     return null;
   }
@@ -45,13 +46,13 @@ function getRandomSpecialDateWordList(solutionSize: number, randomHelper: Seeded
   return wordSolution;
 }
 
-export async function fetchRandomWordSolution(solutionSize: number, seed: string): Promise<WordSolution> {
+export async function fetchRandomWordSolution(mode: GameMode, seed: string): Promise<WordSolution> {
   const randomHelper = SeededRandom.fromString(seed);
 
-  let solution = getRandomSpecialDateWordList(solutionSize, randomHelper);
+  let solution = getRandomSpecialDateWordList(mode, randomHelper);
 
   // Special case for Chengyu mode (size 8): fetch from chengyu.json
-  if (solution === null && solutionSize === 8) {
+  if (solution === null && mode === GAME_MODES.chengyu.mode) {
     const res = await fetch(createUrl(`solutions/8x8/words/chengyu.json`));
     const allChengyus = (await res.json()) as string[];
     
@@ -70,28 +71,28 @@ export async function fetchRandomWordSolution(solutionSize: number, seed: string
 
   // If no special date word list is found, fetch a random word solution from the checked.json file
   if (solution === null) {
-    const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/words/checked.json`));
+    const res = await fetch(createUrl(`solutions/${String(GAME_MODES[mode].solutionSize)}x${String(GAME_MODES[mode].solutionSize)}/words/checked.json`));
     const data = (await res.json()) as WordSolution[];
     solution = data[randomHelper.randInt(0, data.length - 1)];
   }
 
   solution.words = solution.words.map((word: string) => word.toUpperCase());
-  solution.words = randomHelper.shuffle(solution.words).slice(0, solutionSize);
+  solution.words = randomHelper.shuffle(solution.words).slice(0, GAME_MODES[mode].solutionSize);
   return solution;
 }
 
-export async function fetchRandomPieceSolution(solutionSize: number, seed: string): Promise<PieceSolutionEntry[]> {
+export async function fetchRandomPieceSolution(mode: GameMode, seed: string): Promise<PieceSolutionEntry[]> {
   const randomHelper = SeededRandom.fromString(seed);
   
   // Special case for 8x8: fetch 4 random 4x4 solutions and translate them
-  if (solutionSize === 8) {
+  if (mode === GAME_MODES.chengyu.mode) {
     return await fetchCombined4x4Solutions(randomHelper);
   }
   
   // Original logic for other sizes
-  const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[solutionSize];
+  const numAvailableSolutions = NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE[GAME_MODES[mode].solutionSize];
   const index = randomHelper.randInt(0, numAvailableSolutions - 1);
-  const res = await fetch(createUrl(`solutions/${String(solutionSize)}x${String(solutionSize)}/pieces/${String(index)}.json`));
+  const res = await fetch(createUrl(`solutions/${String(GAME_MODES[mode].solutionSize)}x${String(GAME_MODES[mode].solutionSize)}/pieces/${String(index)}.json`));
   const data = (await res.json()) as PieceSolutionEntry[];
   return data;
 }

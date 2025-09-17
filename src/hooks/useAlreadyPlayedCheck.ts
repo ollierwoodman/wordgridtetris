@@ -1,27 +1,29 @@
 import { useEffect, useState } from "react";
 import { useCompletedPuzzlesManager, type CompletedPuzzle } from "./useLocalStorage";
 import { getLocalDateString } from "../utils/game";
+import type { GameMode } from "../types/gameMode";
 
 interface UseAlreadyPlayedCheckParams {
   isInitialized: boolean;
-  solutionSize: number;
+  gameMode: GameMode;
 }
 
 export const useAlreadyPlayedCheck = ({
   isInitialized,
-  solutionSize,
+  gameMode,
 }: UseAlreadyPlayedCheckParams) => {
   const [shouldShowAlreadyPlayed, setShouldShowAlreadyPlayed] = useState(false);
   const [completedPuzzle, setCompletedPuzzle] = useState<CompletedPuzzle | null>(null);
   
-  const { hasCompletedTodayWithSize, getPuzzleByDateAndSize } = useCompletedPuzzlesManager();
+  const { hasCompletedTodayWithMode, getPuzzleByDateAndMode } = useCompletedPuzzlesManager();
 
-  // Check if puzzle was already completed when loading
+  // Check if puzzle was already completed when loading (including gave up)
   useEffect(() => {
-    if (isInitialized && hasCompletedTodayWithSize(solutionSize)) {
-      const puzzle = getPuzzleByDateAndSize(
+    if (isInitialized && hasCompletedTodayWithMode(gameMode, true)) {
+      const puzzle = getPuzzleByDateAndMode(
         getLocalDateString(),
-        solutionSize
+        gameMode,
+        true // include gave up
       );
       if (puzzle) {
         setCompletedPuzzle(puzzle);
@@ -31,7 +33,7 @@ export const useAlreadyPlayedCheck = ({
     }
     setShouldShowAlreadyPlayed(false);
     setCompletedPuzzle(null);
-  }, [isInitialized, solutionSize, hasCompletedTodayWithSize, getPuzzleByDateAndSize]);
+  }, [isInitialized, gameMode, hasCompletedTodayWithMode, getPuzzleByDateAndMode]);
 
   return {
     shouldShowAlreadyPlayed,

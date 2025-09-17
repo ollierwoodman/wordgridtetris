@@ -51,7 +51,7 @@ export interface GameState {
   pieces: Piece[];
   selectedPieceIndex: number | null;
   isCompleted: boolean;
-  isThemeRevealed: boolean;
+  hintState: HintState;
 }
 
 // UI types
@@ -96,11 +96,15 @@ export interface ModalProps {
   className?: string;
 }
 
-export interface HintsProps {
-  puzzleData?: PuzzleData;
-  onHintRevealed?: (hintId: string) => void;
-  game?: Game;
+export interface HintState {
+  theme?: boolean;
+  emptyTilePosition?: boolean;
+  emptyTileLetter?: boolean;
+  firstPieceLocation: boolean;
+  firstWord: boolean;
 }
+
+export type HintType = 'theme' | 'emptyTilePosition' | 'emptyTileLetter' | 'firstPieceLocation' | 'firstWord';
 
 export interface WordSolution {
   theme: string;

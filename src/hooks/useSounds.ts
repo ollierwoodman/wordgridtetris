@@ -67,7 +67,7 @@ export function useGameSounds() {
     soundEnabled: !isMuted,
   });
 
-  const [playThemeReveal] = useSound(SOUND_PATHS.THEME_REVEAL, {
+  const [playHintReveal] = useSound(SOUND_PATHS.THEME_REVEAL, {
     ...SOUND_OPTIONS,
     soundEnabled: !isMuted,
   });
@@ -87,7 +87,7 @@ export function useGameSounds() {
     playDragClick,
     playDropSuccess,
     playDropFail,
-    playThemeReveal,
+    playHintReveal,
     playPuzzleComplete,
     playLevelUp,
   };

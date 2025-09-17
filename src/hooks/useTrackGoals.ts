@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import type { MatomoFunction } from "./useTrackingOptOut";
+import type { GameMode } from "../types/gameMode";
 
 declare global {
   interface Window {
@@ -25,10 +26,10 @@ export const GOAL_IDS = {
   SHUFFLED_PIECES: 13,
   REVEALED_THEME: 14,
   COMPLETED_PUZZLE_CHENGYU: 17,
+  GAVE_UP_PUZZLE: 18,
 } as const;
 
 function trackGoal(goalId: typeof GOAL_IDS[keyof typeof GOAL_IDS]): void {
-  console.log("Tracking goal:", goalId);
   window._paq = window._paq ?? [];
   window._paq.push(["trackGoal", goalId]);
 }
@@ -39,23 +40,24 @@ export const useTrackMatomoGoalById = (): ((goalId: typeof GOAL_IDS[keyof typeof
   }, []);
 };
 
-export const useTrackCompletedPuzzle = (): ((solutionSize: number) => void) => {
-  return useCallback((solutionSize: number) => {
-    switch (solutionSize) {
-      case 5:
+export const useTrackCompletedPuzzle = (): ((mode: GameMode) => void) => {
+  return useCallback((mode: GameMode) => {
+    switch (mode) {
+      case "5x5":
         trackGoal(GOAL_IDS.COMPLETED_PUZZLE_5X5);
         break;
-      case 6:
+      case "6x6":
         trackGoal(GOAL_IDS.COMPLETED_PUZZLE_6X6);
         break;
-      case 7:
+      case "7x7":
         trackGoal(GOAL_IDS.COMPLETED_PUZZLE_7X7);
         break;
-      case 8:
+      case "chengyu":
         trackGoal(GOAL_IDS.COMPLETED_PUZZLE_CHENGYU);
         break;
       default:
-        throw new Error(`Invalid solution size: ${solutionSize.toString()}`);
+        console.error("Error tracking completed puzzle for mode: ", mode);
+        return;
     }
   }, []);
 };

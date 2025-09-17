@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BookOpenIcon,
+  FlagIcon,
   Grid2X2CheckIcon,
   MenuIcon,
   SettingsIcon,
@@ -14,6 +15,7 @@ import { useHasSeenTutorial } from "../hooks/useLocalStorage";
 import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 import Menu from "./DialogContents/Menu";
 import type { GameMode } from "../types/gameMode";
+import { ConfirmModal } from "./ui/ConfirmModal";
 
 interface ButtonPanelProps {
   updateGameState: () => void;
@@ -22,22 +24,25 @@ interface ButtonPanelProps {
   game: Game;
   onOpenModal: (header: string, content: React.ReactNode) => void;
   onCloseModal?: () => void;
+  onGiveUp: () => void;
 }
 
 export const ButtonPanel: React.FC<ButtonPanelProps> = ({
   solvePuzzle,
-  handleChangePuzzle,
   game,
   onOpenModal,
   updateGameState,
+  onGiveUp,
 }) => {
+  
   const [hasSeenTutorial, setHasSeenTutorial] = useHasSeenTutorial();
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
   useEffect(() => {
     if (!hasSeenTutorial) {
       onOpenModal("Tutorial", <Tutorial game={game} />);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasSeenTutorial]);
 
   const trackGoal = useTrackMatomoGoalById();
@@ -45,7 +50,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
   return (
     <>
       <BigRoundButton
-        title="Tutorial"
+        title="Open tutorial"
         onClick={() => {
           setHasSeenTutorial(true);
           trackGoal(GOAL_IDS.OPENED_TUTORIAL);
@@ -67,7 +72,16 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
       </BigRoundButton>
       <BigRoundButton
-        title="Settings"
+        title="Give up?"
+        disabled={game.isPuzzleCompleted()}
+        onClick={() => {
+          setShowGiveUpConfirm(true);
+        }}
+      >
+        <FlagIcon className="size-8 md:size-10 xl:size-12" />
+      </BigRoundButton>
+      <BigRoundButton
+        title="Open settings"
         onClick={() => {
           trackGoal(GOAL_IDS.OPENED_SETTINGS);
           onOpenModal("Settings", <Settings />);
@@ -79,7 +93,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         title="Open menu"
         onClick={() => {
           trackGoal(GOAL_IDS.OPENED_ABOUT);
-          onOpenModal("Menu", <Menu handleChangePuzzle={handleChangePuzzle} />);
+          onOpenModal("Menu", <Menu />);
         }}
       >
         <MenuIcon className="size-8 md:size-10 xl:size-12" />
@@ -94,7 +108,20 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
           <Grid2X2CheckIcon className="size-8 md:size-10 xl:size-12" />
         </BigRoundButton>
       )}
+      <ConfirmModal
+        isOpen={showGiveUpConfirm}
+        onClose={() => {
+          setShowGiveUpConfirm(false);
+        }}
+        onConfirm={() => {
+          onGiveUp();
+        }}
+        title="Give up?"
+        message="This will mark today's puzzle as given up and reveal the solution."
+        confirmText="Give Up"
+        cancelText="Cancel"
+        variant="warning"
+      />
     </>
   );
 };
-

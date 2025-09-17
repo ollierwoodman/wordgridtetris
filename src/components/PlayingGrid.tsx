@@ -27,18 +27,18 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
   const gridSize = game.getGridSize();
 
   function getTileClasses(tileState: TileState) {
+    const piece = game.getPieceByIndex(tileState.pieceIndex);
+    const isFirstPieceLocked = tileState.pieceIndex === 0 && game.getHintState().firstPieceLocation;
     return cn(
       "relative aspect-square select-none touch-none text-white font-bold text-center rounded-[10%] bg-white dark:bg-gray-400 flex items-center justify-center",
       {
         "bg-gray-400/50 dark:bg-gray-600/50": !tileState.isInSolutionGrid,
-        [`${getPieceColor(tileState.pieceIndex)} cursor-pointer`]:
+        [`${getPieceColor(piece?.type ?? 0)} cursor-pointer`]:
           tileState.pieceIndex >= 0 &&
-          (tileState.pieceIndex !== draggedPieceIndex || tileState.isGhost),
-        "cursor-not-allowed": tileState.isLocked
-          ? gameState.isCompleted
-          : false,
+          (tileState.pieceIndex !== draggedPieceIndex || tileState.isGhost) && !isFirstPieceLocked,
+        "cursor-not-allowed": (tileState.isLocked ?? gameState.isCompleted) || isFirstPieceLocked,
         "bg-gray-800 dark:bg-gray-900 inset-shadow-sm inset-shadow-gray-200/75 dark:inset-shadow-gray-500/75":
-          tileState.isEmptyTile,
+          tileState.isEmptyTile ? true : isFirstPieceLocked,
         "ring-3 ring-green-500 dark:ring-green-700": tileState.isValid,
         "ring-3 ring-red-500 dark:ring-red-700": tileState.isValid === false,
       }
@@ -77,13 +77,17 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
         const canDrag =
           pieceAtPosition &&
           draggedPieceIndex === null &&
-          !gameState.isCompleted;
+          !gameState.isCompleted &&
+          !(game.getHintState().firstPieceLocation && pieceAtPosition.pieceIndex === 0);
         return (
           <div
             key={index}
             className={getTileClasses(tileState)}
             onClick={() => {
-              handleTileClick(x, y);
+              const isFirstLocked = game.getHintState().firstPieceLocation && pieceAtPosition?.pieceIndex === 0;
+              if (!isFirstLocked) {
+                handleTileClick(x, y);
+              }
             }}
             onPointerDown={
               canDrag
@@ -107,15 +111,20 @@ const PlayingGrid: React.FC<PlayingGridProps> = ({
               (tileState.pieceIndex !== draggedPieceIndex ||
                 tileState.isGhost) && (
                 <>
-                  {tileState.isSelected && tileState.isValid === undefined && (
+                  {tileState.isSelected && tileState.isValid === undefined && !(game.getHintState().firstPieceLocation && tileState.pieceIndex === 0) && (
                     <div className="absolute top-1/10 left-1/10 bg-white rounded-full w-1/5 h-1/5">
                       <span className="sr-only">Selected</span>
                     </div>
                   )}
-                  {tileState.letter && (
+                  {tileState.letter && !(game.getHintState().firstPieceLocation && tileState.pieceIndex === 0) && (
                     <span className="text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl leading-0">
                       {tileState.letter}
                     </span>
+                  )}
+                  {tileState.isLocked && !(game.getHintState().firstPieceLocation && tileState.pieceIndex === 0) && (
+                    <div className="absolute top-1/10 left-1/10 text-white w-full h-full">
+                      <LockIcon className="size-1/5" />
+                    </div>
                   )}
                 </>
               )}
