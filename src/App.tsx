@@ -95,7 +95,7 @@ function App() {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-300 dark:bg-gray-900 py-4 px-8">
       {/* Confetti */}
-      <GameConfetti show={showConfetti} />
+      <GameConfetti show={showConfetti} game={game} />
 
       <GameHeader
         game={game}
