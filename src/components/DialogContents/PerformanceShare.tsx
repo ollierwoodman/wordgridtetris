@@ -171,6 +171,18 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     return Object.values(hintState).filter((hint) => hint === true).length;
   }
 
+  const countHintsAvailable = (hintState: HintState): number => {
+    return Object.values(hintState).filter((hint) => hint !== undefined).length;
+  }
+
+  const hintsString = (hintState: HintState): string => {
+    return `${countHintsUsed(hintState).toString()}/${countHintsAvailable(hintState).toString()} hints`;
+  }
+
+  const numMovesString = (numMoves: number): string => {
+    return numMoves === 0 ? "0 moves" : `${numMoves.toString()} moves`;
+  }
+
   let out = `My Blockle Results (${new Date().toLocaleDateString()}):`;
   GAME_MODE_LIST.filter(mode => {
     const puzzle = getPuzzleCompletionByDateAndMode(
@@ -191,13 +203,11 @@ function buildShareText(completedPuzzles: CompletedPuzzle[]): string {
     );
 
     if (puzzle === undefined) return;
-    
-    const numHintsUsed = countHintsUsed(puzzle.hintState);
 
     if (puzzle.gaveUp) {
       out += `\n${config.displayName} - Gave up`;
     } else {
-      out += `\n${config.displayName} - ${formatDurationMs(puzzle.timeToCompleteMs)}, ${puzzle.numMoves.toString()} moves, ${numHintsUsed.toString()} hints`;
+      out += `\n${config.displayName} - ${formatDurationMs(puzzle.timeToCompleteMs)}, ${numMovesString(puzzle.numMoves)}, ${hintsString(puzzle.hintState)}`;
     }
   });
   return out;
