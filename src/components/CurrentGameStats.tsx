@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Clock12Icon, MoveIcon } from "lucide-react";
 import type { Game } from "../game/logic";
 import { formatDurationMs } from "../utils/game";
@@ -10,21 +10,19 @@ interface CurrentGameStatsProps {
 
 export const CurrentGameStats: React.FC<CurrentGameStatsProps> = ({ game }) => {
   const [elapsedMs, setElapsedMs] = useState<number>(game.getElapsedMs());
+  const originRef = useRef<number>(Date.now() - game.getElapsedMs());
 
   useEffect(() => {
+    // Reset origin when game instance changes
+    originRef.current = Date.now() - game.getElapsedMs();
     // Initial tick
-    setElapsedMs(game.getElapsedMs());
-
-    if (game.isPuzzleCompleted()) {
-      return;
-    }
+    setElapsedMs(Date.now() - originRef.current);
 
     const id = window.setInterval(() => {
+      const nextElapsed = Date.now() - originRef.current;
+      setElapsedMs(nextElapsed);
       if (game.isPuzzleCompleted()) {
-        setElapsedMs(game.getElapsedMs());
         window.clearInterval(id);
-      } else {
-        setElapsedMs(game.getElapsedMs());
       }
     }, 1000);
 
