@@ -16,6 +16,7 @@ import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
 import Menu from "./DialogContents/Menu";
 import type { GameMode } from "../types/gameMode";
 import { ConfirmModal } from "./ui/ConfirmModal";
+import { cn } from "@sglara/cn";
 
 interface ButtonPanelProps {
   updateGameState: () => void;
@@ -48,7 +49,9 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
   const trackGoal = useTrackMatomoGoalById();
 
   return (
-    <>
+    <div className={cn("grid grid-cols-5 justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4",
+      import.meta.env.DEV && "grid-cols-6"
+    )}>
       <BigRoundButton
         title="Open tutorial"
         onClick={() => {
@@ -58,7 +61,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         }}
         hasBadge={!hasSeenTutorial}
       >
-        <BookOpenIcon className="size-8 md:size-10 xl:size-12" />
+        <BookOpenIcon className="size-6 md:size-8 xl:size-10" />
       </BigRoundButton>
       <BigRoundButton
         title="Shuffle pieces"
@@ -69,7 +72,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
           trackGoal(GOAL_IDS.SHUFFLED_PIECES);
         }}
       >
-        <ShuffleIcon className="size-8 md:size-10 xl:size-12" />
+        <ShuffleIcon className="size-6 md:size-8 xl:size-10" />
       </BigRoundButton>
       <BigRoundButton
         title="Give up?"
@@ -78,7 +81,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
           setShowGiveUpConfirm(true);
         }}
       >
-        <FlagIcon className="size-8 md:size-10 xl:size-12" />
+        <FlagIcon className="size-6 md:size-8 xl:size-10" />
       </BigRoundButton>
       <BigRoundButton
         title="Open settings"
@@ -87,7 +90,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
           onOpenModal("Settings", <Settings />);
         }}
       >
-        <SettingsIcon className="size-8 md:size-10 xl:size-12" />
+        <SettingsIcon className="size-6 md:size-8 xl:size-10" />
       </BigRoundButton>
       <BigRoundButton
         title="Open menu"
@@ -96,7 +99,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
           onOpenModal("Menu", <Menu />);
         }}
       >
-        <MenuIcon className="size-8 md:size-10 xl:size-12" />
+        <MenuIcon className="size-6 md:size-8 xl:size-10" />
       </BigRoundButton>
       {import.meta.env.DEV && (
         <BigRoundButton
@@ -105,7 +108,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
             solvePuzzle();
           }}
         >
-          <Grid2X2CheckIcon className="size-8 md:size-10 xl:size-12" />
+          <Grid2X2CheckIcon className="size-6 md:size-8 xl:size-10" />
         </BigRoundButton>
       )}
       <ConfirmModal
@@ -122,6 +125,6 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         cancelText="Cancel"
         variant="warning"
       />
-    </>
+    </div>
   );
 };
