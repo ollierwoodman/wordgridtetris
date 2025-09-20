@@ -17,14 +17,17 @@ const NUMBER_OF_PIECE_SOLUTIONS_BY_SOLUTION_SIZE: Record<number, number> = {
   8: TOTAL_NUM_SOLUTIONS_8x8,
 };
 
-export function getSeedFromDate(date: Date = new Date()): string {
+export function buildSeed(seedPrefix: string, date: Date = new Date()): string {
   const strYear = date.getFullYear().toString();
   const strMonth = (date.getMonth() + 1).toString();
   const strDay = date.getDate().toString();
-  return `${strYear}${strMonth}${strDay}`;
+  return `${seedPrefix}-${strYear}-${strMonth}-${strDay}`;
 }
 
 function getRandomSpecialDateWordList(mode: GameMode, randomHelper: SeededRandom): WordSolution | null {
+  // Only for English 5x5, 6x6, and 7x7 modes
+  if (!["5x5", "6x6", "7x7"].includes(mode)) return null;
+
   const dateSlug = getDateSlug(new Date());
   const currentDateEntries = SPECIAL_DATE_WORD_LISTS[dateSlug];
   
@@ -49,35 +52,44 @@ function getRandomSpecialDateWordList(mode: GameMode, randomHelper: SeededRandom
 export async function fetchRandomWordSolution(mode: GameMode, seed: string): Promise<WordSolution> {
   const randomHelper = SeededRandom.fromString(seed);
 
+  // Try special date lists first for supported English modes
   let solution = getRandomSpecialDateWordList(mode, randomHelper);
 
-  // Special case for Chengyu mode (size 8): fetch from chengyu.json
+  const cfg = GAME_MODES[mode];
+  const publicPath = cfg.wordSolutionsFilePath.replace(/^public\//, "");
+
+  // Chengyu mode: pick 16 random four-character idioms from the configured file
   if (solution === null && mode === GAME_MODES.chengyu.mode) {
-    const res = await fetch(createUrl(`solutions/8x8/words/chengyu.json`));
+    const res = await fetch(createUrl(publicPath));
     const allChengyus = (await res.json()) as string[];
-    
-    // Randomly select 16 chengyus from the entire pool
     const selectedChengyus = randomHelper.shuffle(allChengyus).slice(0, 16);
-    
-    // Create a solution with random chengyus and no theme
-    solution = {
-      theme: "", // No theme for chengyu mode
+    return {
+      theme: "",
       words: selectedChengyus,
-      greeting: undefined
+      greeting: undefined,
     };
-    
-    return solution;
   }
 
-  // If no special date word list is found, fetch a random word solution from the checked.json file
+  // If no special date list, fetch based on mode config
   if (solution === null) {
-    const res = await fetch(createUrl(`solutions/${String(GAME_MODES[mode].solutionSize)}x${String(GAME_MODES[mode].solutionSize)}/words/checked.json`));
-    const data = (await res.json()) as WordSolution[];
-    solution = data[randomHelper.randInt(0, data.length - 1)];
+    const res = await fetch(createUrl(publicPath));
+
+    if (cfg.wordSolutionsType === "themed") {
+      // themed: JSON array of { theme, words }
+      const themedLists = (await res.json()) as WordSolution[];
+      const chosen = themedLists[randomHelper.randInt(0, themedLists.length - 1)];
+      solution = { theme: chosen.theme, words: [...chosen.words] };
+    } else {
+      // random: JSON array of strings
+      const wordsPool = (await res.json()) as string[];
+      const selected = randomHelper.shuffle(wordsPool).slice(0, cfg.solutionSize);
+      solution = { theme: "", words: selected };
+    }
   }
 
+  // Normalize words for display/play
   solution.words = solution.words.map((word: string) => word.toUpperCase());
-  solution.words = randomHelper.shuffle(solution.words).slice(0, GAME_MODES[mode].solutionSize);
+  solution.words = randomHelper.shuffle(solution.words).slice(0, cfg.solutionSize);
   return solution;
 }
 

@@ -22,7 +22,13 @@ export const PuzzleSelect: React.FC<PuzzleSelectProps> = ({ handleChangePuzzle }
 
   return (
     <>
-      <PuzzleSelectCategory title="Daily puzzles" modes={["5x5", "6x6", "7x7", "chengyu"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="English puzzles" modes={["5x5", "6x6", "7x7"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="中文 puzzles" modes={["chengyu"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="Deutsch puzzles" modes={["ger-5x5", "ger-6x6", "ger-7x7"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="Español puzzles" modes={["spa-5x5", "spa-6x6", "spa-7x7"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="Français puzzles" modes={["fra-5x5", "fra-6x6", "fra-7x7"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="Русские puzzles" modes={["rus-5x5", "rus-6x6", "rus-7x7"]} onChangePuzzle={onChangePuzzle} />
+      <PuzzleSelectCategory title="Tiếng Việt puzzles" modes={["vie-5x5"]} onChangePuzzle={onChangePuzzle} />
     </>
   );
 };

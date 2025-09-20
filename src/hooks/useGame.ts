@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
-import { getSeedFromDate } from "../game/puzzle/random";
+import { buildSeed } from "../game/puzzle/random";
 import { useGameSounds } from "./useSounds";
-import type { GameMode } from "../types/gameMode";
+import { GAME_MODES, type GameMode } from "../types/gameMode";
 
-export function useGame(mode?: GameMode, seed: string = getSeedFromDate()) {
+export function useGame(mode?: GameMode, seed: string | null = null) {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,8 @@ export function useGame(mode?: GameMode, seed: string = getSeedFromDate()) {
     // Reset gameState immediately to prevent completion effects from old state
     setGameState(null);
     
-    const newGame = new Game(mode, seed);
+    const gameConfig = GAME_MODES[mode];
+    const newGame = new Game(mode, seed ?? buildSeed(gameConfig.seedPrefix, new Date()));
     setGame(newGame);
     
     // Wait for the game to be fully initialized

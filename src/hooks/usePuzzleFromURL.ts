@@ -74,12 +74,8 @@ export function usePuzzleFromURL() {
     }
   }, []);
 
-  // Get solution size from current game mode
-  const solutionSize = getGameModeConfig(gameMode).solutionSize;
-
   return {
     gameMode,
-    solutionSize,
     isInitialized,
     changeGameMode,
     shouldShow404,
