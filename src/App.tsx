@@ -114,34 +114,33 @@ function App() {
       <div className="w-full max-w-[60vh] flex flex-col justify-center my-4">
         {playingGrid}
       </div>
-      
-      {/* Current game stats */}
-      <CurrentGameStats game={game} />
 
-      <div className="flex flex-row flex-wrap justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4">
-        {/* Button Panel */}
-        <ButtonPanel
-          updateGameState={updateGameState}
-          solvePuzzle={solvePuzzle}
-          handleChangePuzzle={handleChangePuzzle}
-          game={game}
-          onOpenModal={handleOpenModal}
-          onCloseModal={handleCloseModal}
-          onGiveUp={handleGiveUp}
-        />
+      <div className="flex flex-row justify-between items-center w-full max-w-[60vh] gap-4">
+        <CurrentGameStats game={game} />
+        <button
+          type="button"
+          onClick={() => {
+            playMenuClick();
+            handleOpenModal("About Blockle", <About />);
+          }}
+          className="cursor-pointer hover:opacity-80 transition-opacity text-gray-600 dark:text-white text-sm md:text-base text-center text-balance"
+        >
+          Made with{" "}
+          <HeartIcon className="size-5 inline-block fill-gray-600 dark:fill-gray-300 -mt-1" />{" "}
+          by Ollie
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={() => {
-          playMenuClick();
-          handleOpenModal("About Blockle", <About />);
-        }}
-        className="cursor-pointer hover:opacity-80 transition-opacity text-gray-600 dark:text-gray-300 text-sm md:text-base text-center text-balance mt-4"
-      >
-        Made with{" "}
-        <HeartIcon className="size-5 inline-block fill-gray-600 dark:fill-gray-300 -mt-1" />{" "}
-        by Ollie
-      </button>
+
+      {/* Button Panel */}
+      <ButtonPanel
+        updateGameState={updateGameState}
+        solvePuzzle={solvePuzzle}
+        handleChangePuzzle={handleChangePuzzle}
+        game={game}
+        onOpenModal={handleOpenModal}
+        onCloseModal={handleCloseModal}
+        onGiveUp={handleGiveUp}
+      />
 
       <Modal
         isOpen={isModalOpen}
