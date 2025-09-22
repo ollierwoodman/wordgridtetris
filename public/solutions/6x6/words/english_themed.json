@@ -1147,5 +1147,60 @@
       "chisel",
       "plough"
     ]
+  },
+  {
+    "theme": "Pizza",
+    "words": [
+      "cheese",
+      "pepper",
+      "tomato",
+      "garlic",
+      "salami",
+      "potato"
+    ]
+  },
+  {
+    "theme": "Famous Women",
+    "words": [
+      "austen",
+      "teresa",
+      "keller",
+      "tubman",
+      "chanel",
+      "gandhi"
+    ]
+  },
+  {
+    "theme": "3.14159",
+    "words": [
+      "radius",
+      "circle",
+      "volume",
+      "sphere",
+      "around",
+      "newton"
+    ]
+  },
+  {
+    "theme": "Cat",
+    "words": [
+      "feline",
+      "kitten",
+      "pounce",
+      "litter",
+      "reflex",
+      "sphynx"
+    ]
+  },
+  {
+    "theme": "Christmas",
+    "words": [
+      "jingle",
+      "sleigh",
+      "grinch",
+      "advent",
+      "cookie",
+      "carrot"
+    ]
   }
 ]

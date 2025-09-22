@@ -923,5 +923,165 @@
       "berth",
       "aisle"
     ]
+  },
+  {
+    "theme": "New Year",
+    "words": [
+      "cheer",
+      "drink",
+      "party",
+      "toast",
+      "count"
+    ]
+  },
+  {
+    "theme": "Pizza",
+    "words": [
+      "pizza",
+      "slice",
+      "crust",
+      "sauce",
+      "flour",
+      "dough",
+      "onion",
+      "olive",
+      "basil",
+      "bacon"
+    ]
+  },
+  {
+    "theme": "Valentine's Day",
+    "words": [
+      "heart",
+      "lover",
+      "movie",
+      "dress",
+      "cupid"
+    ]
+  },
+  {
+    "theme": "Famous Women",
+    "words": [
+      "curie",
+      "diana",
+      "parks",
+      "kahlo",
+      "woolf"
+    ]
+  },
+  {
+    "theme": "St. Patrick's Day",
+    "words": [
+      "green",
+      "lucky",
+      "irish",
+      "paddy",
+      "drink"
+    ]
+  },
+  {
+    "theme": "Poetry",
+    "words": [
+      "verse",
+      "rhyme",
+      "lyric",
+      "meter",
+      "frost"
+    ]
+  },
+  {
+    "theme": "Chocolate",
+    "words": [
+      "sweet",
+      "cocoa",
+      "sugar",
+      "candy",
+      "treat"
+    ]
+  },
+  {
+    "theme": "Beer",
+    "words": [
+      "yeast",
+      "wheat",
+      "maize",
+      "craft",
+      "drink",
+      "drunk",
+      "light",
+      "lager",
+      "brown"
+    ]
+  },
+  {
+    "theme": "Dog",
+    "words": [
+      "puppy",
+      "pooch",
+      "hound",
+      "doggy",
+      "chase",
+      "fetch"
+    ]
+  },
+  {
+    "theme": "Peace",
+    "words": [
+      "peace",
+      "share",
+      "unity",
+      "equal",
+      "human"
+    ]
+  },
+  {
+    "theme": "Heart",
+    "words": [
+      "heart",
+      "blood",
+      "pulse",
+      "atria",
+      "organ",
+      "chest",
+      "aorta",
+      "valve"
+    ]
+  },
+  {
+    "theme": "Coffee",
+    "words": [
+      "drink",
+      "latte",
+      "mocha",
+      "decaf",
+      "roast",
+      "cuppa",
+      "grind",
+      "sugar"
+    ]
+  },
+  {
+    "theme": "Halloween",
+    "words": [
+      "ghost",
+      "witch",
+      "trick",
+      "treat",
+      "candy",
+      "spook",
+      "scary",
+      "skull"
+    ]
+  },
+  {
+    "theme": "Christmas",
+    "words": [
+      "santa",
+      "frost",
+      "kevin",
+      "carol",
+      "merry",
+      "jesus"
+    ]
   }
 ]

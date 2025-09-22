@@ -67,6 +67,8 @@ describe("GAME_MODES solution assets", () => {
 					expect(wordLists.length, `wordSolutionsFilePath should have at least ${String(minThemesNeeded)} themes for mode ${mode}`).toBeGreaterThanOrEqual(minThemesNeeded);
 				});
 
+				console.log("mode", mode, "has", wordLists.length, "themes");
+
 				it(`all words in each theme should have length of ${strSolutionSize}`, () => {
 					wordLists.forEach((theme) => {
 						theme.words.forEach((word) => {

@@ -110,6 +110,7 @@ export interface WordSolution {
   theme: string;
   words: string[];
   greeting?: string;
+  credit?: string;
 }
 
 export interface UserSettings {
