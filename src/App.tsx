@@ -103,13 +103,6 @@ function App() {
         handleChangePuzzle={handleChangePuzzle}
       />
 
-      {/* Greeting */}
-      {game.getWordSolution().greeting && (
-        <div className="text-gray-600 dark:text-gray-300 text-lg md:text-xl xl:text-2xl font-bold text-center text-balance mb-4">
-          {game.getWordSolution().greeting}
-        </div>
-      )}
-
       {/* Playing grid */}
       <div className="w-full max-w-[60vh] flex flex-col justify-center my-4">
         {playingGrid}
@@ -117,18 +110,26 @@ function App() {
 
       <div className="flex flex-row justify-between items-center w-full max-w-[60vh] gap-4">
         <CurrentGameStats game={game} />
-        <button
-          type="button"
-          onClick={() => {
-            playMenuClick();
-            handleOpenModal("About Blockle", <About />);
-          }}
-          className="cursor-pointer hover:opacity-80 transition-opacity text-gray-600 dark:text-white text-sm md:text-base text-center text-balance"
-        >
-          Made with{" "}
-          <HeartIcon className="size-5 inline-block fill-gray-600 dark:fill-gray-300 -mt-1" />{" "}
-          by Ollie
-        </button>
+
+        {/* Greeting */}
+        {(game.getWordSolution().greeting && (
+          <div className="text-gray-600 dark:text-white text-sm md:text-base text-center text-balance">
+            {game.getWordSolution().greeting}
+          </div>
+        )) ?? (
+          <button
+            type="button"
+            onClick={() => {
+              playMenuClick();
+              handleOpenModal("About Blockle", <About />);
+            }}
+            className="cursor-pointer hover:opacity-80 transition-opacity text-gray-600 dark:text-white text-sm md:text-base text-center text-balance"
+          >
+            Made with{" "}
+            <HeartIcon className="size-5 inline-block fill-gray-600 dark:fill-gray-300 -mt-1" />{" "}
+            by Ollie
+          </button>
+        )}
       </div>
 
       {/* Button Panel */}
