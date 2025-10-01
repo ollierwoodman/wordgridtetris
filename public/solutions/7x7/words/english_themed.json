@@ -431,20 +431,15 @@
     ]
   },
   {
-    "theme": "medicine",
+    "theme": "medical",
     "words": [
-      "medical",
       "patient",
       "syringe",
       "capsule",
       "aspirin",
-      "vicodin",
-      "tylenol",
-      "ritalin",
       "surgery",
       "surgeon",
       "bandage",
-      "anthrax",
       "steroid",
       "swollen",
       "therapy",
