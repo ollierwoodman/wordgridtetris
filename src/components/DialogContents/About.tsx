@@ -6,7 +6,7 @@ export const About = () => {
         <p>
           This game was created with ❤️ by{" "}
           <a
-            href="https://card.ollierwoodman.com/en"
+            href="https://card.ollierwoodman.com"
             className="underline hover:opacity-80"
           >
             Ollie
