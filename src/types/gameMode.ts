@@ -14,6 +14,9 @@ export interface GameModeConfig {
   description: string;
   urlPath: string;
   seedPrefix: string;
+  // Disabled modes keep their config and word lists but are unreachable: they are
+  // hidden from the puzzle select and their urlPath resolves to the 404 page.
+  enabled: boolean;
 }
 
 export const GAME_MODE_LIST = [
@@ -50,6 +53,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "English 5×5",
     urlPath: "/5x5",
     seedPrefix: "eng5",
+    enabled: true,
   },
   "6x6": {
     mode: "6x6",
@@ -62,6 +66,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "English 6×6",
     urlPath: "/6x6",
     seedPrefix: "eng6",
+    enabled: true,
   },
   "7x7": {
     mode: "7x7",
@@ -74,6 +79,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "English 7×7",
     urlPath: "/7x7",
     seedPrefix: "eng7",
+    enabled: true,
   },
   chengyu: {
     mode: "chengyu",
@@ -86,6 +92,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "16 Chinese chengyus",
     urlPath: "/chengyu",
     seedPrefix: "chengyu",
+    enabled: true,
   },
   // French
   "fra-5x5": {
@@ -99,6 +106,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "French 5×5",
     urlPath: "/french-5x5",
     seedPrefix: "fr5",
+    enabled: false,
   },
   "fra-6x6": {
     mode: "fra-6x6",
@@ -111,6 +119,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "French 6×6",
     urlPath: "/french-6x6",
     seedPrefix: "fr6",
+    enabled: false,
   },
   "fra-7x7": {
     mode: "fra-7x7",
@@ -123,6 +132,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "French 7×7",
     urlPath: "/french-7x7",
     seedPrefix: "fr7",
+    enabled: false,
   },
   // German
   "ger-5x5": {
@@ -136,6 +146,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "German 5×5",
     urlPath: "/german-5x5",
     seedPrefix: "de5",
+    enabled: false,
   },
   "ger-6x6": {
     mode: "ger-6x6",
@@ -148,6 +159,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "German 6×6",
     urlPath: "/german-6x6",
     seedPrefix: "de6",
+    enabled: false,
   },
   "ger-7x7": {
     mode: "ger-7x7",
@@ -160,6 +172,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "German 7×7",
     urlPath: "/german-7x7",
     seedPrefix: "de7",
+    enabled: false,
   },
   // Russian
   "rus-5x5": {
@@ -173,6 +186,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Russian 5×5",
     urlPath: "/russian-5x5",
     seedPrefix: "ru5",
+    enabled: false,
   },
   "rus-6x6": {
     mode: "rus-6x6",
@@ -185,6 +199,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Russian 6×6",
     urlPath: "/russian-6x6",
     seedPrefix: "ru6",
+    enabled: false,
   },
   "rus-7x7": {
     mode: "rus-7x7",
@@ -197,6 +212,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Russian 7×7",
     urlPath: "/russian-7x7",
     seedPrefix: "ru7",
+    enabled: false,
   },
   // Spanish
   "spa-5x5": {
@@ -210,6 +226,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Spanish 5×5",
     urlPath: "/spanish-5x5",
     seedPrefix: "es5",
+    enabled: false,
   },
   "spa-6x6": {
     mode: "spa-6x6",
@@ -222,6 +239,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Spanish 6×6",
     urlPath: "/spanish-6x6",
     seedPrefix: "es6",
+    enabled: false,
   },
   "spa-7x7": {
     mode: "spa-7x7",
@@ -234,6 +252,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Spanish 7×7",
     urlPath: "/spanish-7x7",
     seedPrefix: "es7",
+    enabled: false,
   },
   // Vietnamese
   "vie-5x5": {
@@ -247,8 +266,20 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Vietnamese 5×5",
     urlPath: "/vietnamese-5x5",
     seedPrefix: "vi5",
+    enabled: false,
   },
 };
+
+// The modes players can actually reach. Prefer this over GAME_MODE_LIST anywhere
+// modes are offered, counted or navigated to; GAME_MODE_LIST still covers every
+// mode ever played, so historical stats keep resolving their display names.
+export const ENABLED_GAME_MODE_LIST: GameMode[] = GAME_MODE_LIST.filter(
+  (mode) => GAME_MODES[mode].enabled
+);
+
+export function isGameModeEnabled(mode: GameMode): boolean {
+  return GAME_MODES[mode].enabled;
+}
 
 export function getGameModeFromPath(path: string): GameMode | null {
   // Handle base path
@@ -260,7 +291,7 @@ export function getGameModeFromPath(path: string): GameMode | null {
   const cleanPath = path.startsWith("/") ? path.substring(1) : path;
 
   // Find matching game mode
-  for (const mode of Object.keys(GAME_MODES) as GameMode[]) {
+  for (const mode of ENABLED_GAME_MODE_LIST) {
     const config = GAME_MODES[mode];
     if (config.urlPath === path || cleanPath === mode) {
       return mode;

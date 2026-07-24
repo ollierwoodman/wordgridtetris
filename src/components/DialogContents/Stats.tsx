@@ -13,7 +13,7 @@ import {
 import { useCompletedPuzzlesManager } from "../../hooks/useLocalStorage";
 import { ConfirmModal } from "../ui/ConfirmModal";
 import { formatDurationMs } from "../../utils/game";
-import { GAME_MODES, type GameMode } from "../../types/gameMode";
+import { ENABLED_GAME_MODE_LIST, GAME_MODES, type GameMode } from "../../types/gameMode";
 
 // All completed puzzles now include a definitive mode; no legacy size fallback needed.
 
@@ -32,12 +32,13 @@ export function Stats() {
   const completedToday = hasCompletedToday(false); // exclude gave up
 
   // Group puzzles by size (excluding gave up)
-  const puzzlesByMode = {
-    "5x5": getPuzzlesByMode("5x5", false).length,
-    "6x6": getPuzzlesByMode("6x6", false).length,
-    "7x7": getPuzzlesByMode("7x7", false).length,
-    "chengyu": getPuzzlesByMode("chengyu", false).length,
-  } as Record<GameMode, number>;
+  const puzzlesByMode = ENABLED_GAME_MODE_LIST.reduce<Record<GameMode, number>>(
+    (acc, mode) => {
+      acc[mode] = getPuzzlesByMode(mode, false).length;
+      return acc;
+    },
+    {} as Record<GameMode, number>
+  );
 
   // Calculate average completion time (excluding 0 values and gave up puzzles)
   const puzzlesWithTime = completedPuzzles.filter(

@@ -8,7 +8,7 @@ import {
 import { formatDurationMs, getLocalDateString } from "../../utils/game";
 import useShare from "../../hooks/useShare";
 import {
-  GAME_MODE_LIST,
+  ENABLED_GAME_MODE_LIST,
   getGameModeConfig,
   type GameMode,
 } from "../../types/gameMode";
@@ -24,7 +24,7 @@ import type { HintState } from "../../types/game";
 const baseUrl = "https://blockle.au";
 
 const getVisibleGameModes = (completedPuzzles: CompletedPuzzle[]): GameMode[] => {
-  return GAME_MODE_LIST.filter((mode) => {
+  return ENABLED_GAME_MODE_LIST.filter((mode) => {
     const puzzle = getPuzzleCompletionByDateAndMode(
       completedPuzzles,
       getLocalDateString(),

@@ -1,6 +1,6 @@
 import { useCompletedPuzzlesManager } from "../../hooks/useLocalStorage";
 import { PerformanceShare } from "./PerformanceShare";
-import { GAME_MODE_LIST, getGameModeConfig, type GameMode } from "../../types/gameMode";
+import { ENABLED_GAME_MODE_LIST, getGameModeConfig, type GameMode } from "../../types/gameMode";
 import { ShareIcon } from "lucide-react";
 
 interface ShareProps {
@@ -9,7 +9,7 @@ interface ShareProps {
 
 export function Share({ handleChangePuzzle }: ShareProps) {
   const { hasCompletedTodayWithMode } = useCompletedPuzzlesManager();
-  const hasCompletedAllTodaysPuzzles = GAME_MODE_LIST.every((mode) => {
+  const hasCompletedAllTodaysPuzzles = ENABLED_GAME_MODE_LIST.every((mode) => {
     const config = getGameModeConfig(mode);
     return hasCompletedTodayWithMode(config.mode);
   });

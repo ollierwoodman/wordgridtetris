@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { type GameMode, getGameModeFromPath, getGameModeConfig, GAME_MODE_LIST } from "../types/gameMode";
+import { type GameMode, getGameModeFromPath, getGameModeConfig, ENABLED_GAME_MODE_LIST } from "../types/gameMode";
 
 const DEFAULT_GAME_MODE: GameMode = '5x5';
 
@@ -68,7 +68,7 @@ export function usePuzzleFromURL() {
 
   // Function to manually change game mode
   const changeGameMode = useCallback((newMode: GameMode) => {
-    if (GAME_MODE_LIST.includes(newMode)) {
+    if (ENABLED_GAME_MODE_LIST.includes(newMode)) {
       setShouldShow404(false); // Reset 404 state when manually changing mode
       setGameMode(newMode);
     }

@@ -3,8 +3,21 @@ import { GOAL_IDS, useTrackMatomoGoalById } from "../../hooks/useTrackGoals";
 import { useGameSounds } from "../../hooks/useSounds";
 import {
   getGameModeConfig,
+  isGameModeEnabled,
   type GameMode,
 } from "../../types/gameMode";
+
+// Categories are listed in full; disabled modes are filtered out below, so
+// re-enabling a mode in GAME_MODES brings its category back with no edit here.
+const PUZZLE_CATEGORIES: { title: string; modes: GameMode[] }[] = [
+  { title: "English puzzles", modes: ["5x5", "6x6", "7x7"] },
+  { title: "中文 puzzles", modes: ["chengyu"] },
+  { title: "Deutsch puzzles", modes: ["ger-5x5", "ger-6x6", "ger-7x7"] },
+  { title: "Español puzzles", modes: ["spa-5x5", "spa-6x6", "spa-7x7"] },
+  { title: "Français puzzles", modes: ["fra-5x5", "fra-6x6", "fra-7x7"] },
+  { title: "Русские puzzles", modes: ["rus-5x5", "rus-6x6", "rus-7x7"] },
+  { title: "Tiếng Việt puzzles", modes: ["vie-5x5"] },
+];
 
 interface PuzzleSelectProps {
   handleChangePuzzle: (mode: GameMode) => void;
@@ -22,13 +35,18 @@ export const PuzzleSelect: React.FC<PuzzleSelectProps> = ({ handleChangePuzzle }
 
   return (
     <>
-      <PuzzleSelectCategory title="English puzzles" modes={["5x5", "6x6", "7x7"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="中文 puzzles" modes={["chengyu"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="Deutsch puzzles" modes={["ger-5x5", "ger-6x6", "ger-7x7"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="Español puzzles" modes={["spa-5x5", "spa-6x6", "spa-7x7"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="Français puzzles" modes={["fra-5x5", "fra-6x6", "fra-7x7"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="Русские puzzles" modes={["rus-5x5", "rus-6x6", "rus-7x7"]} onChangePuzzle={onChangePuzzle} />
-      <PuzzleSelectCategory title="Tiếng Việt puzzles" modes={["vie-5x5"]} onChangePuzzle={onChangePuzzle} />
+      {PUZZLE_CATEGORIES.map(({ title, modes }) => {
+        const enabledModes = modes.filter(isGameModeEnabled);
+        if (enabledModes.length === 0) return null;
+        return (
+          <PuzzleSelectCategory
+            key={title}
+            title={title}
+            modes={enabledModes}
+            onChangePuzzle={onChangePuzzle}
+          />
+        );
+      })}
     </>
   );
 };

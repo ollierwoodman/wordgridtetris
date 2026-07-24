@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Game } from '../game/logic';
 import { getLocalDateString } from '../utils/game';
 import type { GameMode } from '../types/gameMode';
-import { GAME_MODE_LIST } from '../types/gameMode';
+import { ENABLED_GAME_MODE_LIST } from '../types/gameMode';
 import type { HintState } from '../types/game';
 
 // Storage keys for the application
@@ -236,7 +236,7 @@ export function useCompletedPuzzlesManager() {
   }, [completedPuzzles]);
 
   const getTodaysPuzzles = useCallback((includeGaveUp = false) => {
-    return GAME_MODE_LIST.map((mode) => getPuzzleCompletionByDateAndMode(completedPuzzles, getLocalDateString(), mode, includeGaveUp));
+    return ENABLED_GAME_MODE_LIST.map((mode) => getPuzzleCompletionByDateAndMode(completedPuzzles, getLocalDateString(), mode, includeGaveUp));
   }, [completedPuzzles]);
 
   const hasCompletedToday = useCallback((includeGaveUp = false) => {
