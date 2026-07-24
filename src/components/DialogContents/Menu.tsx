@@ -2,7 +2,7 @@ import React from "react";
 import { ChevronRightIcon } from "lucide-react";
 import { Stats } from "./Stats";
 import { BarChart2Icon, InfoIcon } from "lucide-react";
-import { GOAL_IDS, useTrackMatomoGoalById } from "../../hooks/useTrackGoals";
+import { ANALYTICS_EVENTS, useTrackEvent } from "../../hooks/useTrackEvents";
 import { About } from "./About";
 import { useGameSounds } from "../../hooks/useSounds";
 import { useModal } from "../../hooks/useModal";
@@ -17,17 +17,17 @@ const Menu: React.FC = () => {
     handleCloseModal,
   } = useModal();
   const { playMenuClick } = useGameSounds();
-  const trackGoal = useTrackMatomoGoalById();
+  const trackEvent = useTrackEvent();
 
   const handleOpenStats = () => {
     playMenuClick();
-    trackGoal(GOAL_IDS.OPENED_STATS);
+    trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "stats" });
     handleOpenModal("My stats", <Stats />);
   };
 
   const handleOpenAbout = () => {
     playMenuClick();
-    trackGoal(GOAL_IDS.OPENED_ABOUT);
+    trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "about" });
     handleOpenModal("About Blockle", <About />);
   };
 

@@ -3,7 +3,7 @@ import { Game } from "../game/logic";
 import type { GameState } from "../types/game";
 import { useGameSounds } from "./useSounds";
 import { useCompletedPuzzlesManager } from "./useLocalStorage";
-import { useTrackCompletedPuzzle } from "./useTrackGoals";
+import { useTrackCompletedPuzzle } from "./useTrackEvents";
 import { getLocalDateString } from "../utils/game";
 
 interface UsePuzzleCompletionParams {

@@ -11,7 +11,6 @@ export const STORAGE_KEYS = {
   THEME: 'theme',
   HAS_SEEN_TUTORIAL: 'hasSeenTutorial',
   COMPLETED_PUZZLES: 'completedPuzzlesVersion2',
-  TRACKING_OPT_OUT: 'trackingOptOut',
 } as const;
 
 // Types for the data we store
@@ -32,7 +31,6 @@ export interface LocalStorageData {
   [STORAGE_KEYS.THEME]: 'light' | 'dark' | 'system';
   [STORAGE_KEYS.HAS_SEEN_TUTORIAL]: boolean;
   [STORAGE_KEYS.COMPLETED_PUZZLES]: CompletedPuzzle[];
-  [STORAGE_KEYS.TRACKING_OPT_OUT]: boolean;
 }
 
 // Default values for each storage key
@@ -41,7 +39,6 @@ const DEFAULT_VALUES: LocalStorageData = {
   [STORAGE_KEYS.THEME]: 'system',
   [STORAGE_KEYS.HAS_SEEN_TUTORIAL]: false,
   [STORAGE_KEYS.COMPLETED_PUZZLES]: [],
-  [STORAGE_KEYS.TRACKING_OPT_OUT]: false,
 };
 
 // Helper function to safely get item from localStorage
@@ -124,10 +121,6 @@ export function useHasSeenTutorial() {
 
 export function useCompletedPuzzles() {
   return useLocalStorage(STORAGE_KEYS.COMPLETED_PUZZLES);
-}
-
-export function useTrackingOptOut() {
-  return useLocalStorage(STORAGE_KEYS.TRACKING_OPT_OUT);
 }
 
 // Utility functions for completed puzzles

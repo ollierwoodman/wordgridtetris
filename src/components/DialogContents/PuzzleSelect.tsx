@@ -1,5 +1,5 @@
 import React from "react";
-import { GOAL_IDS, useTrackMatomoGoalById } from "../../hooks/useTrackGoals";
+import { ANALYTICS_EVENTS, useTrackEvent } from "../../hooks/useTrackEvents";
 import { useGameSounds } from "../../hooks/useSounds";
 import {
   getGameModeConfig,
@@ -25,11 +25,11 @@ interface PuzzleSelectProps {
 
 export const PuzzleSelect: React.FC<PuzzleSelectProps> = ({ handleChangePuzzle }) => {
   const { playMenuClick } = useGameSounds();
-  const trackGoal = useTrackMatomoGoalById();
+  const trackEvent = useTrackEvent();
 
   const onChangePuzzle = (mode: GameMode) => {
     playMenuClick();
-    trackGoal(GOAL_IDS.OPENED_LEVEL_SELECT);
+    trackEvent(ANALYTICS_EVENTS.SELECTED_PUZZLE, { mode });
     handleChangePuzzle(mode);
   };
 

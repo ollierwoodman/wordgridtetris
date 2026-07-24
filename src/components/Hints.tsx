@@ -1,5 +1,5 @@
 import { useGameSounds } from "../hooks/useSounds";
-import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
+import { ANALYTICS_EVENTS, useTrackEvent } from "../hooks/useTrackEvents";
 import type { Game } from "../game/logic";
 import { useCallback, useReducer } from "react";
 import type { HintType } from "../types/game";
@@ -40,7 +40,7 @@ export const Hints = ({
   game,
 }: HintsProps) => {
   const { playHintReveal } = useGameSounds();
-  const trackGoal = useTrackMatomoGoalById();
+  const trackEvent = useTrackEvent();
   const [, forceRerender] = useReducer((n: number) => n + 1, 0);
 
   const revealHint = useCallback(
@@ -73,11 +73,11 @@ export const Hints = ({
       revealHint(hintType);
 
       playHintReveal();
-      trackGoal(GOAL_IDS.REVEALED_THEME);
+      trackEvent(ANALYTICS_EVENTS.REVEALED_HINT, { hintType });
       // Force a re-render so live hint values from `game` are reflected
       forceRerender();
     },
-    [playHintReveal, trackGoal, revealHint]
+    [playHintReveal, trackEvent, revealHint]
   );
 
   return (

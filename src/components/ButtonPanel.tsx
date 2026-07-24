@@ -12,7 +12,7 @@ import Settings from "./DialogContents/Settings";
 import type { Game } from "../game/logic";
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { useHasSeenTutorial } from "../hooks/useLocalStorage";
-import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
+import { ANALYTICS_EVENTS, useTrackEvent } from "../hooks/useTrackEvents";
 import Menu from "./DialogContents/Menu";
 import type { GameMode } from "../types/gameMode";
 import { ConfirmModal } from "./ui/ConfirmModal";
@@ -46,7 +46,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasSeenTutorial]);
 
-  const trackGoal = useTrackMatomoGoalById();
+  const trackEvent = useTrackEvent();
 
   return (
     <div className={cn("grid grid-cols-5 justify-center items-center w-full max-w-[60vh] my-auto py-4 gap-4",
@@ -56,7 +56,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         title="Open tutorial"
         onClick={() => {
           setHasSeenTutorial(true);
-          trackGoal(GOAL_IDS.OPENED_TUTORIAL);
+          trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "tutorial" });
           onOpenModal("Tutorial", <Tutorial game={game} />);
         }}
         hasBadge={!hasSeenTutorial}
@@ -69,7 +69,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
         onClick={() => {
           game.resetPieces();
           updateGameState();
-          trackGoal(GOAL_IDS.SHUFFLED_PIECES);
+          trackEvent(ANALYTICS_EVENTS.SHUFFLED_PIECES);
         }}
       >
         <ShuffleIcon className="size-6 md:size-8 xl:size-10" />
@@ -86,7 +86,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
       <BigRoundButton
         title="Open settings"
         onClick={() => {
-          trackGoal(GOAL_IDS.OPENED_SETTINGS);
+          trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "settings" });
           onOpenModal("Settings", <Settings />);
         }}
       >
@@ -95,7 +95,7 @@ export const ButtonPanel: React.FC<ButtonPanelProps> = ({
       <BigRoundButton
         title="Open menu"
         onClick={() => {
-          trackGoal(GOAL_IDS.OPENED_ABOUT);
+          trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "menu" });
           onOpenModal("Menu", <Menu />);
         }}
       >

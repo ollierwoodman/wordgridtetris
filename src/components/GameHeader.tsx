@@ -1,6 +1,6 @@
 import { BigRoundButton } from "./ui/bigRoundButton";
 import { useGameSounds } from "../hooks/useSounds";
-import { GOAL_IDS, useTrackMatomoGoalById } from "../hooks/useTrackGoals";
+import { ANALYTICS_EVENTS, useTrackEvent } from "../hooks/useTrackEvents";
 import { GAME_MODES, type GameMode } from "../types/gameMode";
 import { LightbulbIcon, ShareIcon } from "lucide-react";
 import type { Game } from "../game/logic";
@@ -22,26 +22,26 @@ export const GameHeader = ({
   handleChangePuzzle,
 }: GameHeaderProps) => {
   const { playMenuClick } = useGameSounds();
-  const trackGoal = useTrackMatomoGoalById();
+  const trackEvent = useTrackEvent();
 
   const [shareButtonHasBeenClicked, setShareButtonHasBeenClicked] =
     useState(false);
 
   const handleShareClick = () => {
-    trackGoal(GOAL_IDS.OPENED_SUCCESS);
+    trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "share" });
     setShareButtonHasBeenClicked(true);
     onOpenModal("Share", <Share handleChangePuzzle={handleChangePuzzle} />);
   };
 
   const handleAboutClick = () => {
     playMenuClick();
-    trackGoal(GOAL_IDS.OPENED_ABOUT);
+    trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "about" });
     onOpenModal("About Blockle", <About />);
   };
 
   const handleHintsClick = () => {
     playMenuClick();
-    // trackGoal(GOAL_IDS.OPENED_HINTS);
+    trackEvent(ANALYTICS_EVENTS.OPENED_DIALOG, { dialog: "hints" });
     onOpenModal("Hints", <Hints game={game} />);
   };
 

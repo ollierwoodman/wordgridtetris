@@ -15,6 +15,7 @@ export const About = () => {
         <p>You can support my boba addiction via the link below</p>
         <a
           href="https://www.buymeacoffee.com/ooodman"
+          data-umami-event="clicked-buy-me-a-coffee"
           className="flex items-center justify-center bg-purple-500 text-lg text-white font-bold px-4 py-2 gap-4 rounded-full shadow-lg hover:opacity-80"
         >
           Buy me a boba{" "}
@@ -30,6 +31,7 @@ export const About = () => {
         <p>Give feedback, ask questions, and share your ideas</p>
         <a
           href="https://discord.gg/4QGpsTPrT7"
+          data-umami-event="joined-discord"
           className="flex items-center justify-center bg-[#5865F2] text-lg text-white font-bold px-4 py-2 gap-4 rounded-full shadow-lg hover:opacity-80"
         >
           <span>Join the Discord</span>
